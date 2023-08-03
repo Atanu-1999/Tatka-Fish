@@ -3,6 +3,7 @@ package com.example.licious.api;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.Otp_verify_Response;
+import com.example.licious.response.Pages_Response;
 import com.example.licious.response.SendOtp_Response;
 
 import retrofit2.Call;
@@ -32,6 +33,10 @@ public interface ApiHolder {
 
     @GET("trproduct")
     Call<Best_Seller_Response> topRated(@Query("token") String token);
+
+    @GET("pages")
+    Call<Pages_Response> pages(@Query("pageId") String pageId,
+                               @Query("token") String token);
 
 
 

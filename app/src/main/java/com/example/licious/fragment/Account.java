@@ -43,7 +43,7 @@ public class Account extends Fragment {
 
     TextView txt_edite, txt_login;
     LinearLayout address, notification, contactUs, privacy, faq, terms, btn_logout, btn_order, wishList, before_login_layout,
-            after_login_layout;
+            after_login_layout,About_policy;
     private BottomSheetDialog bottomSheetDialog;
     private Handler handler;
     private int charIndex;
@@ -70,6 +70,7 @@ public class Account extends Fragment {
 //        editor.putString("ID","0");
 //        editor.commit();
 
+        About_policy = account.findViewById(R.id.About_policy);
         after_login_layout = account.findViewById(R.id.after_login_layout);
         before_login_layout = account.findViewById(R.id.before_login_layout);
         wishList = account.findViewById(R.id.wishList);
@@ -117,22 +118,34 @@ public class Account extends Fragment {
                 startActivity(new Intent(getContext(), ContactUs.class));
             }
         });
-        privacy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), Pages.class));
-            }
-        });
         faq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), FAQ.class));
             }
         });
+        privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),Pages.class);
+                i.putExtra("page_id","2");
+                startActivity(new Intent(i));
+            }
+        });
         terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), Pages.class));
+               Intent i = new Intent(getContext(),Pages.class);
+               i.putExtra("page_id","1");
+               startActivity(new Intent(i));
+            }
+        });
+        About_policy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),Pages.class);
+                i.putExtra("page_id","3");
+                startActivity(new Intent(i));
             }
         });
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -146,8 +159,6 @@ public class Account extends Fragment {
                 Intent logoutIntent = new Intent(getContext(), MainActivity.class);
                 logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logoutIntent);
-
-
                 Toast.makeText(getContext(),"LogOut Successfully",Toast.LENGTH_SHORT).show();
             }
         });

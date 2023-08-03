@@ -25,9 +25,10 @@
                 android:padding="@dimen/_10sdp"/>
 
             <TextView
+                android:id="@+id/txt_heading_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
-                android:text="Terms and Condition"
+                android:text="Terms"
                 android:textSize="@dimen/_16sdp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -37,6 +38,33 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="@dimen/_7sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Terms"
+                android:textSize="@dimen/_14sdp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
 
