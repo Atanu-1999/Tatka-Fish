@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AllFish">
+
+     <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:scrollbars="none"
+       android:layout_below="@id/header">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           android:background="@drawable/bottom_bg">
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginStart="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="106 items"
+                   android:textColor="@color/black"
+                   android:padding="@dimen/_7sdp"
+                   android:textSize="@dimen/_16sdp"/>
+
+           </LinearLayout>
+
+           <include layout="@layout/subcategori_layout"/>
+           <include layout="@layout/subcategori_layout"/>
+           <include layout="@layout/subcategori_layout"/>
+
+       </LinearLayout>
+
+   </ScrollView>
+
+</LinearLayout>
