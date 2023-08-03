@@ -1,17 +1,22 @@
 package com.example.licious.adapter;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.activity.ProductDetails;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
@@ -24,10 +29,17 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
     public static List<Best_Seller_Response.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    private final Best_Seller_Adapter.OnItemClickListener listener;
 
-    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList) {
+
+    public interface OnItemClickListener {
+        void onItemClick(Best_Seller_Response.Datum item, int position);
+    }
+
+    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList,Best_Seller_Adapter.OnItemClickListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -50,6 +62,14 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_bestSeller);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent i = new Intent(context, ProductDetails.class);
+               context.startActivity(i);
+            }
+        });
+
     }
 
     @Override
@@ -69,7 +89,12 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
             tv_mrp = (TextView) itemView.findViewById(R.id.tv_mrp);
             tv_discount =  (TextView) itemView.findViewById(R.id.tv_discount);
 
-
+            iv_bestSeller.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                }
+            });
         }
     }
 }

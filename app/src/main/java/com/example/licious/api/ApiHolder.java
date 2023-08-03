@@ -34,4 +34,5 @@ public interface ApiHolder {
     Call<Best_Seller_Response> topRated(@Query("token") String token);
 
 
+
 }

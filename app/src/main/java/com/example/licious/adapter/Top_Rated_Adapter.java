@@ -1,6 +1,7 @@
 package com.example.licious.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.activity.ProductDetails;
 import com.example.licious.response.Best_Seller_Response;
 import com.squareup.picasso.Picasso;
 
@@ -42,6 +44,14 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_bestSeller);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ProductDetails.class);
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

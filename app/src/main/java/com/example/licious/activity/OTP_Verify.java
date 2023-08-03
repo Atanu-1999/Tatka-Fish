@@ -35,6 +35,7 @@ public class OTP_Verify extends AppCompatActivity {
     String timeStr = "10",otp,OTP,phone,device_id;
     EditText otp1,otp2,otp3,otp4,otp5;
     RelativeLayout OTP_layout;
+    SharedPreferences loginPref;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -54,6 +55,9 @@ public class OTP_Verify extends AppCompatActivity {
         btn_resend = findViewById(R.id.btn_resend);
         count_time = findViewById(R.id.count_time);
         btn_continue = findViewById(R.id.btn_continue);
+        //sharedPref
+        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+
         btn_resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,6 +239,11 @@ public class OTP_Verify extends AppCompatActivity {
                if (response.body().getVerify()==true){
                    Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
                    Intent i = new Intent(OTP_Verify.this,MainActivity.class);
+                   SharedPreferences.Editor editor = loginPref.edit();
+                   String deviceId = response.body().getData().get(0).getDeviceId();
+                   editor.putString("device_id",deviceId);
+                   Log.d("device_id",device_id);
+                   editor.commit();
                    startActivity(i);
                }
                else {

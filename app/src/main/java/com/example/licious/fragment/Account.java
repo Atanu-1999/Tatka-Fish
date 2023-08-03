@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.activity.Address;
 import com.example.licious.activity.ContactUs;
@@ -39,14 +41,14 @@ import retrofit2.Response;
 
 public class Account extends Fragment {
 
-    TextView txt_edite,txt_login;
-    LinearLayout address,notification,contactUs,privacy,faq,terms,btn_logout,btn_order,wishList,before_login_layout,
+    TextView txt_edite, txt_login;
+    LinearLayout address, notification, contactUs, privacy, faq, terms, btn_logout, btn_order, wishList, before_login_layout,
             after_login_layout;
     private BottomSheetDialog bottomSheetDialog;
     private Handler handler;
     private int charIndex;
-    String deviceId,phone;
-    String BlankId = "0";
+    String deviceId, phone;
+    String BlankId = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,15 +60,15 @@ public class Account extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View account =  inflater.inflate(R.layout.fragment_account, container, false);
+        View account = inflater.inflate(R.layout.fragment_account, container, false);
         /*Device Id Get*/
         deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
         /*Value Store*/
         SharedPreferences loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = loginPref.edit();
-        editor.putString("ID","0");
-        editor.commit();
+//        SharedPreferences.Editor editor = loginPref.edit();
+//        editor.putString("ID","0");
+//        editor.commit();
 
         after_login_layout = account.findViewById(R.id.after_login_layout);
         before_login_layout = account.findViewById(R.id.before_login_layout);
@@ -81,13 +83,15 @@ public class Account extends Fragment {
         notification = account.findViewById(R.id.notification);
         address = account.findViewById(R.id.address);
         txt_edite = account.findViewById(R.id.txt_edite);
-        if (BlankId.equals(loginPref.getString("Id","0"))){
+        Log.d("device_id",loginPref.getString("device_id", ""));
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
             after_login_layout.setVisibility(View.GONE);
             before_login_layout.setVisibility(View.VISIBLE);
-        }
-        else {
+            btn_logout.setVisibility(View.GONE);
+        } else {
             after_login_layout.setVisibility(View.VISIBLE);
             before_login_layout.setVisibility(View.GONE);
+            btn_logout.setVisibility(View.VISIBLE);
         }
         txt_edite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +138,17 @@ public class Account extends Fragment {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences =getContext().getSharedPreferences("login_pref",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
 
+                Intent logoutIntent = new Intent(getContext(), MainActivity.class);
+                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logoutIntent);
+
+
+                Toast.makeText(getContext(),"LogOut Successfully",Toast.LENGTH_SHORT).show();
             }
         });
         btn_order.setOnClickListener(new View.OnClickListener() {
@@ -152,25 +166,23 @@ public class Account extends Fragment {
         txt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetTheme);
+                bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetTheme);
                 View view1 = LayoutInflater.from(getContext()).inflate(R.layout.login_layout,
                         (LinearLayout) getActivity().findViewById(R.id.container));
-                TextView btn_submit = (TextView)view1.findViewById(R.id.btn_submit);
-                TextView myTextView = (TextView)view1.findViewById(R.id.myTextView);
-                EditText txt_phone = (EditText)view1.findViewById(R.id.txt_phone);
+                TextView btn_submit = (TextView) view1.findViewById(R.id.btn_submit);
+                TextView myTextView = (TextView) view1.findViewById(R.id.myTextView);
+                EditText txt_phone = (EditText) view1.findViewById(R.id.txt_phone);
                 btn_submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         phone = txt_phone.getText().toString();
-                        if (txt_phone.getText().toString().trim().isEmpty()){
+                        if (txt_phone.getText().toString().trim().isEmpty()) {
                             Toast.makeText(getContext(), "Field Can't Empty", Toast.LENGTH_SHORT).show();
                             txt_phone.requestFocus();
-                        }
-                        else if (txt_phone.length() > 10 || txt_phone.length() < 10){
+                        } else if (txt_phone.length() > 10 || txt_phone.length() < 10) {
                             Toast.makeText(getContext(), "Please Enter Valid Phone Number", Toast.LENGTH_SHORT).show();
                             txt_phone.requestFocus();
-                        }
-                        else {
+                        } else {
                             user_login(phone);
                         }
                     }
@@ -185,19 +197,18 @@ public class Account extends Fragment {
     }
 
     private void user_login(String phone) {
-        Call<SendOtp_Response> login_apiCall = ApiService.apiHolders().sent_otp(phone,deviceId);
+        Call<SendOtp_Response> login_apiCall = ApiService.apiHolders().sent_otp(phone, deviceId);
         login_apiCall.enqueue(new Callback<SendOtp_Response>() {
             @Override
             public void onResponse(Call<SendOtp_Response> call, Response<SendOtp_Response> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     String response1 = response.body().toString();
-                    Intent i = new Intent(getContext(),OTP_Verify.class);
-                    i.putExtra("OTP",response.body().getData().get(0).getOtp());
-                    i.putExtra("NUMBER",response.body().getData().get(0).getPhone());
-                    i.putExtra("DEVICE_ID",response.body().getData().get(0).getDeviceId());
+                    Intent i = new Intent(getContext(), OTP_Verify.class);
+                    i.putExtra("OTP", response.body().getData().get(0).getOtp());
+                    i.putExtra("NUMBER", response.body().getData().get(0).getPhone());
+                    i.putExtra("DEVICE_ID", response.body().getData().get(0).getDeviceId());
                     startActivity(i);
-                }
-                else {
+                } else {
 
                 }
             }

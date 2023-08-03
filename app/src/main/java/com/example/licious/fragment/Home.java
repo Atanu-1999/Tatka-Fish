@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -29,7 +30,10 @@ import android.widget.TextView;
 
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
+import com.example.licious.activity.ProductDetails;
 import com.example.licious.adapter.Best_Seller_Adapter;
+import com.example.licious.adapter.Category_Adapter;
+import com.example.licious.adapter.Main_screen_Category_Adapter;
 import com.example.licious.adapter.Slider_Adapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
@@ -37,6 +41,7 @@ import com.example.licious.authentication.AddressUtils;
 import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.model.Slider_Model;
 import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.Master_Category_Response;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,7 +52,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class Home extends Fragment {
+public class Home extends Fragment implements Best_Seller_Adapter.OnItemClickListener {
 
     ViewPager viewPager;
     Slider_Adapter slider_adapter;
@@ -69,9 +74,13 @@ public class Home extends Fragment {
 
     List<Best_Seller_Response.Datum> best_seller_response;
     Best_Seller_Adapter best_seller_adapter;
-    RecyclerView rv_bestSeller,rv_topRated;
+    RecyclerView rv_bestSeller,rv_topRated,rv_category;
 
     Top_Rated_Adapter top_rated_adapter;
+    List<Master_Category_Response.Datum> master_category_responses;
+    Main_screen_Category_Adapter main_screen_category_adapter;
+
+    Best_Seller_Adapter.OnItemClickListener listener;
 
     public Home() {
     }
@@ -99,6 +108,7 @@ public class Home extends Fragment {
  //       product_one = home.findViewById(R.id.product_one);
         rv_bestSeller = home.findViewById(R.id.rv_bestSeller);
         rv_topRated = home.findViewById(R.id.rv_topRated);
+        rv_category = home.findViewById(R.id.rv_category_s);
 
         /*Functionality*/
         handler = new Handler();
@@ -167,6 +177,8 @@ public class Home extends Fragment {
 //            }
 //        });
 
+        //category
+        Category("abcdefgh12345");
         //Best Seller
         BestSeller("abcdefgh12345");
         //Top Rated
@@ -175,6 +187,32 @@ public class Home extends Fragment {
 
 
         return home;
+    }
+
+    private void Category(String token) {
+        Call<Master_Category_Response> login_apiCall = ApiService.apiHolders().category(token);
+        login_apiCall.enqueue(new Callback<Master_Category_Response>() {
+            @Override
+            public void onResponse(Call<Master_Category_Response> call, Response<Master_Category_Response> response) {
+                if (response.isSuccessful()){
+                    String response1 = response.body().toString();
+                    master_category_responses = response.body().getData();
+                    main_screen_category_adapter = new Main_screen_Category_Adapter(getContext(),master_category_responses);
+                    GridLayoutManager layoutManager=new GridLayoutManager(getContext(),3);
+                    rv_category.setLayoutManager(layoutManager);
+                    rv_category.setAdapter(main_screen_category_adapter);
+                   // rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
+                }
+                else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Master_Category_Response> call, Throwable t) {
+
+            }
+        });
     }
 
     private void TopRated(String token) {
@@ -209,7 +247,7 @@ public class Home extends Fragment {
                 if (response.isSuccessful()) {
                     String response1 = response.body().toString();
                     best_seller_response = response.body().getData();
-                    best_seller_adapter = new Best_Seller_Adapter(getContext(), best_seller_response);
+                    best_seller_adapter = new Best_Seller_Adapter(getContext(), best_seller_response,listener);
                     rv_bestSeller.setAdapter(best_seller_adapter);
                     // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
                     rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -276,6 +314,12 @@ public class Home extends Fragment {
         if (locationManager != null && locationListener != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    //best seller onItemClick
+    @Override
+    public void onItemClick(Best_Seller_Response.Datum item, int position) {
+        startActivity(new Intent(getContext(), ProductDetails.class));
     }
 
     private class MyLocationListener implements LocationListener {
