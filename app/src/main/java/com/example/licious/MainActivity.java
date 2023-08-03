@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e("ss","ss");
         /*network Connection Check*/
         if(!Check_Internet.isInternetAvailable(MainActivity.this)) {
             noInternetDialog = new Dialog(this);
@@ -93,4 +95,5 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.main_container, fragment)
                 .commit();
     }
+
 }
