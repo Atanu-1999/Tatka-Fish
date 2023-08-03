@@ -5,6 +5,7 @@ import static java.security.AccessController.getContext;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.licious.BestSellerListener;
 import com.example.licious.R;
+import com.example.licious.activity.MyCart;
 import com.example.licious.activity.ProductDetails;
+import com.example.licious.fragment.Account;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
@@ -29,14 +34,15 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
     public static List<Best_Seller_Response.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
-    private final Best_Seller_Adapter.OnItemClickListener listener;
+    private BestSellerListener listener;
+    String BlankId = "";
 
 
-    public interface OnItemClickListener {
-        void onItemClick(Best_Seller_Response.Datum item, int position);
-    }
+//    public interface OnItemClickListener {
+//        void onItemClick(Best_Seller_Response.Datum item, int position);
+//    }
 
-    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList,Best_Seller_Adapter.OnItemClickListener listener) {
+    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList, BestSellerListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;
@@ -69,6 +75,27 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                context.startActivity(i);
             }
         });
+//        holder.btn_add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SharedPreferences loginPref = context.getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+//                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+////                    Intent i = new Intent(context, Account.class);
+////                    context.startActivity(i);
+//                }
+//                else {
+//                    Intent i = new Intent(context, MyCart.class);
+//                    context.startActivity(i);
+//                }
+//            }
+//        });
+//        holder.btn_add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+//                listener.onItemClicked(position);
+//            }
+//        });
 
     }
 
@@ -79,7 +106,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_bestSeller;
+        ImageView iv_bestSeller,btn_add;
         TextView tv_title,tv_weight,tv_mrp,tv_discount;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,11 +115,13 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
             tv_weight = (TextView) itemView.findViewById(R.id.tv_weight);
             tv_mrp = (TextView) itemView.findViewById(R.id.tv_mrp);
             tv_discount =  (TextView) itemView.findViewById(R.id.tv_discount);
+            btn_add = (ImageView) itemView.findViewById(R.id.btn_add);
 
-            iv_bestSeller.setOnClickListener(new View.OnClickListener() {
+            btn_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                   //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                    listener.onItemClickedmy(0);
                 }
             });
         }

@@ -19,9 +19,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".utils.Progressbar"
-            android:exported="false" />
-        <activity
             android:name=".activity.Wishlist"
             android:exported="false" />
         <activity
