@@ -241,8 +241,11 @@ public class OTP_Verify extends AppCompatActivity {
                    Intent i = new Intent(OTP_Verify.this,MainActivity.class);
                    SharedPreferences.Editor editor = loginPref.edit();
                    String deviceId = response.body().getData().get(0).getDeviceId();
+                   String phoneNumber = response.body().getData().get(0).getPhone();
+                   int userId = response.body().getData().get(0).getId();
                    editor.putString("device_id",deviceId);
-                   Log.d("device_id",device_id);
+                   editor.putString("phone",phoneNumber);
+                   editor.putInt("userId",userId);
                    editor.commit();
                    startActivity(i);
                }

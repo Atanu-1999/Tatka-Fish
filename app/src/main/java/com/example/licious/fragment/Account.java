@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 public class Account extends Fragment {
 
-    TextView txt_edite, txt_login;
+    TextView txt_edite, txt_login,tv_phone;
     LinearLayout address, notification, contactUs, privacy, faq, terms, btn_logout, btn_order, wishList, before_login_layout,
             after_login_layout,About_policy;
     private BottomSheetDialog bottomSheetDialog;
@@ -84,6 +84,11 @@ public class Account extends Fragment {
         notification = account.findViewById(R.id.notification);
         address = account.findViewById(R.id.address);
         txt_edite = account.findViewById(R.id.txt_edite);
+        tv_phone = account.findViewById(R.id.tv_phone);
+
+        String phoneNum= loginPref.getString("phone","");
+        tv_phone.setText(phoneNum);
+
         Log.d("device_id",loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             after_login_layout.setVisibility(View.GONE);

@@ -114,6 +114,7 @@
                     android:layout_marginTop="@dimen/_5sdp">
 
                     <TextView
+                        android:id="@+id/tv_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="9xxxxxxxx9"
