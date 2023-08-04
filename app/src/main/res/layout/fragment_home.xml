@@ -89,10 +89,10 @@
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_160sdp"
-                android:foregroundGravity="center"
-                android:overScrollMode="never"
+                android:layout_margin="@dimen/_10sdp"
                 android:clipToPadding="false"
-                android:layout_margin="@dimen/_10sdp"/>
+                android:foregroundGravity="center"
+                android:overScrollMode="never" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

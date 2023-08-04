@@ -36,6 +36,7 @@ import com.example.licious.BestSellerListener;
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
 import com.example.licious.activity.ProductDetails;
+import com.example.licious.adapter.BannerAdapter;
 import com.example.licious.adapter.Best_Seller_Adapter;
 import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.Main_screen_Category_Adapter;
@@ -45,12 +46,14 @@ import com.example.licious.api.ApiService;
 import com.example.licious.authentication.AddressUtils;
 import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.model.Slider_Model;
+import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -88,6 +91,8 @@ public class Home extends Fragment implements BestSellerListener {
     BestSellerListener listener;
     String BlankId = "";
 
+    List<BannerResponse.Datum> bannerResponses;
+
     public Home() {
     }
 
@@ -115,36 +120,38 @@ public class Home extends Fragment implements BestSellerListener {
         rv_bestSeller = home.findViewById(R.id.rv_bestSeller);
         rv_topRated = home.findViewById(R.id.rv_topRated);
         rv_category = home.findViewById(R.id.rv_category_s);
+        viewPager = home.findViewById(R.id.view_pager);
 
         /*Functionality*/
-        handler = new Handler();
-        modelList = new ArrayList<>();
-        modelList.add(new Slider_Model(R.drawable.onboard_one));
-        modelList.add(new Slider_Model(R.drawable.onboard_three));
-        modelList.add(new Slider_Model(R.drawable.banner_one));
-        modelList.add(new Slider_Model(R.drawable.onboard_two));
-        modelList.add(new Slider_Model(R.drawable.banner_two));
+//        handler = new Handler();
+//        modelList = new ArrayList<>();
+//        modelList.add(new Slider_Model(R.drawable.onboard_one));
+//        modelList.add(new Slider_Model(R.drawable.onboard_three));
+//        modelList.add(new Slider_Model(R.drawable.banner_one));
+//        modelList.add(new Slider_Model(R.drawable.onboard_two));
+//        modelList.add(new Slider_Model(R.drawable.banner_two));
 
-        slider_adapter = new Slider_Adapter(modelList, getContext());
-        viewPager = home.findViewById(R.id.view_pager);
-        viewPager.setAdapter(slider_adapter);
-        viewPager.setPadding(80, 0, 80, 0);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//        slider_adapter = new Slider_Adapter(modelList, getContext());
+//        viewPager.setAdapter(slider_adapter);
+//        viewPager.setPadding(80, 0, 80, 0);
+//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         /*Location Permission*/
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -183,6 +190,8 @@ public class Home extends Fragment implements BestSellerListener {
 //            }
 //        });
 
+        //Banner
+        Banner("abcdefgh12345");
         //category
         Category("abcdefgh12345");
         //Best Seller
@@ -192,6 +201,33 @@ public class Home extends Fragment implements BestSellerListener {
 
 
         return home;
+    }
+
+    private void Banner(String token) {
+        Call<BannerResponse> login_apiCall = ApiService.apiHolders().banner(token);
+        login_apiCall.enqueue(new Callback<BannerResponse>() {
+            @Override
+            public void onResponse(Call<BannerResponse> call, Response<BannerResponse> response) {
+                if (response.isSuccessful()) {
+                    String response1 = response.body().toString();
+                    bannerResponses = response.body().getData();
+                    BannerAdapter bannerAdapter = new BannerAdapter(getContext(), bannerResponses);
+                    viewPager.setAdapter(bannerAdapter);
+
+                    // The_slide_timer
+                    java.util.Timer timer = new java.util.Timer();
+                    timer.scheduleAtFixedRate(new The_slide_timer(), 2000, 3000);
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BannerResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     private void Category(String token) {
@@ -378,5 +414,22 @@ public class Home extends Fragment implements BestSellerListener {
             greeting = "Good Evening";
         }
         text_wish_time.setText(greeting);
+    }
+
+    //for banner timer
+    public class The_slide_timer extends TimerTask {
+        @Override
+        public void run() {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (viewPager.getCurrentItem() < bannerResponses.size() - 1) {
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    } else
+                        viewPager.setCurrentItem(0);
+                }
+            });
+        }
     }
 }

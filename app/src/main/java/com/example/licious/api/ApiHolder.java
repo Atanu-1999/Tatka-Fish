@@ -1,5 +1,6 @@
 package com.example.licious.api;
 
+import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.Otp_verify_Response;
@@ -37,6 +38,9 @@ public interface ApiHolder {
     @GET("pages")
     Call<Pages_Response> pages(@Query("pageId") String pageId,
                                @Query("token") String token);
+
+    @GET("banners")
+    Call<BannerResponse> banner(@Query("token") String token);
 
 
 
