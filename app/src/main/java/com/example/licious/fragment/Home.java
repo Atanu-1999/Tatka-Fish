@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,8 @@ import com.example.licious.response.Master_Category_Response;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import retrofit2.Call;
@@ -92,6 +95,10 @@ public class Home extends Fragment implements BestSellerListener {
     String BlankId = "";
 
     List<BannerResponse.Datum> bannerResponses;
+
+    private int currentPage = 0;
+    private final long DELAY_MS = 3000; // Delay in milliseconds before flipping to the next page
+    private final long PERIOD_MS = 5000; // Time period between each auto-flipping
 
     public Home() {
     }
@@ -214,9 +221,24 @@ public class Home extends Fragment implements BestSellerListener {
                     BannerAdapter bannerAdapter = new BannerAdapter(getContext(), bannerResponses);
                     viewPager.setAdapter(bannerAdapter);
 
-                    // The_slide_timer
-                    java.util.Timer timer = new java.util.Timer();
-                    timer.scheduleAtFixedRate(new The_slide_timer(), 2000, 3000);
+//                    // The_slide_timer
+//                    java.util.Timer timer = new java.util.Timer();
+//                    timer.scheduleAtFixedRate(new The_slide_timer(), 2000, 3000);
+                    // Auto-scrolling with Timer
+                    final Handler handler = new Handler(Looper.getMainLooper());
+                    final Runnable update = () -> {
+                        if (currentPage == bannerResponses.size()) {
+                            currentPage = 0;
+                        }
+                        viewPager.setCurrentItem(currentPage++, true);
+                    };
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(update);
+                        }
+                    }, DELAY_MS, PERIOD_MS);
 
                 } else {
 
@@ -414,22 +436,5 @@ public class Home extends Fragment implements BestSellerListener {
             greeting = "Good Evening";
         }
         text_wish_time.setText(greeting);
-    }
-
-    //for banner timer
-    public class The_slide_timer extends TimerTask {
-        @Override
-        public void run() {
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (viewPager.getCurrentItem() < bannerResponses.size() - 1) {
-                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                    } else
-                        viewPager.setCurrentItem(0);
-                }
-            });
-        }
     }
 }
