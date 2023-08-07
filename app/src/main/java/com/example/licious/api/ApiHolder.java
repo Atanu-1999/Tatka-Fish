@@ -1,5 +1,7 @@
 package com.example.licious.api;
 
+import com.example.licious.response.AddAddressResponse;
+import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.ImageResponse;
@@ -66,6 +68,21 @@ public interface ApiHolder {
     Call<ImageResponse> profile_change(@Part("userId") RequestBody userId,
                                        @Part("token") RequestBody token,
                                        @Part MultipartBody.Part userImg);
+
+    @POST("addnewaddress")
+    @FormUrlEncoded
+    Call<AddAddressResponse> add_address(@Field("user_id") int user_id,
+                                         @Field("address_line_one") String address_line_one,
+                                         @Field("address_line_two") String address_line_two,
+                                         @Field("landmark") String landmark,
+                                         @Field("city") String city,
+                                         @Field("mobile_number") String mobile_number,
+                                         @Field("address_type") String address_type,
+                                         @Field("token") String token);
+
+    @GET("getaddress")
+    Call<AllAddressListResponse> getAllAddress(@Query("user_id") int user_id,
+                                               @Query("token") String token);
 
 
 }

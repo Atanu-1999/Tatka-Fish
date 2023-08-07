@@ -30,13 +30,10 @@
             app:hintAnimationEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bottom_bg">
-
-
-
-            </com.google.android.material.textfield.TextInputEditText>
+                android:background="@drawable/bottom_bg"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,12 +56,10 @@
             android:layout_margin="@dimen/_5sdp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_building"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg">
-
-
-
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -88,13 +83,10 @@
             android:layout_margin="@dimen/_5sdp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_landmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bottom_bg">
-
-
-
-            </com.google.android.material.textfield.TextInputEditText>
+                android:background="@drawable/bottom_bg"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,12 +109,10 @@
             android:layout_margin="@dimen/_5sdp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg">
-
-
-
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -146,12 +136,11 @@
             android:layout_margin="@dimen/_5sdp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="10"
                 android:background="@drawable/bottom_bg">
-
-
-
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
