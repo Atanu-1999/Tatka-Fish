@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 public class Account extends Fragment {
 
-    TextView txt_edite, txt_login,tv_phone;
+    TextView txt_edite, txt_login,tv_phone,tv_full_name,tv_mail;
     LinearLayout address, notification, contactUs, privacy, faq, terms, btn_logout, btn_order, wishList, before_login_layout,
             after_login_layout,About_policy;
     private BottomSheetDialog bottomSheetDialog;
@@ -85,19 +85,29 @@ public class Account extends Fragment {
         address = account.findViewById(R.id.address);
         txt_edite = account.findViewById(R.id.txt_edite);
         tv_phone = account.findViewById(R.id.tv_phone);
+        tv_full_name = account.findViewById(R.id.tv_full_name);
+        tv_mail = account.findViewById(R.id.tv_mail);
 
         String phoneNum= loginPref.getString("phone","");
-        tv_phone.setText(phoneNum);
+        String firstname = loginPref.getString("first_name", null);
+        String lastName = loginPref.getString("last_name", null);
+        String email_s = loginPref.getString("email", null);
 
         Log.d("device_id",loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             after_login_layout.setVisibility(View.GONE);
             before_login_layout.setVisibility(View.VISIBLE);
             btn_logout.setVisibility(View.GONE);
+            tv_phone.setText("NA");
+            tv_full_name.setText("NA");
+            tv_mail.setText("NA");
         } else {
             after_login_layout.setVisibility(View.VISIBLE);
             before_login_layout.setVisibility(View.GONE);
             btn_logout.setVisibility(View.VISIBLE);
+            tv_phone.setText(phoneNum);
+            tv_full_name.setText(firstname + " " + lastName);
+            tv_mail.setText(email_s);
         }
         txt_edite.setOnClickListener(new View.OnClickListener() {
             @Override

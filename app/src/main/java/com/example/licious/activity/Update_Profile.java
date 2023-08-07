@@ -46,6 +46,7 @@ import com.example.licious.R;
 import com.example.licious.api.ApiService;
 import com.example.licious.response.ImageResponse;
 import com.example.licious.response.Otp_verify_Response;
+import com.example.licious.response.ProfileResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +59,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -81,7 +83,15 @@ public class Update_Profile extends AppCompatActivity {
     private String mediaPath;
     File mediaFile;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
-String mCurrentPhotoPath="";
+    String token;
+    int id;
+    String mCurrentPhotoPath = "";
+    String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    SharedPreferences loginPref;
+    SharedPreferences.Editor editor;
+    String firstname,lastName,email_s,Dob_s,gender_s,image,image_s;
+    String BlankId = "";
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +112,43 @@ String mCurrentPhotoPath="";
         radio_other = findViewById(R.id.radio_other);
         Iv_profile = findViewById(R.id.Iv_profile);
 
-        SharedPreferences loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        editor = loginPref.edit();
+        token = loginPref.getString("device_id", null);
+        id = loginPref.getInt("userId", 0);
+
+
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            edite_Fname.setText("");
+            edite_Last_name.setText("");
+            et_email.setText("");
+        }
+        else {
+            firstname = loginPref.getString("first_name", null);
+            lastName = loginPref.getString("last_name", null);
+            email_s = loginPref.getString("email", null);
+            Dob_s = loginPref.getString("dob", null);
+            gender_s = loginPref.getString("gender", null);
+            image_s = loginPref.getString("image", null);
+
+            edite_Fname.setText(firstname);
+            edite_Last_name.setText(lastName);
+            et_email.setText(email_s);
+            edit_user_dob.setText(Dob_s);
+            Picasso.with(getApplicationContext())
+                    .load(image_url+image_s)
+                    .into(Iv_profile);
+
+            if (Objects.equals(gender_s, "Male")){
+                radio_male.setChecked(true);
+            }else if (Objects.equals(gender_s, "Female")){
+                radio_female.setChecked(true);
+            }
+            else {
+                radio_other.setChecked(true);
+            }
+
+        }
 
         phoneNum = loginPref.getString("phone", "");
         tv_phone.setText(phoneNum);
@@ -213,6 +259,7 @@ String mCurrentPhotoPath="";
             }
         });
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -228,6 +275,7 @@ String mCurrentPhotoPath="";
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     public static void copyStream(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[1024];
         int bytesRead;
@@ -235,6 +283,7 @@ String mCurrentPhotoPath="";
             output.write(buffer, 0, bytesRead);
         }
     }
+
     private void updatedProfile() {
         f_name = edite_Fname.getText().toString();
         l_name = edite_Last_name.getText().toString();
@@ -242,29 +291,46 @@ String mCurrentPhotoPath="";
         Dob = edit_user_dob.getText().toString();
 
 
-        Call<Otp_verify_Response> otp_verify = ApiService.apiHolders().UpdateProfile("", f_name, l_name, email, phoneNum, Dob, gender);
-        otp_verify.enqueue(new Callback<Otp_verify_Response>() {
+        Call<ProfileResponse> otp_verify = ApiService.apiHolders().UpdateProfile(token,id, f_name, l_name, email, phoneNum, Dob, gender);
+        otp_verify.enqueue(new Callback<ProfileResponse>() {
             @Override
-            public void onResponse(Call<Otp_verify_Response> call, Response<Otp_verify_Response> response) {
-                if (response.body().getVerify() == true) {
-//                    Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
-//                    Intent i = new Intent(OTP_Verify.this, MainActivity.class);
-//                    SharedPreferences.Editor editor = loginPref.edit();
-//                    String deviceId = response.body().getData().get(0).getDeviceId();
-//                    String phoneNumber = response.body().getData().get(0).getPhone();
-//                    editor.putString("device_id",deviceId);
-//                    editor.putString("phone",phoneNumber);
-//                    editor.commit();
-//                    startActivity(i);
-                } else {
-                    //  Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                String response1 = response.body().toString();
+                Toast.makeText(Update_Profile.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
+
+                //set data in userField
+                edite_Fname.setText(response.body().getData().get(0).getFirst_name());
+                edite_Last_name.setText(response.body().getData().get(0).getLast_name());
+                et_email.setText(response.body().getData().get(0).getEmail());
+                 String rb_gender = response.body().getData().get(0).getGender();
+                if (rb_gender=="Male"){
+                    radio_male.setChecked(true);
+                }else if (rb_gender=="Female"){
+                    radio_female.setChecked(true);
                 }
+                else {
+                    radio_other.setChecked(true);
+                }
+
+                //add to sharedpref
+                String firstname_s=response.body().getData().get(0).getFirst_name();
+                String lastName_s=response.body().getData().get(0).getLast_name();
+                String email_ss=response.body().getData().get(0).getEmail();
+                String Dob_ss=response.body().getData().get(0).getDob();
+                String gender_ss=response.body().getData().get(0).getGender();
+
+                editor.putString("first_name",firstname_s);
+                editor.putString("last_name",lastName_s);
+                editor.putString("email",email_ss);
+                editor.putString("dob",Dob_ss);
+                editor.putString("gender",gender_ss);
+                editor.commit();
+
             }
 
             @Override
-            public void onFailure(Call<Otp_verify_Response> call, Throwable t) {
-                //Toast.makeText(OTP_Verify.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-//                Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Toast.makeText(Update_Profile.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -303,6 +369,7 @@ String mCurrentPhotoPath="";
                         takePictureGallery();
                         alertDialog.dismiss();
                     }
+                    alertDialog.dismiss();
                 }
             }
         });
@@ -373,8 +440,8 @@ String mCurrentPhotoPath="";
                     Iv_profile.setImageBitmap(BitmapFactory.decodeFile(mediaPath));
                     cursor.close();
                     Iv_profile.setImageURI(uri);
-                  mediaFile=  new File(mediaPath);
-                     uploadImg();
+                    mediaFile = new File(mediaPath);
+                    uploadImg();
                 } else {
                     Toast.makeText(this, "No image Capture to upload", Toast.LENGTH_SHORT).show();
                 }
@@ -390,8 +457,8 @@ String mCurrentPhotoPath="";
                     Iv_profile.setImageBitmap(BitmapFactory.decodeFile(mediaPath));
                     cursor.close();
                     Iv_profile.setImageURI(selectedImage);
-                    mediaFile=  new File(mediaPath);
-                      uploadImg();
+                    mediaFile = new File(mediaPath);
+                    uploadImg();
                 } else {
                     Toast.makeText(this, "No image select to upload", Toast.LENGTH_SHORT).show();
                 }
@@ -400,24 +467,27 @@ String mCurrentPhotoPath="";
 
     //call API for Image
     private void uploadImg() {
-        SharedPreferences loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
-        String token = loginPref.getString("device_id", null);
-        int id = loginPref.getInt("userId", 0);
+//        SharedPreferences loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+//        String token = loginPref.getString("device_id", null);
+//        int id = loginPref.getInt("userId", 0);
         Log.e("MEDIA", "" + mediaPath);
         //File file =
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mediaFile);
         MultipartBody.Part userImg = MultipartBody.Part.createFormData("image", mediaFile.getName(), requestBody);
-        RequestBody userToken = RequestBody.create(MediaType.parse("multipart/form-data"),""+token);
-        RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"),""+id);
+        RequestBody userToken = RequestBody.create(MediaType.parse("multipart/form-data"), "" + token);
+        RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), "" + id);
 
-        Call<ImageResponse> otp_verify = ApiService.apiHolders().profile_change(userId, userToken, userImg);
-        otp_verify.enqueue(new Callback<ImageResponse>() {
+        Call<ImageResponse> imageUpload = ApiService.apiHolders().profile_change(userId, userToken, userImg);
+        imageUpload.enqueue(new Callback<ImageResponse>() {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                if (response.isSuccessful()) {
-
-                    Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
+                assert response.body() != null;
+                Picasso.with(getApplicationContext())
+                        .load(image_url+response.body().getData().get(0).getImage())
+                        .into(Iv_profile);
+                editor.putString("image",response.body().getData().get(0).getImage());
+                editor.commit();
             }
 
             @Override

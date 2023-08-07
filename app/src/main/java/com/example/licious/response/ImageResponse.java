@@ -8,7 +8,7 @@ import java.util.List;
 public class ImageResponse {
     @SerializedName("data")
     @Expose
-    private String data;
+    private List<ImageResponse.Datum> data;
     @SerializedName("code")
     @Expose
     private String code;
@@ -16,11 +16,11 @@ public class ImageResponse {
     @Expose
     private String message;
 
-    public String getData() {
+    public List<Datum> getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List<Datum> data) {
         this.data = data;
     }
 
@@ -41,6 +41,27 @@ public class ImageResponse {
     }
 
     public class Datum {
+        @SerializedName("id")
+        @Expose
+        private String id;
+        @SerializedName("image")
+        @Expose
+        private String image;
 
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
     }
 }

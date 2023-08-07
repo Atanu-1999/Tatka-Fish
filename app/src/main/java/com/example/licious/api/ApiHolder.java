@@ -6,6 +6,7 @@ import com.example.licious.response.ImageResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
+import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.SendOtp_Response;
 
 import okhttp3.MultipartBody;
@@ -49,15 +50,16 @@ public interface ApiHolder {
     @GET("banners")
     Call<BannerResponse> banner(@Query("token") String token);
 
-    @PATCH("verifyotp")
+    @PATCH("updateProfile")
     @FormUrlEncoded
-    Call<Otp_verify_Response> UpdateProfile(@Field("userId") String userId,
-                                            @Field("first_name") String first_name,
-                                            @Field("last_name") String last_name,
-                                            @Field("email") String email,
-                                            @Field("phone") String phone,
-                                            @Field("dob") String dob,
-                                            @Field("gender") String gender);
+    Call<ProfileResponse> UpdateProfile(@Query("token") String token,
+                                        @Field("userId") int userId,
+                                        @Field("first_name") String first_name,
+                                        @Field("last_name") String last_name,
+                                        @Field("email") String email,
+                                        @Field("phone") String phone,
+                                        @Field("dob") String dob,
+                                        @Field("gender") String gender);
 
     @Multipart
     @POST("updateimg")
