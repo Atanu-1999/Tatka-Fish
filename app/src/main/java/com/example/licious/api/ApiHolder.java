@@ -2,6 +2,7 @@ package com.example.licious.api;
 
 import com.example.licious.response.AddAddressResponse;
 import com.example.licious.response.AllAddressListResponse;
+import com.example.licious.response.AllWishListResponse;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.ImageResponse;
@@ -83,6 +84,10 @@ public interface ApiHolder {
     @GET("getaddress")
     Call<AllAddressListResponse> getAllAddress(@Query("user_id") int user_id,
                                                @Query("token") String token);
+
+    @GET("getwishlist")
+    Call<AllWishListResponse> getAllWishList(@Query("user_id") int user_id,
+                                             @Query("token") String token);
 
 
 }
