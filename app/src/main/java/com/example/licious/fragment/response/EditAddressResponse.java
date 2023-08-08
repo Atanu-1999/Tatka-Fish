@@ -1,11 +1,11 @@
-package com.example.licious.response;
+package com.example.licious.fragment.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class AddAddressResponse {
+public class EditAddressResponse {
     @SerializedName("data")
     @Expose
     private List<Datum> data;
@@ -46,7 +46,7 @@ public class AddAddressResponse {
         private Integer address_id;
         @SerializedName("user_id")
         @Expose
-        private String user_id;
+        private Integer user_id;
         @SerializedName("address_line_one")
         @Expose
         private String address_line_one;
@@ -77,11 +77,11 @@ public class AddAddressResponse {
             this.address_id = address_id;
         }
 
-        public String getUser_id() {
+        public Integer getUser_id() {
             return user_id;
         }
 
-        public void setUser_id(String user_id) {
+        public void setUser_id(Integer user_id) {
             this.user_id = user_id;
         }
 

@@ -6,19 +6,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.adapter.AddressListAdapter;
 import com.example.licious.adapter.WishListAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.response.AllAddressListResponse;
-import com.example.licious.response.AllWishListResponse;
+import com.example.licious.fragment.response.AllWishListResponse;
 
 import java.util.List;
 

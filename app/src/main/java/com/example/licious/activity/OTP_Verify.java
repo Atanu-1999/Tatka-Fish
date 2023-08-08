@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,8 +20,7 @@ import android.widget.Toast;
 import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.api.ApiService;
-import com.example.licious.response.Otp_verify_Response;
-import com.example.licious.response.SendOtp_Response;
+import com.example.licious.fragment.response.Otp_verify_Response;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;

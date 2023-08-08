@@ -8,16 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.api.ApiService;
-import com.example.licious.response.Pages_Response;
-import com.example.licious.response.SendOtp_Response;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Pages extends AppCompatActivity {
 

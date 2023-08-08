@@ -36,10 +36,8 @@ import android.widget.Toast;
 import com.example.licious.BestSellerListener;
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
-import com.example.licious.activity.ProductDetails;
 import com.example.licious.adapter.BannerAdapter;
 import com.example.licious.adapter.Best_Seller_Adapter;
-import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.Main_screen_Category_Adapter;
 import com.example.licious.adapter.Slider_Adapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
@@ -47,14 +45,12 @@ import com.example.licious.api.ApiService;
 import com.example.licious.authentication.AddressUtils;
 import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.model.Slider_Model;
-import com.example.licious.response.BannerResponse;
-import com.example.licious.response.Best_Seller_Response;
-import com.example.licious.response.Master_Category_Response;
+import com.example.licious.fragment.response.BannerResponse;
+import com.example.licious.fragment.response.Best_Seller_Response;
+import com.example.licious.fragment.response.Master_Category_Response;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 

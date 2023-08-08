@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -31,7 +30,7 @@ import com.example.licious.activity.Update_Profile;
 import com.example.licious.activity.Wishlist;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.response.SendOtp_Response;
+import com.example.licious.fragment.response.SendOtp_Response;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import retrofit2.Call;

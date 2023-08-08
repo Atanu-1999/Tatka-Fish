@@ -19,7 +19,7 @@ import com.example.licious.R;
 import com.example.licious.activity.Subcategories;
 import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.response.Master_Category_Response;
+import com.example.licious.fragment.response.Master_Category_Response;
 
 import java.util.List;
 

@@ -1,20 +1,23 @@
 package com.example.licious.api;
 
-import com.example.licious.response.AddAddressResponse;
-import com.example.licious.response.AllAddressListResponse;
-import com.example.licious.response.AllWishListResponse;
-import com.example.licious.response.BannerResponse;
-import com.example.licious.response.Best_Seller_Response;
-import com.example.licious.response.ImageResponse;
-import com.example.licious.response.Master_Category_Response;
-import com.example.licious.response.Otp_verify_Response;
-import com.example.licious.response.Pages_Response;
-import com.example.licious.response.ProfileResponse;
-import com.example.licious.response.SendOtp_Response;
+import com.example.licious.fragment.response.AddAddressResponse;
+import com.example.licious.fragment.response.AllAddressListResponse;
+import com.example.licious.fragment.response.AllWishListResponse;
+import com.example.licious.fragment.response.BannerResponse;
+import com.example.licious.fragment.response.Best_Seller_Response;
+import com.example.licious.fragment.response.DeleteResponse;
+import com.example.licious.fragment.response.EditAddressResponse;
+import com.example.licious.fragment.response.ImageResponse;
+import com.example.licious.fragment.response.Master_Category_Response;
+import com.example.licious.fragment.response.Otp_verify_Response;
+import com.example.licious.fragment.response.Pages_Response;
+import com.example.licious.fragment.response.ProfileResponse;
+import com.example.licious.fragment.response.SendOtp_Response;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -88,6 +91,21 @@ public interface ApiHolder {
     @GET("getwishlist")
     Call<AllWishListResponse> getAllWishList(@Query("user_id") int user_id,
                                              @Query("token") String token);
+
+    @DELETE("deleteaddress")
+    Call<DeleteResponse> deleteAddress(@Query("address_id") int address_id,
+                                       @Query("token") String token);
+
+    @PATCH("updateaddress")
+    @FormUrlEncoded
+    Call<EditAddressResponse> update_address(@Query("token") String token,
+                                             @Field("address_id") int address_id,
+                                             @Field("address_line_one") String address_line_one,
+                                             @Field("address_line_two") String address_line_two,
+                                             @Field("landmark") String landmark,
+                                             @Field("city") String city,
+                                             @Field("mobile_number") String mobile_number,
+                                             @Field("address_type") String address_type);
 
 
 }

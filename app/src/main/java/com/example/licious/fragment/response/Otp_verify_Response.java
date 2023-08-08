@@ -1,11 +1,11 @@
-package com.example.licious.response;
+package com.example.licious.fragment.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class SendOtp_Response {
+public class Otp_verify_Response {
     public class Datum {
         @SerializedName("id")
         @Expose
@@ -174,7 +174,6 @@ public class SendOtp_Response {
         }
 
     }
-
         @SerializedName("data")
         @Expose
         private List<Datum> data;
@@ -185,7 +184,19 @@ public class SendOtp_Response {
         @Expose
         private String message;
 
-        public List<Datum> getData() {
+        @SerializedName("verify")
+        @Expose
+        private Boolean verify;
+
+    public Boolean getVerify() {
+        return verify;
+    }
+
+    public void setVerify(Boolean verify) {
+        this.verify = verify;
+    }
+
+    public List<Datum> getData() {
             return data;
         }
 
@@ -208,5 +219,4 @@ public class SendOtp_Response {
         public void setMessage(String message) {
             this.message = message;
         }
-
 }

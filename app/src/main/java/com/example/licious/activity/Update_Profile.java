@@ -41,12 +41,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.api.ApiService;
-import com.example.licious.response.ImageResponse;
-import com.example.licious.response.Otp_verify_Response;
-import com.example.licious.response.ProfileResponse;
+import com.example.licious.fragment.response.ImageResponse;
+import com.example.licious.fragment.response.ProfileResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
