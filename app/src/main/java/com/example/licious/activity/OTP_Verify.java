@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.api.ApiService;
-import com.example.licious.fragment.response.Otp_verify_Response;
+import com.example.licious.response.Otp_verify_Response;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;

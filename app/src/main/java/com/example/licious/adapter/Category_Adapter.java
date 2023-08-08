@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.fragment.response.Master_Category_Response;
+import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,11 +21,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.ViewHolder> {
     public static List<Master_Category_Response.Datum> ItemList;
     private Context context;
+    private final Category_Adapter.OnItemClickListener listener;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    Category_horizental_Adapter category_horizental_adapter;
+    public interface OnItemClickListener {
+        void onItemClickCategory(Master_Category_Response.Datum item, int position, int type);
+    }
 
-    public Category_Adapter(Context context, List<Master_Category_Response.Datum> ItemList) {
+    public Category_Adapter(Context context, List<Master_Category_Response.Datum> ItemList,Category_Adapter.OnItemClickListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,6 +49,8 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getImage())
                 .into(holder.iv_image);
+
+      //  category_horizental_adapter = new Category_horizental_Adapter()
     }
 
     @Override
@@ -53,10 +62,18 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView iv_image;
         TextView tv_catg_name;
+        ImageView open;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_image = (CircleImageView) itemView.findViewById(R.id.iv_image);
             tv_catg_name = (TextView) itemView.findViewById(R.id.tv_catg_name);
+            open = (ImageView) itemView.findViewById(R.id.open);
+            open.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClickCategory(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
         }
     }
 }

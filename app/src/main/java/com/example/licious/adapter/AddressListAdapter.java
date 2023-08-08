@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.fragment.response.AllAddressListResponse;
+import com.example.licious.response.AllAddressListResponse;
 
 import java.util.List;
 

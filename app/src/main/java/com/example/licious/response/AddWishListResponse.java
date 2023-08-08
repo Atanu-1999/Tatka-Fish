@@ -1,11 +1,11 @@
-package com.example.licious.fragment.response;
+package com.example.licious.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Best_Seller_Response {
+public class AddWishListResponse {
     @SerializedName("data")
     @Expose
     private List<Datum> data;
@@ -15,6 +15,18 @@ public class Best_Seller_Response {
     @SerializedName("message")
     @Expose
     private String message;
+
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public List<Datum> getData() {
         return data;
@@ -106,6 +118,12 @@ public class Best_Seller_Response {
         @SerializedName("createdAt")
         @Expose
         private String createdAt;
+        @SerializedName("user_id")
+        @Expose
+        private String user_id;
+        @SerializedName("product_id")
+        @Expose
+        private String product_id;
 
         public Integer getId() {
             return id;
@@ -273,6 +291,22 @@ public class Best_Seller_Response {
 
         public void setCreatedAt(String createdAt) {
             this.createdAt = createdAt;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
+
+        public String getProduct_id() {
+            return product_id;
+        }
+
+        public void setProduct_id(String product_id) {
+            this.product_id = product_id;
         }
     }
 }

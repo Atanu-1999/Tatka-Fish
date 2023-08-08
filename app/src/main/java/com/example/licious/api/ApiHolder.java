@@ -1,18 +1,20 @@
 package com.example.licious.api;
 
-import com.example.licious.fragment.response.AddAddressResponse;
-import com.example.licious.fragment.response.AllAddressListResponse;
-import com.example.licious.fragment.response.AllWishListResponse;
-import com.example.licious.fragment.response.BannerResponse;
-import com.example.licious.fragment.response.Best_Seller_Response;
-import com.example.licious.fragment.response.DeleteResponse;
-import com.example.licious.fragment.response.EditAddressResponse;
-import com.example.licious.fragment.response.ImageResponse;
-import com.example.licious.fragment.response.Master_Category_Response;
-import com.example.licious.fragment.response.Otp_verify_Response;
-import com.example.licious.fragment.response.Pages_Response;
-import com.example.licious.fragment.response.ProfileResponse;
-import com.example.licious.fragment.response.SendOtp_Response;
+import com.example.licious.response.AddAddressResponse;
+import com.example.licious.response.AddWishListResponse;
+import com.example.licious.response.AllAddressListResponse;
+import com.example.licious.response.AllWishListResponse;
+import com.example.licious.response.BannerResponse;
+import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.Category_Response;
+import com.example.licious.response.DeleteResponse;
+import com.example.licious.response.EditAddressResponse;
+import com.example.licious.response.ImageResponse;
+import com.example.licious.response.Master_Category_Response;
+import com.example.licious.response.Otp_verify_Response;
+import com.example.licious.response.Pages_Response;
+import com.example.licious.response.ProfileResponse;
+import com.example.licious.response.SendOtp_Response;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -106,6 +108,17 @@ public interface ApiHolder {
                                              @Field("city") String city,
                                              @Field("mobile_number") String mobile_number,
                                              @Field("address_type") String address_type);
+
+    @POST("addwishlist")
+    @FormUrlEncoded
+    Call<AddWishListResponse> add_wishList(@Field("user_id") int user_id,
+                                           @Field("product_id") int product_id,
+                                           @Field("status") String status,
+                                           @Field("token") String token);
+
+    @GET("cproduct")
+    Call<Category_Response> getCategory(@Query("cId") int cId,
+                                        @Query("token") String token);
 
 
 }

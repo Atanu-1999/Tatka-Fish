@@ -17,10 +17,10 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.AddressListAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.fragment.response.AddAddressResponse;
-import com.example.licious.fragment.response.AllAddressListResponse;
-import com.example.licious.fragment.response.DeleteResponse;
-import com.example.licious.fragment.response.EditAddressResponse;
+import com.example.licious.response.AddAddressResponse;
+import com.example.licious.response.AllAddressListResponse;
+import com.example.licious.response.DeleteResponse;
+import com.example.licious.response.EditAddressResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 

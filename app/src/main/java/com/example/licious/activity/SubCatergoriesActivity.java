@@ -1,10 +1,8 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,7 +20,6 @@ import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
 import com.example.licious.response.Category_Response;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
@@ -30,8 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Subcategories extends AppCompatActivity {
-
+public class SubCatergoriesActivity extends AppCompatActivity {
     LinearLayout btn_all,btn_fresh,btn_crab,btn_sea;
     AllFish all = new AllFish();
     Crab crab = new Crab();
@@ -49,50 +45,50 @@ public class Subcategories extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subcategories);
+        setContentView(R.layout.activity_sub_catergories);
 
-        product_search = findViewById(R.id.product_search);
-        btn_all = findViewById(R.id.btn_all);
-        btn_fresh = findViewById(R.id.btn_fresh);
-        btn_crab = findViewById(R.id.btn_crab);
-        btn_sea = findViewById(R.id.btn_sea);
-        rv_category_sub_s= findViewById(R.id.rv_category_sub_s);
+//        product_search = findViewById(R.id.product_search);
+//        btn_all = findViewById(R.id.btn_all);
+//        btn_fresh = findViewById(R.id.btn_fresh);
+//        btn_crab = findViewById(R.id.btn_crab);
+//        btn_sea = findViewById(R.id.btn_sea);
+        rv_category_sub_s= findViewById(R.id.rv_category_sub_ss);
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
-        btn_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
-            }
-        });
-        btn_fresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Subcategories.this,Freshwater.class));
-            }
-        });
-        btn_sea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Subcategories.this,Seawater.class));
-            }
-        });
-        btn_crab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,crab).commit();
-            }
-        });
-        product_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Subcategories.this,SearchActivity.class));
-            }
-        });
+//        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
+//        btn_all.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
+//            }
+//        });
+//        btn_fresh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              //  startActivity(new Intent(Subcategories.this,Freshwater.class));
+//            }
+//        });
+//        btn_sea.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              //  startActivity(new Intent(Subcategories.this,Seawater.class));
+//            }
+//        });
+//        btn_crab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,crab).commit();
+//            }
+//        });
+//        product_search.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              //  startActivity(new Intent(Subcategories.this,SearchActivity.class));
+//            }
+//        });
         getCategory(2);
     }
 
@@ -112,10 +108,9 @@ public class Subcategories extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Category_Response> call, Throwable t) {
-                Toast.makeText(Subcategories.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-
 }

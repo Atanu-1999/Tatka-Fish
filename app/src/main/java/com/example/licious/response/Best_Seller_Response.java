@@ -1,11 +1,11 @@
-package com.example.licious.fragment.response;
+package com.example.licious.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class AllWishListResponse {
+public class Best_Seller_Response {
     @SerializedName("data")
     @Expose
     private List<Datum> data;
@@ -46,10 +46,10 @@ public class AllWishListResponse {
         private Integer id;
         @SerializedName("mc_id")
         @Expose
-        private String mc_id;
+        private Integer mc_id;
         @SerializedName("c_id")
         @Expose
-        private String c_id;
+        private Integer c_id;
         @SerializedName("sc_id")
         @Expose
         private String sc_id;
@@ -83,6 +83,7 @@ public class AllWishListResponse {
         @SerializedName("price")
         @Expose
         private String price;
+
         @SerializedName("description")
         @Expose
         private String description;
@@ -92,6 +93,7 @@ public class AllWishListResponse {
         @SerializedName("best_seller")
         @Expose
         private String best_seller;
+
         @SerializedName("top_rated")
         @Expose
         private String top_rated;
@@ -104,12 +106,6 @@ public class AllWishListResponse {
         @SerializedName("createdAt")
         @Expose
         private String createdAt;
-        @SerializedName("user_id")
-        @Expose
-        private String user_id;
-        @SerializedName("product_id")
-        @Expose
-        private String product_id;
 
         public Integer getId() {
             return id;
@@ -119,19 +115,19 @@ public class AllWishListResponse {
             this.id = id;
         }
 
-        public String getMc_id() {
+        public Integer getMc_id() {
             return mc_id;
         }
 
-        public void setMc_id(String mc_id) {
+        public void setMc_id(Integer mc_id) {
             this.mc_id = mc_id;
         }
 
-        public String getC_id() {
+        public Integer getC_id() {
             return c_id;
         }
 
-        public void setC_id(String c_id) {
+        public void setC_id(Integer c_id) {
             this.c_id = c_id;
         }
 
@@ -277,22 +273,6 @@ public class AllWishListResponse {
 
         public void setCreatedAt(String createdAt) {
             this.createdAt = createdAt;
-        }
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
-        public String getProduct_id() {
-            return product_id;
-        }
-
-        public void setProduct_id(String product_id) {
-            this.product_id = product_id;
         }
     }
 }

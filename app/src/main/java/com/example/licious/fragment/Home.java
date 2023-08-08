@@ -44,13 +44,16 @@ import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.AddressUtils;
 import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.response.AddWishListResponse;
 import com.example.licious.model.Slider_Model;
-import com.example.licious.fragment.response.BannerResponse;
-import com.example.licious.fragment.response.Best_Seller_Response;
-import com.example.licious.fragment.response.Master_Category_Response;
+import com.example.licious.response.BannerResponse;
+import com.example.licious.response.Best_Seller_New_response;
+import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.Master_Category_Response;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -59,7 +62,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class Home extends Fragment implements BestSellerListener {
+public class Home extends Fragment {
 
     ViewPager viewPager;
     Slider_Adapter slider_adapter;
@@ -80,6 +83,8 @@ public class Home extends Fragment implements BestSellerListener {
     private MyLocationListener locationListener;*/
 
     List<Best_Seller_Response.Datum> best_seller_response;
+
+    List<Best_Seller_Response.Datum> best_seller_new_response;
     Best_Seller_Adapter best_seller_adapter;
     RecyclerView rv_bestSeller, rv_topRated, rv_category;
 
@@ -95,6 +100,12 @@ public class Home extends Fragment implements BestSellerListener {
     private int currentPage = 0;
     private final long DELAY_MS = 3000; // Delay in milliseconds before flipping to the next page
     private final long PERIOD_MS = 5000; // Time period between each auto-flipping
+
+    SharedPreferences loginPref;
+    SharedPreferences.Editor editor;
+    String token;
+    int id;
+    Boolean wishlist_status = false;
 
     public Home() {
     }
@@ -124,6 +135,11 @@ public class Home extends Fragment implements BestSellerListener {
         rv_topRated = home.findViewById(R.id.rv_topRated);
         rv_category = home.findViewById(R.id.rv_category_s);
         viewPager = home.findViewById(R.id.view_pager);
+
+        loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        editor = loginPref.edit();
+        token = loginPref.getString("device_id", null);
+        id = loginPref.getInt("userId", 0);
 
         /*Functionality*/
 //        handler = new Handler();
@@ -304,11 +320,11 @@ public class Home extends Fragment implements BestSellerListener {
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
                 if (response.isSuccessful()) {
                     String response1 = response.body().toString();
-                    best_seller_response = response.body().getData();
-                    best_seller_adapter = new Best_Seller_Adapter(getContext(), best_seller_response, new BestSellerListener() {
+                    best_seller_new_response = response.body().getData();
+                    best_seller_adapter = new Best_Seller_Adapter(getContext(), best_seller_new_response, wishlist_status, new BestSellerListener() {
                         @Override
                         public void onItemClickedmy(int position) {
-                            SharedPreferences loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+                            // SharedPreferences loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -320,6 +336,12 @@ public class Home extends Fragment implements BestSellerListener {
                                 Intent i = new Intent(getContext(), MyCart.class);
                                 startActivity(i);
                             }
+                        }
+
+                        @Override
+                        public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
+                            Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                            addWishList(item.getId(),item.getStatus());
                         }
                     });
                     rv_bestSeller.setAdapter(best_seller_adapter);
@@ -333,6 +355,28 @@ public class Home extends Fragment implements BestSellerListener {
             @Override
             public void onFailure(Call<Best_Seller_Response> call, Throwable t) {
 
+            }
+        });
+    }
+
+    private void addWishList(Integer prod_id,String status) {
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True",token);
+        addAddress.enqueue(new Callback<AddWishListResponse>() {
+            @Override
+            public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
+                String status = response.body().getStatus();
+                if (Objects.equals(status, "true")) {
+                    wishlist_status = true;
+                    Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    wishlist_status = false;
+                    Toast.makeText(getContext(), "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddWishListResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -388,11 +432,6 @@ public class Home extends Fragment implements BestSellerListener {
         if (locationManager != null && locationListener != null) {
             locationManager.removeUpdates(locationListener);
         }
-    }
-
-    @Override
-    public void onItemClickedmy(int position) {
-        Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
     }
 
     //best seller onItemClick

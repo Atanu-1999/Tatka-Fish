@@ -1,14 +1,14 @@
-package com.example.licious.fragment.response;
+package com.example.licious.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Master_Category_Response {
+public class BannerResponse {
     @SerializedName("data")
     @Expose
-    private List<Datum> data;
+    private List<BannerResponse.Datum> data;
     @SerializedName("code")
     @Expose
     private String code;
@@ -44,18 +44,21 @@ public class Master_Category_Response {
         @SerializedName("id")
         @Expose
         private Integer id;
-        @SerializedName("name")
-        @Expose
-        private String name;
         @SerializedName("image")
         @Expose
         private String image;
+        @SerializedName("priority")
+        @Expose
+        private String priority;
         @SerializedName("status")
         @Expose
         private String status;
         @SerializedName("createdAt")
         @Expose
         private String createdAt;
+        @SerializedName("updatedAt")
+        @Expose
+        private String updatedAt;
 
         public Integer getId() {
             return id;
@@ -65,20 +68,20 @@ public class Master_Category_Response {
             this.id = id;
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public String getImage() {
             return image;
         }
 
         public void setImage(String image) {
             this.image = image;
+        }
+
+        public String getPriority() {
+            return priority;
+        }
+
+        public void setPriority(String priority) {
+            this.priority = priority;
         }
 
         public String getStatus() {
@@ -96,6 +99,14 @@ public class Master_Category_Response {
         public void setCreatedAt(String createdAt) {
             this.createdAt = createdAt;
         }
-    }
-}
 
+        public String getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(String updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+    }
+
+}

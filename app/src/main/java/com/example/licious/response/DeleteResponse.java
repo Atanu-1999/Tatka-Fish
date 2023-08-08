@@ -1,4 +1,4 @@
-package com.example.licious.fragment.response;
+package com.example.licious.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
