@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.licious.BestSellerListener;
+import com.example.licious.listener.BestSellerListener;
 import com.example.licious.R;
 import com.example.licious.activity.ProductDetails;
 import com.example.licious.response.Best_Seller_Response;
@@ -71,31 +71,10 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent i = new Intent(context, ProductDetails.class);
-               context.startActivity(i);
+//               Intent i = new Intent(context, ProductDetails.class);
+//               context.startActivity(i);
             }
         });
-//        holder.btn_add.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                SharedPreferences loginPref = context.getSharedPreferences("login_pref", Context.MODE_PRIVATE);
-//                if (BlankId.equals(loginPref.getString("device_id", ""))) {
-////                    Intent i = new Intent(context, Account.class);
-////                    context.startActivity(i);
-//                }
-//                else {
-//                    Intent i = new Intent(context, MyCart.class);
-//                    context.startActivity(i);
-//                }
-//            }
-//        });
-//        holder.btn_add.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
-//                listener.onItemClicked(position);
-//            }
-//        });
 
     }
 
@@ -122,7 +101,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                 @Override
                 public void onClick(View view) {
                   //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
-                    listener.onItemClickedmy(0);
+                    listener.onItemClickedmy(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
                 }
             });
             fav_image.setOnClickListener(new View.OnClickListener() {

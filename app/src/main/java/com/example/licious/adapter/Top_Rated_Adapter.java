@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.TopSellerListener;
 import com.example.licious.activity.ProductDetails;
 import com.example.licious.response.Best_Seller_Response;
 import com.squareup.picasso.Picasso;
@@ -22,10 +23,14 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
     public static List<Best_Seller_Response.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    private TopSellerListener listener;
+    Boolean status;
 
-    public Top_Rated_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList) {
+    public Top_Rated_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList,Boolean status,TopSellerListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
+        this.status = status;
     }
     @NonNull
     @Override
@@ -45,7 +50,15 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_bestSeller);
 
-        holder.btn_add.setOnClickListener(new View.OnClickListener() {
+        if (status)
+        {
+            holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
+        }
+        else {
+            holder.fav_image.setImageResource(R.drawable.baseline_favorite_24);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, ProductDetails.class);
@@ -72,6 +85,21 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
             tv_discount =  (TextView) itemView.findViewById(R.id.tv_discount);
             fav_image = (ImageView) itemView.findViewById(R.id.fav_image);
             btn_add = (ImageView) itemView.findViewById(R.id.btn_add);
+
+            fav_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                    listener.onItemClickedWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1,status);
+                }
+            });
+            btn_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                    listener.onItemClickedAdd(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
 
         }
     }

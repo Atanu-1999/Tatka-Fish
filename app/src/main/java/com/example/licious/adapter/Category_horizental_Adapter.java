@@ -53,12 +53,12 @@ public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_h
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_circle_image;
+        CircleImageView iv_circle_image;
         TextView title;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            iv_circle_image = (ImageView) itemView.findViewById(R.id.iv_circle_image);
+            iv_circle_image = (CircleImageView) itemView.findViewById(R.id.iv_circle_image);
             title = (TextView) itemView.findViewById(R.id.title);
         }
     }

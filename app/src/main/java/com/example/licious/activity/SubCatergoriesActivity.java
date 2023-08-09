@@ -38,8 +38,9 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     Category_horizental_Adapter category_horizental_adapter;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    int id;
+    int id,cId;
     String token;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -57,6 +58,11 @@ public class SubCatergoriesActivity extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!= null) {
+            cId = bundle.getInt("cId");
+        }
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
 //        btn_all.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +95,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //              //  startActivity(new Intent(Subcategories.this,SearchActivity.class));
 //            }
 //        });
+       // getCategory(cId);
         getCategory(2);
     }
 

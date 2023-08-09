@@ -1,6 +1,7 @@
 package com.example.licious.fragment;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,8 +34,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.licious.BestSellerListener;
+import com.example.licious.activity.SubCatergoriesActivity;
+import com.example.licious.listener.BestSellerListener;
 import com.example.licious.R;
+import com.example.licious.listener.CategoriesListener;
+import com.example.licious.listener.TopSellerListener;
 import com.example.licious.activity.MyCart;
 import com.example.licious.adapter.BannerAdapter;
 import com.example.licious.adapter.Best_Seller_Adapter;
@@ -44,10 +48,10 @@ import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.AddressUtils;
 import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.model.Slider_Model;
 import com.example.licious.response.BannerResponse;
-import com.example.licious.response.Best_Seller_New_response;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.Master_Category_Response;
 
@@ -106,6 +110,8 @@ public class Home extends Fragment {
     String token;
     int id;
     Boolean wishlist_status = false;
+    int product_id;
+    ProgressDialog progressDialog;
 
     public Home() {
     }
@@ -140,6 +146,11 @@ public class Home extends Fragment {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+        //loading
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
 
         /*Functionality*/
 //        handler = new Handler();
@@ -210,24 +221,26 @@ public class Home extends Fragment {
 //        });
 
         //Banner
-        Banner("abcdefgh12345");
+        Banner(deviceId);
         //category
-        Category("abcdefgh12345");
+        Category(deviceId);
         //Best Seller
-        BestSeller("abcdefgh12345");
+        BestSeller(deviceId);
         //Top Rated
-        TopRated("abcdefgh12345");
+        TopRated(deviceId);
 
 
         return home;
     }
 
     private void Banner(String token) {
+        progressDialog.show();
         Call<BannerResponse> login_apiCall = ApiService.apiHolders().banner(token);
         login_apiCall.enqueue(new Callback<BannerResponse>() {
             @Override
             public void onResponse(Call<BannerResponse> call, Response<BannerResponse> response) {
                 if (response.isSuccessful()) {
+                    progressDialog.dismiss();
                     String response1 = response.body().toString();
                     bannerResponses = response.body().getData();
                     BannerAdapter bannerAdapter = new BannerAdapter(getContext(), bannerResponses);
@@ -265,14 +278,26 @@ public class Home extends Fragment {
     }
 
     private void Category(String token) {
+        progressDialog.show();
         Call<Master_Category_Response> login_apiCall = ApiService.apiHolders().category(token);
         login_apiCall.enqueue(new Callback<Master_Category_Response>() {
             @Override
             public void onResponse(Call<Master_Category_Response> call, Response<Master_Category_Response> response) {
                 if (response.isSuccessful()) {
+                    progressDialog.dismiss();
                     String response1 = response.body().toString();
                     master_category_responses = response.body().getData();
-                    main_screen_category_adapter = new Main_screen_Category_Adapter(getContext(), master_category_responses);
+                    main_screen_category_adapter = new Main_screen_Category_Adapter(getContext(), master_category_responses, new CategoriesListener() {
+                        @Override
+                        public void onItemClickedCategories(Master_Category_Response.Datum item, int position, int type) {
+                            int cId = item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("cId", cId);
+                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
                     rv_category.setLayoutManager(layoutManager);
                     rv_category.setAdapter(main_screen_category_adapter);
@@ -290,14 +315,36 @@ public class Home extends Fragment {
     }
 
     private void TopRated(String token) {
+        progressDialog.show();
         Call<Best_Seller_Response> login_apiCall = ApiService.apiHolders().topRated(token);
         login_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
                 if (response.isSuccessful()) {
+                    progressDialog.dismiss();
                     String response1 = response.body().toString();
                     best_seller_response = response.body().getData();
-                    top_rated_adapter = new Top_Rated_Adapter(getContext(), best_seller_response);
+                    top_rated_adapter = new Top_Rated_Adapter(getContext(), best_seller_response, true, new TopSellerListener() {
+                        @Override
+                        public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
+                            addWishList(item.getId(), item.getStatus());
+                        }
+
+                        @Override
+                        public void onItemClickedAdd(Best_Seller_Response.Datum item, int position, int type) {
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                //edit_sku_no.getText().clear();
+                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                product_id = item.getId();
+                                addToCart(product_id);//add to cart API
+                            }
+                        }
+                    });
                     rv_topRated.setAdapter(top_rated_adapter);
                     // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
                     rv_topRated.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -314,16 +361,18 @@ public class Home extends Fragment {
     }
 
     private void BestSeller(String token) {
+        progressDialog.show();
         Call<Best_Seller_Response> login_apiCall = ApiService.apiHolders().bestSeller(token);
         login_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
                 if (response.isSuccessful()) {
+                    progressDialog.dismiss();
                     String response1 = response.body().toString();
                     best_seller_new_response = response.body().getData();
                     best_seller_adapter = new Best_Seller_Adapter(getContext(), best_seller_new_response, wishlist_status, new BestSellerListener() {
                         @Override
-                        public void onItemClickedmy(int position) {
+                        public void onItemClickedmy(Best_Seller_Response.Datum item, int position, int type) {
                             // SharedPreferences loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -333,15 +382,15 @@ public class Home extends Fragment {
                                 //edit_sku_no.getText().clear();
                                 fragmentTransaction.addToBackStack(null).commit();
                             } else {
-                                Intent i = new Intent(getContext(), MyCart.class);
-                                startActivity(i);
+                                product_id = item.getId();
+                                addToCart(product_id);//add to cart API
                             }
                         }
 
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
-                            Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-                            addWishList(item.getId(),item.getStatus());
+                            Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
+                            addWishList(item.getId(), item.getStatus());
                         }
                     });
                     rv_bestSeller.setAdapter(best_seller_adapter);
@@ -359,18 +408,47 @@ public class Home extends Fragment {
         });
     }
 
-    private void addWishList(Integer prod_id,String status) {
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True",token);
+    private void addToCart(int product_id) {
+        progressDialog.show();
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, token);
+        addAddress.enqueue(new Callback<AddToCartResponse>() {
+            @Override
+            public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("product_id", product_id);
+                    Intent i = new Intent(getContext(), MyCart.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddToCartResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addWishList(Integer prod_id, String status) {
+        progressDialog.show();
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True", token);
         addAddress.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
-                String status = response.body().getStatus();
-                if (Objects.equals(status, "true")) {
-                    wishlist_status = true;
-                    Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    wishlist_status = false;
-                    Toast.makeText(getContext(), "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    String status = response.body().getStatus();
+                    if (Objects.equals(status, "true")) {
+                        wishlist_status = true;
+                        Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        wishlist_status = false;
+                        Toast.makeText(getContext(), "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

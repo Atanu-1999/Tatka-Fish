@@ -1,11 +1,13 @@
 package com.example.licious.api;
 
 import com.example.licious.response.AddAddressResponse;
+import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.AllWishListResponse;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
@@ -119,6 +121,16 @@ public interface ApiHolder {
     @GET("cproduct")
     Call<Category_Response> getCategory(@Query("cId") int cId,
                                         @Query("token") String token);
+
+    @POST("addtocart")
+    @FormUrlEncoded
+    Call<AddToCartResponse> add_to_cart(@Field("user_id") int user_id,
+                                        @Field("product_id") int product_id,
+                                        @Field("token") String token);
+
+    @GET("cproduct")
+    Call<CartDetailsResponse> getCartDetails(@Query("user_id") int user_id,
+                                             @Query("token") String token);
 
 
 }
