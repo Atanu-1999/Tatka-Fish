@@ -48,6 +48,7 @@ public class Account extends Fragment {
     private int charIndex;
     String deviceId, phone;
     String BlankId = "";
+    LinearLayout ll_line;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class Account extends Fragment {
         tv_phone = account.findViewById(R.id.tv_phone);
         tv_full_name = account.findViewById(R.id.tv_full_name);
         tv_mail = account.findViewById(R.id.tv_mail);
+        ll_line = account.findViewById(R.id.ll_line);
 
         String phoneNum= loginPref.getString("phone","");
         String firstname = loginPref.getString("first_name", null);
@@ -105,8 +107,15 @@ public class Account extends Fragment {
             before_login_layout.setVisibility(View.GONE);
             btn_logout.setVisibility(View.VISIBLE);
             tv_phone.setText(phoneNum);
-            tv_full_name.setText(firstname + " " + lastName);
-            tv_mail.setText(email_s);
+            if (firstname== null && lastName == null){
+                tv_full_name.setVisibility(View.GONE);
+                tv_mail.setVisibility(View.GONE);
+                ll_line.setVisibility(View.GONE);
+            }else {
+                tv_full_name.setText(firstname + " " + lastName);
+                tv_mail.setText(email_s);
+                ll_line.setVisibility(View.VISIBLE);
+            }
         }
         txt_edite.setOnClickListener(new View.OnClickListener() {
             @Override

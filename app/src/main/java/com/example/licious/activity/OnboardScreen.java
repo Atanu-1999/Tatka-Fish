@@ -47,7 +47,7 @@ public class OnboardScreen extends AppCompatActivity {
                 if ((viewPager.getCurrentItem() + 1) < adapter.getCount()) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
-                    startActivity(new Intent(OnboardScreen.this, LoginPage.class));
+                    startActivity(new Intent(OnboardScreen.this, MainActivity.class));
                     finish();
                 }
             }
@@ -56,7 +56,7 @@ public class OnboardScreen extends AppCompatActivity {
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(OnboardScreen.this, LoginPage.class));
+                startActivity(new Intent(OnboardScreen.this, MainActivity.class));
                 finish();
             }
         });

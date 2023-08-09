@@ -95,5 +95,4 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.main_container, fragment)
                 .commit();
     }
-
 }

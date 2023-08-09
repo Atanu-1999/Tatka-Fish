@@ -1,6 +1,7 @@
 package com.example.licious.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -228,6 +230,24 @@ public class Home extends Fragment {
         BestSeller(deviceId);
         //Top Rated
         TopRated(deviceId);
+
+        //onBackPressed
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                //requireActivity().finish();
+//                AlertDialog.Builder builder;
+//                builder = new AlertDialog.Builder(getActivity());
+//                builder.setMessage("Do you want to exit?");
+//                builder.setCancelable(true);
+//
+//                builder.setPositiveButton("Yes", (dialogInterface, i) -> requireActivity().finish());
+//
+//                builder.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel());
+//                AlertDialog alertDialog = builder.create();
+//                alertDialog.show();
+//            }
+//        });
 
 
         return home;

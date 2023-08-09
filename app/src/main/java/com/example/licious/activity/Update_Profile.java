@@ -15,6 +15,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -89,6 +90,7 @@ public class Update_Profile extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String firstname,lastName,email_s,Dob_s,gender_s,image,image_s;
     String BlankId = "";
+    ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -115,13 +117,20 @@ public class Update_Profile extends AppCompatActivity {
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
+        //loader
+        progressDialog = new ProgressDialog(Update_Profile.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
 
-        if (BlankId.equals(loginPref.getString("device_id", ""))) {
-            edite_Fname.setText("");
-            edite_Last_name.setText("");
-            et_email.setText("");
-        }
-        else {
+//        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//            edite_Fname.setText("");
+//            edite_Last_name.setText("");
+//            et_email.setText("");
+//            Iv_profile.setImageResource(R.drawable.user);
+//
+//        }
+//        else {
+//        if (loginPref.getString("device_id", "")!=null){
             firstname = loginPref.getString("first_name", null);
             lastName = loginPref.getString("last_name", null);
             email_s = loginPref.getString("email", null);
@@ -133,9 +142,15 @@ public class Update_Profile extends AppCompatActivity {
             edite_Last_name.setText(lastName);
             et_email.setText(email_s);
             edit_user_dob.setText(Dob_s);
-            Picasso.with(getApplicationContext())
-                    .load(image_url+image_s)
-                    .into(Iv_profile);
+            if (Objects.equals(loginPref.getString("image", null), null)){
+                Picasso.with(getApplicationContext())
+                        .load(R.drawable.user)
+                        .into(Iv_profile);
+            }else {
+                Picasso.with(getApplicationContext())
+                        .load(image_url + image_s)
+                        .into(Iv_profile);
+            }
 
             if (Objects.equals(gender_s, "Male")){
                 radio_male.setChecked(true);
@@ -146,7 +161,7 @@ public class Update_Profile extends AppCompatActivity {
                 radio_other.setChecked(true);
             }
 
-        }
+       // }
 
         phoneNum = loginPref.getString("phone", "");
         tv_phone.setText(phoneNum);
@@ -288,11 +303,12 @@ public class Update_Profile extends AppCompatActivity {
         email = et_email.getText().toString();
         Dob = edit_user_dob.getText().toString();
 
-
+        progressDialog.show();
         Call<ProfileResponse> otp_verify = ApiService.apiHolders().UpdateProfile(token,id, f_name, l_name, email, phoneNum, Dob, gender);
         otp_verify.enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                progressDialog.dismiss();
                 String response1 = response.body().toString();
                 Toast.makeText(Update_Profile.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
 
@@ -468,6 +484,7 @@ public class Update_Profile extends AppCompatActivity {
 //        SharedPreferences loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
 //        String token = loginPref.getString("device_id", null);
 //        int id = loginPref.getInt("userId", 0);
+        progressDialog.show();
         Log.e("MEDIA", "" + mediaPath);
         //File file =
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), mediaFile);
@@ -479,6 +496,7 @@ public class Update_Profile extends AppCompatActivity {
         imageUpload.enqueue(new Callback<ImageResponse>() {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                progressDialog.dismiss();
                 Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
                 assert response.body() != null;
                 Picasso.with(getApplicationContext())
