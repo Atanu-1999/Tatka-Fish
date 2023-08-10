@@ -379,6 +379,7 @@ public class Update_Profile extends AppCompatActivity {
                         pickMedia.launch(new PickVisualMediaRequest.Builder()
                                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                                 .build());
+                        alertDialog.dismiss();
                     } else {
                         takePictureGallery();
                         alertDialog.dismiss();

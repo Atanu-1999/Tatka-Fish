@@ -8,6 +8,7 @@ import com.example.licious.response.AllWishListResponse;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.CartDetailsResponse;
+import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
@@ -128,9 +129,13 @@ public interface ApiHolder {
                                         @Field("product_id") int product_id,
                                         @Field("token") String token);
 
-    @GET("cproduct")
+    @GET("getcartdata")
     Call<CartDetailsResponse> getCartDetails(@Query("user_id") int user_id,
                                              @Query("token") String token);
+
+    @DELETE("deletecartdata")
+    Call<CartItemDeleteResponse> deleteCartItem(@Query("cart_id") int user_id,
+                                                @Query("token") String token);
 
 
 }

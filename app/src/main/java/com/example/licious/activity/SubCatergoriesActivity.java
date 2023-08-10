@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +41,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     int id,cId;
     String token;
+    ProgressDialog progressDialog;
 
 
     @SuppressLint("MissingInflatedId")
@@ -58,6 +60,11 @@ public class SubCatergoriesActivity extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+        //loading
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {
@@ -100,10 +107,12 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     }
 
     private void getCategory(Integer cId) {
+        progressDialog.show();
         Call<Category_Response> addAddress = ApiService.apiHolders().getCategory(2, token);
         addAddress.enqueue(new Callback<Category_Response>() {
             @Override
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
+                progressDialog.dismiss();
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
                 category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response);

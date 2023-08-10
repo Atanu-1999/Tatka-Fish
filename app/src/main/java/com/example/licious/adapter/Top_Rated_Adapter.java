@@ -44,7 +44,8 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
     public void onBindViewHolder(@NonNull Top_Rated_Adapter.ViewHolder holder, int position) {
         holder.tv_title.setText(ItemList.get(position).getProduct_title());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + " " + ItemList.get(position).getWeight_type());
-        holder.tv_mrp.setText("₹" + ItemList.get(position).getMrp());
+        holder.tv_mrp.setText("₹" + ItemList.get(position).getPrice());
+        holder.tv_basePrice.setText("₹" + ItemList.get(position).getMrp());
         holder.tv_discount.setText(ItemList.get(position).getOffer() + "% off");
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getProduct_image())
@@ -75,7 +76,7 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_bestSeller,fav_image,btn_add;
-        TextView tv_title,tv_weight,tv_mrp,tv_discount;
+        TextView tv_title,tv_weight,tv_mrp,tv_discount,tv_basePrice;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_bestSeller =  (ImageView) itemView.findViewById(R.id.iv_bestSeller);
@@ -85,6 +86,7 @@ public class Top_Rated_Adapter extends RecyclerView.Adapter<Top_Rated_Adapter.Vi
             tv_discount =  (TextView) itemView.findViewById(R.id.tv_discount);
             fav_image = (ImageView) itemView.findViewById(R.id.fav_image);
             btn_add = (ImageView) itemView.findViewById(R.id.btn_add);
+            tv_basePrice = (TextView) itemView.findViewById(R.id.tv_base_Price);
 
             fav_image.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     public interface OnItemClickListener {
         void onItemClick(AllAddressListResponse.Datum item, int position, int type);
         void onItemClickEdit(AllAddressListResponse.Datum item, int position, int type);
+        void onItemClickCheck(AllAddressListResponse.Datum item, int position, int type,boolean isChecked);
     }
 
     public AddressListAdapter(Context context, List<AllAddressListResponse.Datum> ItemList,AddressListAdapter.OnItemClickListener listener) {
@@ -57,6 +60,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView address_type, tv_addressLine1, tv_addressLine2, tv_city, tv_phone, tv_delete,tv_edit;
+        CheckBox check_box;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,6 +71,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             tv_phone = (TextView) itemView.findViewById(R.id.tv_phone);
             tv_delete = (TextView) itemView.findViewById(R.id.tv_delete);
             tv_edit = (TextView) itemView.findViewById(R.id.tv_edit);
+            check_box = (CheckBox) itemView.findViewById(R.id.check_box);
 
             tv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,6 +84,13 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 @Override
                 public void onClick(View view) {
                     listener.onItemClickEdit(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
+
+            check_box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listener.onItemClickCheck(ItemList.get(getAdapterPosition()),getAdapterPosition(), 1, isChecked);
                 }
             });
 

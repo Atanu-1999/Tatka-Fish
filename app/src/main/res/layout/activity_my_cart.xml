@@ -39,10 +39,14 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/toolbar"
         android:id="@+id/rv_cart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:scrollbars="none" />
 
 
@@ -71,17 +75,19 @@
                     android:padding="@dimen/_10sdp">
 
                     <TextView
+                        android:id="@+id/tv_add_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Work"
+                        android:text=""
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold"
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/tv_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="128,128 Jodhpur Garden 700045"
+                        android:text=""
                         android:textSize="@dimen/_13sdp"
                         android:padding="@dimen/_3sdp"
                         android:textColor="@color/black"/>
@@ -94,14 +100,15 @@
                     android:layout_weight="2.5"
                     android:layout_gravity="center"
                     android:gravity="center">
+
                     <TextView
                         android:id="@+id/txt_change"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="Change"
+                        android:textColor="@color/red"
                         android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold"
-                        android:textColor="@color/red"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

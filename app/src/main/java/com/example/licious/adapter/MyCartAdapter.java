@@ -39,8 +39,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     public void onBindViewHolder(@NonNull MyCartAdapter.ViewHolder holder, int position) {
         holder.tv_produc_tTitle.setText(ItemList.get(position).getProduct_title());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + " " + ItemList.get(position).getWeight_type());
-        holder.tv_price.setText("₹" + ItemList.get(position).getOffer());
-        holder.tv_base_Price.setText(ItemList.get(position).getMrp() + "% off");
+        holder.tv_price.setText("₹" + ItemList.get(position).getPrice());
+        holder.tv_base_Price.setText(ItemList.get(position).getMrp());
     }
 
     @Override
