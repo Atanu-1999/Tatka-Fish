@@ -143,6 +143,7 @@
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/tv_subtotal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="388.00"

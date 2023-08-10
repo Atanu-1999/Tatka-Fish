@@ -189,7 +189,9 @@ public class Address extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AllAddressListResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed" , Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -232,17 +234,21 @@ public class Address extends AppCompatActivity {
     }
 
     private void UpdateAddress(int address_id,String addrs_one, String addrs_second, String landMark, String city, String phone) {
+        progressDialog.show();
         Call<EditAddressResponse> editAddress = ApiService.apiHolders().update_address(token,address_id,addrs_one,addrs_second,landMark,city,phone,"Home");
         editAddress.enqueue(new Callback<EditAddressResponse>() {
             @Override
             public void onResponse(Call<EditAddressResponse> call, Response<EditAddressResponse> response) {
+                progressDialog.dismiss();
                 Toast.makeText(Address.this, "Address updated Successfully", Toast.LENGTH_SHORT).show();
                 getAllAddress();
             }
 
             @Override
             public void onFailure(Call<EditAddressResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -261,7 +267,9 @@ public class Address extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -285,7 +293,8 @@ public class Address extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddAddressResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed" , Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }

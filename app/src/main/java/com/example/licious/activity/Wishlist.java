@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,12 +33,17 @@ public class Wishlist extends AppCompatActivity {
     int id;
     List<AllWishListResponse.Datum> allWishList;
     WishListAdapter wishListAdapter;
+    ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
+        //loading
+        progressDialog = new ProgressDialog(Wishlist.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
         initi();
         getWishListData();
 
@@ -53,10 +59,12 @@ public class Wishlist extends AppCompatActivity {
     }
 
     private void getWishListData() {
+        progressDialog.show();
         Call<AllWishListResponse> getAllAddress = ApiService.apiHolders().getAllWishList(id,token);
         getAllAddress.enqueue(new Callback<AllWishListResponse>() {
             @Override
             public void onResponse(Call<AllWishListResponse> call, Response<AllWishListResponse> response) {
+                progressDialog.dismiss();
                 Toast.makeText(Wishlist.this, "Successfully", Toast.LENGTH_SHORT).show();
                 allWishList = response.body().getData();
                 wishListAdapter = new WishListAdapter(getApplication(),allWishList);
@@ -66,7 +74,9 @@ public class Wishlist extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<AllWishListResponse> call, Throwable t) {
-                Toast.makeText(Wishlist.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Wishlist.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Wishlist.this, "failed" , Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
 

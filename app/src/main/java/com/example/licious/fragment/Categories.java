@@ -143,7 +143,7 @@ public class Categories extends Fragment {
 
             @Override
             public void onFailure(Call<Master_Category_Response> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }

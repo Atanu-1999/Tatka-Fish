@@ -344,7 +344,8 @@ public class Update_Profile extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                Toast.makeText(Update_Profile.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Update_Profile.this, "failed" , Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
@@ -509,7 +510,8 @@ public class Update_Profile extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
-                Toast.makeText(Update_Profile.this, "" + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }

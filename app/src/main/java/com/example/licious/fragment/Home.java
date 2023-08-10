@@ -1,7 +1,6 @@
 package com.example.licious.fragment;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -292,7 +290,7 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<BannerResponse> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }
@@ -361,7 +359,8 @@ public class Home extends Fragment {
                                 fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
-                                addToCart(product_id);//add to cart API
+                                String prices = item.getPrice();
+                                addToCart(product_id, prices);//add to cart API
                             }
                         }
                     });
@@ -375,7 +374,7 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<Best_Seller_Response> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }
@@ -403,7 +402,8 @@ public class Home extends Fragment {
                                 fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
-                                addToCart(product_id);//add to cart API
+                                String price = item.getPrice();
+                                addToCart(product_id,price);//add to cart API
                             }
                         }
 
@@ -423,14 +423,14 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<Best_Seller_Response> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }
 
-    private void addToCart(int product_id) {
+    private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -448,7 +448,9 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddToCartResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+              //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -474,7 +476,9 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

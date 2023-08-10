@@ -24,7 +24,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     public MyCartAdapter(Context context, List<CartDetailsResponse.Datum> ItemList,DeleteListener listener) {
         this.ItemList = ItemList;
         this.context = context;
-        this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,6 +41,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         holder.tv_weight.setText(ItemList.get(position).getWeight() + " " + ItemList.get(position).getWeight_type());
         holder.tv_price.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_base_Price.setText(ItemList.get(position).getMrp());
+        holder.tv_qty.setText(ItemList.get(position).getQty());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_produc_tTitle,tv_weight,tv_price,tv_base_Price;
+        TextView tv_produc_tTitle,tv_weight,tv_price,tv_base_Price,tv_qty;
         ImageView iv_add,iv_Sub,iv_delete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,11 +62,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             tv_price = (TextView) itemView.findViewById(R.id.tv_price);
             tv_base_Price = (TextView) itemView.findViewById(R.id.tv_base_Price);
             iv_delete = (ImageView) itemView.findViewById(R.id.iv_delete);
+            tv_qty = (TextView) itemView.findViewById(R.id.tv_qty);
 
             iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
                     listener.onItemClickedDelete(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
                 }
             });

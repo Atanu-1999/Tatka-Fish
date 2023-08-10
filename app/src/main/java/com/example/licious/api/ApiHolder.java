@@ -1,6 +1,7 @@
 package com.example.licious.api;
 
 import com.example.licious.response.AddAddressResponse;
+import com.example.licious.response.AddRemoveResponse;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.AllAddressListResponse;
@@ -127,6 +128,7 @@ public interface ApiHolder {
     @FormUrlEncoded
     Call<AddToCartResponse> add_to_cart(@Field("user_id") int user_id,
                                         @Field("product_id") int product_id,
+                                        @Field("price") String price,
                                         @Field("token") String token);
 
     @GET("getcartdata")
@@ -136,6 +138,13 @@ public interface ApiHolder {
     @DELETE("deletecartdata")
     Call<CartItemDeleteResponse> deleteCartItem(@Query("cart_id") int user_id,
                                                 @Query("token") String token);
+
+    @PATCH("updatecart")
+    @FormUrlEncoded
+    Call<AddRemoveResponse> updatedCart(@Query("token") String token,
+                                    @Field("cart_id") int cart_id,
+                                    @Field("price") String price,
+                                    @Field("qty") int qty);
 
 
 }

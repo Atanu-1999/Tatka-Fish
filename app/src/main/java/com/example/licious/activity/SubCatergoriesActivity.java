@@ -124,7 +124,9 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Category_Response> call, Throwable t) {
-                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -19,9 +19,11 @@ import com.example.licious.listener.DeleteListener;
 import com.example.licious.R;
 import com.example.licious.adapter.MyCartAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.response.AddRemoveResponse;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +42,11 @@ public class MyCart extends AppCompatActivity {
     List<CartDetailsResponse.Datum> cardDetailsResponse;
     MyCartAdapter myCartAdapter;
     ProgressDialog progressDialog;
+    ArrayList<String> listPrice = new ArrayList<>();
+    TextView tv_subtotal;
+    int Total_price;
+    int tp = 0;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -52,6 +59,7 @@ public class MyCart extends AppCompatActivity {
         txt_change =findViewById(R.id.txt_change);
         tv_add_type = findViewById(R.id.tv_add_type);
         tv_address = findViewById(R.id.tv_address);
+        tv_subtotal = findViewById(R.id.tv_subtotal);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -80,6 +88,7 @@ public class MyCart extends AppCompatActivity {
         progressDialog = new ProgressDialog(MyCart.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {
@@ -118,6 +127,7 @@ public class MyCart extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     cardDetailsResponse = response.body().getData();
+                    totalPrice(cardDetailsResponse);
                     myCartAdapter = new MyCartAdapter(getApplicationContext(), cardDetailsResponse, new DeleteListener() {
                         @Override
                         public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
@@ -128,12 +138,34 @@ public class MyCart extends AppCompatActivity {
 
                         @Override
                         public void onItemClickedAdditem(CartDetailsResponse.Datum item, int position, int type) {
-                            Toast.makeText(MyCart.this,"ADDED",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(MyCart.this,"ADDED",Toast.LENGTH_SHORT).show();
+                            int Id= item.getId();
+                            String price = item.getOffer_price();
+                            int qty = Integer.parseInt(item.getQty());
+                            int qtn = 1+ qty;
+                            if (qtn > 1){
+                                addOrRemoveItem(Id,price,qtn);
+                            }
+                            else {
+                                Toast.makeText(MyCart.this, "Can not less than 1", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
                         @Override
                         public void onItemClickedRemoveItem(CartDetailsResponse.Datum item, int position, int type) {
-                            Toast.makeText(MyCart.this,"REMOVE",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MyCart.this,"REMOVE",Toast.LENGTH_SHORT).show();
+                            int Id= item.getId();
+                            String price = item.getOffer_price();
+                            int qty = Integer.parseInt(item.getQty());
+                            int qtn = qty - 1;
+                            if (qtn >= 1){
+                                addOrRemoveItem(Id,price,qtn);
+                            }
+                            else {
+                                Toast.makeText(MyCart.this, "Can not less than 1", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
                     rv_cart.setAdapter(myCartAdapter);
@@ -143,15 +175,50 @@ public class MyCart extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CartDetailsResponse> call, Throwable t) {
-                Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
 
     }
 
+    private void totalPrice(List<CartDetailsResponse.Datum> cardDetailsResponse) {
+        for (int i =0 ; i< cardDetailsResponse.size();i++){
+            tv_subtotal.setText("");
+ //           listPrice.add(cardDetailsResponse.get(i).getOffer_price());
+            Total_price = Integer.parseInt(cardDetailsResponse.get(i).getPrice());
+            tp= tp + Total_price;
+        }
+ //       return tp;
+//        tp= tp + Total_price;
+        String tpp = String.valueOf(tp);
+        tv_subtotal.setText(tpp);
+    }
+
+    private void addOrRemoveItem(int id, String price, int qty) {
+        progressDialog.show();
+        Call<AddRemoveResponse> addAddress = ApiService.apiHolders().updatedCart(token,id,price,qty);
+        addAddress.enqueue(new Callback<AddRemoveResponse>() {
+            @Override
+            public void onResponse(Call<AddRemoveResponse> call, Response<AddRemoveResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                  //  Toast.makeText(MyCart.this,"Added Item",Toast.LENGTH_SHORT).show();
+                    getCartDetails();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddRemoveResponse> call, Throwable t) {
+               // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
     private void deleteItem(int cartId) {
         progressDialog.show();
-        Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(id,token);
+        Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(cartId,token);
         addAddress.enqueue(new Callback<CartItemDeleteResponse>() {
             @Override
             public void onResponse(Call<CartItemDeleteResponse> call, Response<CartItemDeleteResponse> response) {
@@ -164,7 +231,8 @@ public class MyCart extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CartItemDeleteResponse> call, Throwable t) {
-                Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
