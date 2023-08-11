@@ -49,10 +49,11 @@ public class CheckoutPage extends AppCompatActivity {
     ProgressDialog progressDialog;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    String token;
-    int id;
+    String token,Total;
+    int id, coupon_id,totalAmount;
     List<CartDetailsResponse.Datum> cardDetailsResponse;
     CheckOutAdapter checkOutAdapter;
+    TextView tv_totalAmount,sub_total,tv_delivery_charge,totalValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,11 @@ public class CheckoutPage extends AppCompatActivity {
         setContentView(R.layout.activity_checkout_page);
         btn_coupon = findViewById(R.id.btn_coupon);
         rv_CheckOutCart = findViewById(R.id.rv_CheckOutCart);
+        tv_totalAmount = findViewById(R.id.tv_totalAmount);
+        sub_total = findViewById(R.id.sub_total);
+        tv_delivery_charge = findViewById(R.id.tv_delivery_charge);
+        totalValue = findViewById(R.id.totalValue);
+
         /*Current date and tomorrow date pick*/
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
@@ -81,6 +87,14 @@ public class CheckoutPage extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+
+        Bundle bundle = getIntent().getExtras();
+        //Extract the data…
+        if (bundle != null) {
+            coupon_id = bundle.getInt("coupon_id",0);
+            totalAmount = bundle.getInt("total_amount",0);
+        }
 
         //get Data
         getCartDetails();
@@ -270,7 +284,12 @@ public class CheckoutPage extends AppCompatActivity {
         btn_coupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CheckoutPage.this, Apply_Coupon.class));
+                Bundle bundle = new Bundle();
+                bundle.putInt("total_amount",totalAmount);
+                Intent i = new Intent(CheckoutPage.this,Apply_Coupon.class);
+                i.putExtras(bundle);
+                startActivity(i);
+               // startActivity(new Intent(CheckoutPage.this, Apply_Coupon.class));
             }
         });
     }
@@ -285,10 +304,11 @@ public class CheckoutPage extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     cardDetailsResponse = response.body().getData();
+                    setTotalAmount(cardDetailsResponse);
                     checkOutAdapter = new CheckOutAdapter(getApplicationContext(), cardDetailsResponse, new DeleteListener() {
                         @Override
                         public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
-                            int cartId= item.getId();
+                            int cartId = item.getId();
                             deleteItem(cartId);
                         }
 
@@ -315,15 +335,26 @@ public class CheckoutPage extends AppCompatActivity {
         });
     }
 
+    private void setTotalAmount(List<CartDetailsResponse.Datum> cardDetailsResponse) {
+        sub_total.setText("₹" + " " + totalAmount);///subTotal
+        int subtotal = totalAmount;
+        //String deliveryCharges =tv_delivery_charge.getText().toString();
+        int deliveryCharges = 39; // static for testing
+        int Total = subtotal + deliveryCharges;
+        String T_total = String.valueOf(Total);
+        totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
+        tv_totalAmount.setText(T_total);//set value final Total
+    }
+
     private void deleteItem(int cartId) {
         progressDialog.show();
-        Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(cartId,token);
+        Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(cartId, token);
         addAddress.enqueue(new Callback<CartItemDeleteResponse>() {
             @Override
             public void onResponse(Call<CartItemDeleteResponse> call, Response<CartItemDeleteResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(CheckoutPage.this,"Deleted Item",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutPage.this, "Deleted Item", Toast.LENGTH_SHORT).show();
                     getCartDetails();
                 }
             }

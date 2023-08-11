@@ -46,6 +46,7 @@ public class MyCart extends AppCompatActivity {
     TextView tv_subtotal;
     int Total_price;
     int tp = 0;
+    String tpp;
 
 
     @SuppressLint("SetTextI18n")
@@ -104,7 +105,12 @@ public class MyCart extends AppCompatActivity {
         btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MyCart.this, CheckoutPage.class));
+                Bundle bundle = new Bundle();
+                bundle.putInt("total_amount", Integer.parseInt(tpp));
+                Intent i = new Intent(MyCart.this,CheckoutPage.class);
+                i.putExtras(bundle);
+                startActivity(i);
+              //  startActivity(new Intent(MyCart.this, CheckoutPage.class));
             }
         });
 //        btn_continue.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +194,7 @@ public class MyCart extends AppCompatActivity {
         for (int i =0 ; i< cardDetailsResponse.size();i++){
             Total_price += Integer.parseInt(cardDetailsResponse.get(i).getPrice());
         }
-        String tpp = String.valueOf(Total_price);
+        tpp = String.valueOf(Total_price);
         tv_subtotal.setText(tpp);
     }
 

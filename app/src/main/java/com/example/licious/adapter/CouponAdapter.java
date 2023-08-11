@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.CouponListener;
 import com.example.licious.listener.DeleteListener;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CheckOutResponse;
@@ -22,10 +23,12 @@ public class CouponAdapter  extends RecyclerView.Adapter<CouponAdapter.ViewHolde
     public static List<CouponsResponse.Datum> ItemList;
     private Context context;
     Boolean flag = false;
+    CouponListener listener;
 
-    public CouponAdapter(Context context, List<CouponsResponse.Datum> ItemList) {
+    public CouponAdapter(Context context, List<CouponsResponse.Datum> ItemList,CouponListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
     @NonNull
     @Override
@@ -74,6 +77,13 @@ public class CouponAdapter  extends RecyclerView.Adapter<CouponAdapter.ViewHolde
             txt_view = (TextView) itemView.findViewById(R.id.txt_view);
             tv_termCondition = (TextView) itemView.findViewById(R.id.tv_termCondition);
             hide_layout = (LinearLayout) itemView.findViewById(R.id.hide_layout);
+
+            tv_apply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedCoupon(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
 
         }
     }

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.licious.R;
 import com.example.licious.adapter.CheckOutAdapter;
 import com.example.licious.adapter.CouponAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.listener.CouponListener;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.CouponsResponse;
@@ -36,7 +38,7 @@ public class Apply_Coupon extends AppCompatActivity {
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
     String token;
-    int id;
+    int id,totalAmount;
     List<CouponsResponse.Datum> couponsResponse;
     CouponAdapter couponAdapter;
     RecyclerView rv_coupons;
@@ -57,6 +59,11 @@ public class Apply_Coupon extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            totalAmount = bundle.getInt("total_amount",0);
+        }
 
 //        hide_layout = findViewById(R.id.hide_layout);
 //        txt_view = findViewById(R.id.txt_view);
@@ -89,7 +96,19 @@ public class Apply_Coupon extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     couponsResponse = response.body().getData();
-                    couponAdapter = new CouponAdapter(getApplicationContext(), couponsResponse);
+                    couponAdapter = new CouponAdapter(getApplicationContext(), couponsResponse, new CouponListener() {
+                        @Override
+                        public void onItemClickedCoupon(CouponsResponse.Datum item, int position, int type) {
+                            int id = item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("coupon_id",id);
+                            bundle.putInt("total_amount",totalAmount);
+//                            startActivity(new Intent(Apply_Coupon.this, CheckoutPage.class));
+                            Intent i = new Intent(Apply_Coupon.this,CheckoutPage.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
+                    });
                     rv_coupons.setAdapter(couponAdapter);
                     rv_coupons.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     //Toast.makeText(Apply_Coupon.this, "Apply Coupon Successfully", Toast.LENGTH_SHORT).show();

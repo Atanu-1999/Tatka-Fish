@@ -217,6 +217,7 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/sub_total"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
@@ -245,6 +246,7 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/tv_delivery_charge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
@@ -279,6 +281,7 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/totalValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
@@ -333,6 +336,7 @@
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/tv_totalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="118.00"
