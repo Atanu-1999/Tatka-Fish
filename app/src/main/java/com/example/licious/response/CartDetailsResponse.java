@@ -74,6 +74,17 @@ public class CartDetailsResponse {
         @SerializedName("offer_price")
         @Expose
         private String offer_price;
+        @SerializedName("product_image")
+        @Expose
+        private String product_image;
+
+        public String getProduct_image() {
+            return product_image;
+        }
+
+        public void setProduct_image(String product_image) {
+            this.product_image = product_image;
+        }
 
         public Integer getId() {
             return id;

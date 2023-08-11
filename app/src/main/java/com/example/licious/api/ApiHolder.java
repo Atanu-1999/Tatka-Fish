@@ -11,6 +11,7 @@ import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.CouponsResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
 import com.example.licious.response.ImageResponse;
@@ -142,9 +143,12 @@ public interface ApiHolder {
     @PATCH("updatecart")
     @FormUrlEncoded
     Call<AddRemoveResponse> updatedCart(@Query("token") String token,
-                                    @Field("cart_id") int cart_id,
-                                    @Field("price") String price,
-                                    @Field("qty") int qty);
+                                        @Field("cart_id") int cart_id,
+                                        @Field("price") String price,
+                                        @Field("qty") int qty);
+
+    @GET("coupons")
+    Call<CouponsResponse> getCoupons(@Query("token") String token);
 
 
 }

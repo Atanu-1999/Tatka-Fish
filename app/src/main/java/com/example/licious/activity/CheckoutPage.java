@@ -2,9 +2,14 @@ package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.R;
+import com.example.licious.adapter.CheckOutAdapter;
+import com.example.licious.adapter.MyCartAdapter;
+import com.example.licious.api.ApiService;
+import com.example.licious.listener.DeleteListener;
+import com.example.licious.response.CartDetailsResponse;
+import com.example.licious.response.CartItemDeleteResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.w3c.dom.Text;
@@ -21,20 +32,34 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CheckoutPage extends AppCompatActivity {
 
     LinearLayout txt_slot;
     private BottomSheetDialog bottomSheetDialog;
-    String today,tomorrow;
+    String today, tomorrow;
     ImageView back;
     CardView btn_coupon;
+    RecyclerView rv_CheckOutCart;
+    ProgressDialog progressDialog;
+    SharedPreferences loginPref;
+    SharedPreferences.Editor editor;
+    String token;
+    int id;
+    List<CartDetailsResponse.Datum> cardDetailsResponse;
+    CheckOutAdapter checkOutAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout_page);
         btn_coupon = findViewById(R.id.btn_coupon);
+        rv_CheckOutCart = findViewById(R.id.rv_CheckOutCart);
         /*Current date and tomorrow date pick*/
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
@@ -46,10 +71,24 @@ public class CheckoutPage extends AppCompatActivity {
         /*initialization*/
         back = findViewById(R.id.back);
         txt_slot = findViewById(R.id.txt_slot);
+
+        //loading
+        progressDialog = new ProgressDialog(CheckoutPage.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+
+        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        editor = loginPref.edit();
+        token = loginPref.getString("device_id", null);
+        id = loginPref.getInt("userId", 0);
+
+        //get Data
+        getCartDetails();
+
         txt_slot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog = new BottomSheetDialog(CheckoutPage.this,R.style.BottomSheetTheme);
+                bottomSheetDialog = new BottomSheetDialog(CheckoutPage.this, R.style.BottomSheetTheme);
                 View view1 = LayoutInflater.from(CheckoutPage.this).inflate(R.layout.slot_layout,
                         (LinearLayout) findViewById(R.id.container));
                 @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_tomorrow = view1.findViewById(R.id.txt_tomorrow);
@@ -232,6 +271,67 @@ public class CheckoutPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(CheckoutPage.this, Apply_Coupon.class));
+            }
+        });
+    }
+
+    private void getCartDetails() {
+        progressDialog.show();
+        Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(id, token);
+        addAddress.enqueue(new Callback<CartDetailsResponse>() {
+            @Override
+            public void onResponse(Call<CartDetailsResponse> call, Response<CartDetailsResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    assert response.body() != null;
+                    cardDetailsResponse = response.body().getData();
+                    checkOutAdapter = new CheckOutAdapter(getApplicationContext(), cardDetailsResponse, new DeleteListener() {
+                        @Override
+                        public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
+                            int cartId= item.getId();
+                            deleteItem(cartId);
+                        }
+
+                        @Override
+                        public void onItemClickedAdditem(CartDetailsResponse.Datum item, int position, int type) {
+                            // No use
+                        }
+
+                        @Override
+                        public void onItemClickedRemoveItem(CartDetailsResponse.Datum item, int position, int type) {
+                            // No use
+                        }
+                    });
+                    rv_CheckOutCart.setAdapter(checkOutAdapter);
+                    rv_CheckOutCart.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartDetailsResponse> call, Throwable t) {
+                // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void deleteItem(int cartId) {
+        progressDialog.show();
+        Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(cartId,token);
+        addAddress.enqueue(new Callback<CartItemDeleteResponse>() {
+            @Override
+            public void onResponse(Call<CartItemDeleteResponse> call, Response<CartItemDeleteResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(CheckoutPage.this,"Deleted Item",Toast.LENGTH_SHORT).show();
+                    getCartDetails();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartItemDeleteResponse> call, Throwable t) {
+                //Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }

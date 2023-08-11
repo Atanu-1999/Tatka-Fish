@@ -91,9 +91,16 @@
 
                     </LinearLayout>
 
-                    <include layout="@layout/checkoutlayout"/>
+<!--                    <include layout="@layout/checkoutlayout"/>-->
 
-                    <include layout="@layout/checkoutlayout"/>
+<!--                    <include layout="@layout/checkoutlayout"/>-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_CheckOutCart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:scrollbars="none" />
 
                 </LinearLayout>
 

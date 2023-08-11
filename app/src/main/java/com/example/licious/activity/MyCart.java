@@ -131,7 +131,7 @@ public class MyCart extends AppCompatActivity {
                     myCartAdapter = new MyCartAdapter(getApplicationContext(), cardDetailsResponse, new DeleteListener() {
                         @Override
                         public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
-                            Toast.makeText(MyCart.this,"Deleted",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MyCart.this,"Deleted",Toast.LENGTH_SHORT).show();
                             int cartId= item.getId();
                             deleteItem(cartId);
                         }
@@ -141,6 +141,7 @@ public class MyCart extends AppCompatActivity {
                            // Toast.makeText(MyCart.this,"ADDED",Toast.LENGTH_SHORT).show();
                             int Id= item.getId();
                             String price = item.getOffer_price();
+
                             int qty = Integer.parseInt(item.getQty());
                             int qtn = 1+ qty;
                             if (qtn > 1){
@@ -183,15 +184,11 @@ public class MyCart extends AppCompatActivity {
     }
 
     private void totalPrice(List<CartDetailsResponse.Datum> cardDetailsResponse) {
+        Total_price = 0;
         for (int i =0 ; i< cardDetailsResponse.size();i++){
-            tv_subtotal.setText("");
- //           listPrice.add(cardDetailsResponse.get(i).getOffer_price());
-            Total_price = Integer.parseInt(cardDetailsResponse.get(i).getPrice());
-            tp= tp + Total_price;
+            Total_price += Integer.parseInt(cardDetailsResponse.get(i).getPrice());
         }
- //       return tp;
-//        tp= tp + Total_price;
-        String tpp = String.valueOf(tp);
+        String tpp = String.valueOf(Total_price);
         tv_subtotal.setText(tpp);
     }
 
@@ -235,5 +232,11 @@ public class MyCart extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCartDetails();
     }
 }

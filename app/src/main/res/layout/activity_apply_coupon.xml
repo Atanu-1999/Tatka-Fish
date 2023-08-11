@@ -74,11 +74,21 @@
 
             </LinearLayout>
 
-           <include layout="@layout/coupon_layout"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_coupons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:scrollbars="none" />
 
-            <include layout="@layout/coupon_layout"/>
+<!--           <include layout="@layout/coupon_layout"/>-->
 
-            <include layout="@layout/coupon_layout"/>
+<!--            <include layout="@layout/coupon_layout"/>-->
+
+<!--            <include layout="@layout/coupon_layout"/>-->
 
         </LinearLayout>
 
