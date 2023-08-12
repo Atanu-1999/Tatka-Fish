@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 public class Address extends AppCompatActivity {
 
     ImageView back;
-    TextView txt_add,tv_home,tv_work,tv_other;
+    TextView txt_add, tv_home, tv_work, tv_other;
     private BottomSheetDialog bottomSheetDialog;
     TextInputEditText tv_area, tv_building, tv_landmark, tv_city, tv_mobile;
     SharedPreferences loginPref;
@@ -47,7 +48,7 @@ public class Address extends AppCompatActivity {
     AddressListAdapter addressListAdapter;
 
     AddressListAdapter.OnItemClickListener listener;
-    String address_type="";
+    String address_type = "";
     ProgressDialog progressDialog;
 
     @Override
@@ -101,7 +102,7 @@ public class Address extends AppCompatActivity {
                         tv_home.setBackgroundResource(R.drawable.bg_textview_color);
                         tv_work.setBackgroundResource(R.drawable.textfield_bg);
                         tv_other.setBackgroundResource(R.drawable.textfield_bg);
-                       // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
                     }
                 });
                 tv_work.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +112,7 @@ public class Address extends AppCompatActivity {
                         tv_work.setBackgroundResource(R.drawable.bg_textview_color);
                         tv_other.setBackgroundResource(R.drawable.textfield_bg);
                         tv_home.setBackgroundResource(R.drawable.textfield_bg);
-                       // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
                     }
                 });
                 tv_other.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +122,7 @@ public class Address extends AppCompatActivity {
                         tv_other.setBackgroundResource(R.drawable.bg_textview_color);
                         tv_work.setBackgroundResource(R.drawable.textfield_bg);
                         tv_home.setBackgroundResource(R.drawable.textfield_bg);
-                      //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -166,17 +167,17 @@ public class Address extends AppCompatActivity {
 
                     @Override
                     public void onItemClickCheck(AllAddressListResponse.Datum item, int position, int type, boolean isChecked) {
-                       int add_Id = item.getAddress_id();
-                       String adds_one = item.getAddress_line_one();
-                       String adds_two = item.getAddress_line_two();
-                       String add_type = item.getAddress_type();
-                       String city = item.getCity();
+                        int add_Id = item.getAddress_id();
+                        String adds_one = item.getAddress_line_one();
+                        String adds_two = item.getAddress_line_two();
+                        String add_type = item.getAddress_type();
+                        String city = item.getCity();
 
-                        editor.putInt("add_id",add_Id);
-                        editor.putString("adds_one",adds_one);
-                        editor.putString("adds_two",adds_two);
-                        editor.putString("add_type",add_type);
-                        editor.putString("city",city);
+                        editor.putInt("add_id", add_Id);
+                        editor.putString("adds_one", adds_one);
+                        editor.putString("adds_two", adds_two);
+                        editor.putString("add_type", add_type);
+                        editor.putString("city", city);
                         editor.commit();
 
                         startActivity(new Intent(Address.this, MyCart.class));
@@ -190,7 +191,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<AllAddressListResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(Address.this, "failed" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -206,6 +207,10 @@ public class Address extends AppCompatActivity {
         tv_landmark = (TextInputEditText) view1.findViewById(R.id.tv_landmark);
         tv_city = (TextInputEditText) view1.findViewById(R.id.tv_city);
         tv_mobile = (TextInputEditText) view1.findViewById(R.id.tv_mobile);
+        tv_home = (TextView) view1.findViewById(R.id.tv_home);
+        tv_other = (TextView) view1.findViewById(R.id.tv_other);
+        tv_work = (TextView) view1.findViewById(R.id.tv_work);
+
 
         tv_area.setText(item.getAddress_line_one());
         String addrs_one = item.getAddress_line_one();
@@ -217,15 +222,62 @@ public class Address extends AppCompatActivity {
         String city = item.getCity();
         tv_mobile.setText(item.getMobile_number());
         String phone = item.getMobile_number();
-        int address_id=item.getAddress_id();
+        int address_id = item.getAddress_id();
+        String addr_type = item.getAddress_type();
+
+        if (Objects.equals(addr_type, "Home")) {
+            tv_home.setBackgroundResource(R.drawable.bg_textview_color);
+            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+        } else if (Objects.equals(addr_type, "Work")) {
+            tv_work.setBackgroundResource(R.drawable.bg_textview_color);
+            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+        } else if (Objects.equals(addr_type, "Other")) {
+            tv_other.setBackgroundResource(R.drawable.bg_textview_color);
+            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+        }
+
+//        tv_home.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                address_type = "Home";
+//                tv_home.setBackgroundResource(R.drawable.bg_textview_color);
+//                tv_work.setBackgroundResource(R.drawable.textfield_bg);
+//                tv_other.setBackgroundResource(R.drawable.textfield_bg);
+//                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        tv_work.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                address_type = "Work";
+//                tv_work.setBackgroundResource(R.drawable.bg_textview_color);
+//                tv_other.setBackgroundResource(R.drawable.textfield_bg);
+//                tv_home.setBackgroundResource(R.drawable.textfield_bg);
+//                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        tv_other.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                address_type = "Other";
+//                tv_other.setBackgroundResource(R.drawable.bg_textview_color);
+//                tv_work.setBackgroundResource(R.drawable.textfield_bg);
+//                tv_home.setBackgroundResource(R.drawable.textfield_bg);
+//                //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkValidation()) {
+              //  if (checkValidation()) {
                     //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
-                    UpdateAddress(address_id,addrs_one, addrs_second, landMark, city, phone);
+                    UpdateAddress(address_id, addrs_one, addrs_second, landMark, city, phone,addr_type);
                     bottomSheetDialog.dismiss();
-                }
+              //  }
             }
         });
         bottomSheetDialog.setContentView(view1);
@@ -233,9 +285,9 @@ public class Address extends AppCompatActivity {
         bottomSheetDialog.setCanceledOnTouchOutside(false);
     }
 
-    private void UpdateAddress(int address_id,String addrs_one, String addrs_second, String landMark, String city, String phone) {
+    private void UpdateAddress(int address_id, String addrs_one, String addrs_second, String landMark, String city, String phone, String addr_type) {
         progressDialog.show();
-        Call<EditAddressResponse> editAddress = ApiService.apiHolders().update_address(token,address_id,addrs_one,addrs_second,landMark,city,phone,"Home");
+        Call<EditAddressResponse> editAddress = ApiService.apiHolders().update_address(token, address_id, addrs_one, addrs_second, landMark, city, phone, addr_type);
         editAddress.enqueue(new Callback<EditAddressResponse>() {
             @Override
             public void onResponse(Call<EditAddressResponse> call, Response<EditAddressResponse> response) {
@@ -293,7 +345,7 @@ public class Address extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddAddressResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "failed" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -312,8 +364,7 @@ public class Address extends AppCompatActivity {
             tv_city.setError("please enter city");
             tv_city.requestFocus();
             return false;
-        }
-        else if (address_type.equals("")) {
+        } else if (address_type.equals("")) {
             Toast.makeText(Address.this, "Please Select Address Type", Toast.LENGTH_SHORT).show();
             return false;
         }
