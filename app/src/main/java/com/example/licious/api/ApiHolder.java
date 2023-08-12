@@ -20,6 +20,8 @@ import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
 import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.SendOtp_Response;
+import com.example.licious.response.SlotResponse;
+import com.example.licious.response.SubCategoriesResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -149,6 +151,13 @@ public interface ApiHolder {
 
     @GET("coupons")
     Call<CouponsResponse> getCoupons(@Query("token") String token);
+
+    @GET("scproduct")
+    Call<SubCategoriesResponse> getSubCategory(@Query("scId") int scId,
+                                               @Query("token") String token);
+
+    @GET("slots")
+    Call<SlotResponse> getTimeSlot(@Query("token") String token);
 
 
 }

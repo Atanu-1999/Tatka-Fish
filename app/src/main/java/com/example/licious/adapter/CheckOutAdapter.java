@@ -45,7 +45,7 @@ public class CheckOutAdapter extends RecyclerView.Adapter<CheckOutAdapter.ViewHo
         holder.tv_weight.setText(ItemList.get(position).getWeight() + " " + ItemList.get(position).getWeight_type());
         holder.tv_price.setText("₹" + ItemList.get(position).getPrice());
         holder.basePrice.setText(ItemList.get(position).getMrp());
-        holder.tv_qnt.setText(ItemList.get(position).getQty());
+        holder.tv_qnt.setText("Qty" + " " +ItemList.get(position).getQty());
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_icon);

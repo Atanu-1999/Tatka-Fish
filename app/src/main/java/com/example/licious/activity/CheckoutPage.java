@@ -2,6 +2,7 @@ package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +22,13 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.CheckOutAdapter;
 import com.example.licious.adapter.MyCartAdapter;
+import com.example.licious.adapter.SlotAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.listener.DeleteListener;
+import com.example.licious.listener.SlotListener;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
+import com.example.licious.response.SlotResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.w3c.dom.Text;
@@ -49,11 +53,21 @@ public class CheckoutPage extends AppCompatActivity {
     ProgressDialog progressDialog;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    String token,Total;
-    int id, coupon_id,totalAmount;
+    String token, Total;
+    int id, coupon_id, totalAmount;
     List<CartDetailsResponse.Datum> cardDetailsResponse;
+    List<SlotResponse.Datum> slotResponse;
+    List<SlotResponse.Datum> slotData;
     CheckOutAdapter checkOutAdapter;
-    TextView tv_totalAmount,sub_total,tv_delivery_charge,totalValue;
+    TextView tv_totalAmount, sub_total, tv_delivery_charge, totalValue;
+    SlotAdapter slotAdapter;
+    RecyclerView rv_slot;
+    Boolean flag=false;
+    TextView tv_slotTime;
+    String SlotTime,delivery_date;
+    int delivery_charge;
+    LinearLayout btn_cart;
+    int add_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +79,15 @@ public class CheckoutPage extends AppCompatActivity {
         sub_total = findViewById(R.id.sub_total);
         tv_delivery_charge = findViewById(R.id.tv_delivery_charge);
         totalValue = findViewById(R.id.totalValue);
+        tv_slotTime = findViewById(R.id.tv_slotTime);
+        btn_cart = findViewById(R.id.btn_cart);
 
         /*Current date and tomorrow date pick*/
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrowDate = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         today = dateFormat.format(currentDate);
         tomorrow = dateFormat.format(tomorrowDate);
         /*initialization*/
@@ -87,17 +103,29 @@ public class CheckoutPage extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+        //address Id
+        add_Id = loginPref.getInt("add_id", 0);
 
 
         Bundle bundle = getIntent().getExtras();
         //Extract the data…
         if (bundle != null) {
-            coupon_id = bundle.getInt("coupon_id",0);
-            totalAmount = bundle.getInt("total_amount",0);
+            coupon_id = bundle.getInt("coupon_id", 0);
+            totalAmount = bundle.getInt("total_amount", 0);
         }
 
         //get Data
         getCartDetails();
+        //get slot time
+       // getSlotDetails();
+
+        btn_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placedOrder(id,sub_total,delivery_date,delivery_charge,totalAmount,SlotTime,add_Id,token);
+            }
+        });
+
 
         txt_slot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,21 +133,56 @@ public class CheckoutPage extends AppCompatActivity {
                 bottomSheetDialog = new BottomSheetDialog(CheckoutPage.this, R.style.BottomSheetTheme);
                 View view1 = LayoutInflater.from(CheckoutPage.this).inflate(R.layout.slot_layout,
                         (LinearLayout) findViewById(R.id.container));
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_tomorrow = view1.findViewById(R.id.txt_tomorrow);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_today = view1.findViewById(R.id.txt_today);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot1 = view1.findViewById(R.id.txt_slot1);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot2 = view1.findViewById(R.id.txt_slot2);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot3 = view1.findViewById(R.id.txt_slot3);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot4 = view1.findViewById(R.id.txt_slot4);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot5 = view1.findViewById(R.id.txt_slot5);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot6 = view1.findViewById(R.id.txt_slot6);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot7 = view1.findViewById(R.id.txt_slot7);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot8 = view1.findViewById(R.id.txt_slot8);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView txt_slot9 = view1.findViewById(R.id.txt_slot9);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageView btn_cancel = view1.findViewById(R.id.btn_cancel);
+                TextView txt_tomorrow = view1.findViewById(R.id.txt_tomorrow);
+                TextView txt_today = view1.findViewById(R.id.txt_today);
+                rv_slot = view1.findViewById(R.id.rv_slot);
+                ImageView btn_cancel = view1.findViewById(R.id.btn_cancel);
 
-                txt_today.setText("Today " + today);
-                txt_tomorrow.setText("Tomorrow " + tomorrow);
+                progressDialog.show();
+                Call<SlotResponse> slot = ApiService.apiHolders().getTimeSlot(token);
+                slot.enqueue(new Callback<SlotResponse>() {
+                    @Override
+                    public void onResponse(Call<SlotResponse> call, Response<SlotResponse> response) {
+                        if (response.isSuccessful()) {
+                            progressDialog.dismiss();
+                            assert response.body() != null;
+                            slotResponse = response.body().getData();
+
+                            slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse,flag, new SlotListener() {
+                                @Override
+                                public void onItemClickedSlot(SlotResponse.Datum item, int position, Boolean flag) {
+                                    flag = flag;
+                                    Toast.makeText(getApplicationContext(),item.getSlot_name(),Toast.LENGTH_SHORT).show();
+                                    SlotTime =item.getSlot_name();
+                                    delivery_charge = item.getDelivery_charge();
+                                    tv_slotTime.setText(SlotTime);
+                                    bottomSheetDialog.dismiss();
+                                }
+                            });
+                            GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                            rv_slot.setLayoutManager(layoutManager);
+                            rv_slot.setAdapter(slotAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SlotResponse> call, Throwable t) {
+                        // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
+
+
+//                slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse);
+//                GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+//                rv_slot.setLayoutManager(layoutManager);
+//                rv_slot.setAdapter(slotAdapter);
+
+
+//                txt_today.setText("Today " + today);
+//                txt_tomorrow.setText("Tomorrow " + tomorrow);
+                txt_today.setText(today);
+                txt_tomorrow.setText(tomorrow);
                 txt_today.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -127,6 +190,7 @@ public class CheckoutPage extends AppCompatActivity {
                         txt_today.setBackground(getDrawable(R.drawable.timeslot_bg));
                         txt_tomorrow.setTextColor(getResources().getColor(R.color.black));
                         txt_today.setTextColor(getResources().getColor(R.color.white));
+                        delivery_date= today;
                     }
                 });
                 txt_tomorrow.setOnClickListener(new View.OnClickListener() {
@@ -136,134 +200,23 @@ public class CheckoutPage extends AppCompatActivity {
                         txt_today.setBackground(getDrawable(R.drawable.time_bg));
                         txt_tomorrow.setTextColor(getResources().getColor(R.color.white));
                         txt_today.setTextColor(getResources().getColor(R.color.black));
+                        delivery_date= tomorrow;
                     }
                 });
-                txt_slot1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot4.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot5.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot6.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot7.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot8.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.slotselected_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
-                    }
-                });
-                txt_slot9.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        txt_slot1.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
-                        txt_slot9.setBackground(getDrawable(R.drawable.slotselected_bg));
-                    }
-                });
+//                txt_slot1.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        txt_slot1.setBackground(getDrawable(R.drawable.slotselected_bg));
+//                        txt_slot2.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot3.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot4.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot5.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot6.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot7.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot8.setBackground(getDrawable(R.drawable.time_bg));
+//                        txt_slot9.setBackground(getDrawable(R.drawable.time_bg));
+//                    }
+//                });
                 btn_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -285,11 +238,41 @@ public class CheckoutPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("total_amount",totalAmount);
-                Intent i = new Intent(CheckoutPage.this,Apply_Coupon.class);
+                bundle.putInt("total_amount", totalAmount);
+                Intent i = new Intent(CheckoutPage.this, Apply_Coupon.class);
                 i.putExtras(bundle);
                 startActivity(i);
-               // startActivity(new Intent(CheckoutPage.this, Apply_Coupon.class));
+                // startActivity(new Intent(CheckoutPage.this, Apply_Coupon.class));
+            }
+        });
+    }
+
+    private void placedOrder(int id, TextView sub_total,String delivery_date, int delivery_charge, int totalAmount, String slotTime, int add_id, String token) {
+        //place order code write here
+    }
+
+    private void getSlotDetails() {
+        progressDialog.show();
+        Call<SlotResponse> slot = ApiService.apiHolders().getTimeSlot(token);
+        slot.enqueue(new Callback<SlotResponse>() {
+            @Override
+            public void onResponse(Call<SlotResponse> call, Response<SlotResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    assert response.body() != null;
+                    slotResponse = response.body().getData();
+
+//                    slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse);
+//                    GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+//                    rv_slot.setLayoutManager(layoutManager);
+//                    rv_slot.setAdapter(slotAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SlotResponse> call, Throwable t) {
+                // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }

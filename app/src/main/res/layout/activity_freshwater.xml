@@ -58,12 +58,23 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/horizontal_only"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_sub_cat"
+        android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_below="@id/header">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="@dimen/_10sdp"/>
+
+    <HorizontalScrollView
+        android:visibility="gone"
+        android:id="@+id/horizontal_only"
+        android:layout_below="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/type"
@@ -247,7 +258,7 @@
         android:id="@+id/contenair"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/horizontal_only">
+        android:layout_below="@id/rv_sub_cat">
 
         <ScrollView
             android:layout_width="match_parent"

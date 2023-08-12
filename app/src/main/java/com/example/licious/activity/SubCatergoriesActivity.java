@@ -20,6 +20,7 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
 
 import java.util.List;
@@ -81,7 +82,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //        btn_fresh.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//              //  startActivity(new Intent(Subcategories.this,Freshwater.class));
+//                startActivity(new Intent(SubCatergoriesActivity.this,Freshwater.class));
 //            }
 //        });
 //        btn_sea.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +116,17 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
-                category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response);
+                category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
+                    @Override
+                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+                        int id = item.getId();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("sub_cat_id",id);
+                        Intent i = new Intent(SubCatergoriesActivity.this,Freshwater.class);
+                        i.putExtras(bundle);
+                        startActivity(i);
+                    }
+                });
                 GridLayoutManager layoutManager = new GridLayoutManager(getApplication(), 3);
                 rv_category_sub_s.setLayoutManager(layoutManager);
                 rv_category_sub_s.setAdapter(category_horizental_adapter);

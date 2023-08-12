@@ -28,6 +28,7 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.adapter.Main_screen_Category_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.Master_Category_Response;
 
@@ -155,7 +156,12 @@ public class Categories extends Fragment {
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
-                category_horizental_adapter = new Category_horizental_Adapter(getContext(), category_response);
+                category_horizental_adapter = new Category_horizental_Adapter(getContext(), category_response, new SubCategoriesListener() {
+                    @Override
+                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+
+                    }
+                });
                 GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
                 rv_category_sub.setLayoutManager(layoutManager);
                 rv_category_sub.setAdapter(category_horizental_adapter);

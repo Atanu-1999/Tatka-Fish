@@ -73,6 +73,7 @@
                         android:layout_marginEnd="@dimen/_10sdp">
 
                         <TextView
+                            android:id="@+id/tv_slotTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Today 90min"

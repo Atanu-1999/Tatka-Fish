@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
@@ -24,10 +26,12 @@ public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_h
     public static List<Category_Response.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    SubCategoriesListener listener;
 
-    public Category_horizental_Adapter(Context context, List<Category_Response.Datum> ItemList) {
+    public Category_horizental_Adapter(Context context, List<Category_Response.Datum> ItemList,SubCategoriesListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
     @NonNull
     @Override
@@ -55,11 +59,19 @@ public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_h
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView iv_circle_image;
         TextView title;
+        LinearLayout ll_all;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_circle_image = (CircleImageView) itemView.findViewById(R.id.iv_circle_image);
             title = (TextView) itemView.findViewById(R.id.title);
+            ll_all = (LinearLayout) itemView.findViewById(R.id.ll_all);
+            ll_all.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedCategories(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
         }
     }
 }

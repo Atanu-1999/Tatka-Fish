@@ -21,6 +21,7 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
 import com.google.android.material.tabs.TabLayout;
 
@@ -103,7 +104,12 @@ public class Subcategories extends AppCompatActivity {
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
-                category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response);
+                category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
+                    @Override
+                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+
+                    }
+                });
                 GridLayoutManager layoutManager = new GridLayoutManager(getApplication(), 3);
                 rv_category_sub_s.setLayoutManager(layoutManager);
                 rv_category_sub_s.setAdapter(category_horizental_adapter);
