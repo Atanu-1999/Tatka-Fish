@@ -162,6 +162,7 @@ public class CheckoutPage extends AppCompatActivity {
                             GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
                             rv_slot.setLayoutManager(layoutManager);
                             rv_slot.setAdapter(slotAdapter);
+                            setTotalAmount();
                         }
                     }
 
@@ -287,7 +288,7 @@ public class CheckoutPage extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     cardDetailsResponse = response.body().getData();
-                    setTotalAmount(cardDetailsResponse);
+                    setTotalAmount();
                     checkOutAdapter = new CheckOutAdapter(getApplicationContext(), cardDetailsResponse, new DeleteListener() {
                         @Override
                         public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
@@ -318,11 +319,18 @@ public class CheckoutPage extends AppCompatActivity {
         });
     }
 
-    private void setTotalAmount(List<CartDetailsResponse.Datum> cardDetailsResponse) {
+    private void setTotalAmount() {
         sub_total.setText("₹" + " " + totalAmount);///subTotal
         int subtotal = totalAmount;
-        //String deliveryCharges =tv_delivery_charge.getText().toString();
-        int deliveryCharges = 39; // static for testing
+        int deliveryCharges=0;
+        if (delivery_charge!=0) {
+            String t_dc = String.valueOf(delivery_charge);
+            tv_delivery_charge.setText(t_dc);// delivery charge
+            deliveryCharges = delivery_charge;
+        }else {
+            tv_delivery_charge.setText("0");
+        }
+
         int Total = subtotal + deliveryCharges;
         String T_total = String.valueOf(Total);
         totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
