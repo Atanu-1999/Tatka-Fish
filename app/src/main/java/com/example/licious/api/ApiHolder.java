@@ -167,5 +167,11 @@ public interface ApiHolder {
     Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("scId") int scId,
                                                  @Query("token") String token);
 
+    @GET("cproduct")
+    Call<Category_Response> getCategoryProduct(@Query("cId") int cId,
+                                                        @Query("token") String token);
+
+
+
 
 }
