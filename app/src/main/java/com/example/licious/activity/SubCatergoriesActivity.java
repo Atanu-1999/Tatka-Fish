@@ -22,6 +22,7 @@ import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.GetCategoryResponse;
 
 import java.util.List;
 
@@ -36,11 +37,11 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
     ImageView product_search;
     RecyclerView rv_category_sub_s;
-    List<Category_Response.Datum> category_response;
+    List<GetCategoryResponse.Datum> category_response;
     Category_horizental_Adapter category_horizental_adapter;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    int id,cId;
+    int id,cId,mcId;
     String token;
     ProgressDialog progressDialog;
 
@@ -69,7 +70,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {
-            cId = bundle.getInt("cId");
+            mcId = bundle.getInt("mcId");
         }
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
@@ -104,24 +105,24 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //            }
 //        });
        // getCategory(cId);
-        getCategory(2);
+        getCategory(mcId);
     }
 
-    private void getCategory(Integer cId) {
+    private void getCategory(Integer mcId) {
         progressDialog.show();
-        Call<Category_Response> addAddress = ApiService.apiHolders().getCategory(2, token);
-        addAddress.enqueue(new Callback<Category_Response>() {
+        Call<GetCategoryResponse> addAddress = ApiService.apiHolders().getCategory(mcId, token);
+        addAddress.enqueue(new Callback<GetCategoryResponse>() {
             @Override
-            public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
+            public void onResponse(Call<GetCategoryResponse> call, Response<GetCategoryResponse> response) {
                 progressDialog.dismiss();
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
                 category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
                     @Override
-                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+                    public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
                         int id = item.getId();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("sub_cat_id",id);
+                        bundle.putInt("cId",id);
                         Intent i = new Intent(SubCatergoriesActivity.this,Freshwater.class);
                         i.putExtras(bundle);
                         startActivity(i);
@@ -134,7 +135,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Category_Response> call, Throwable t) {
+            public void onFailure(Call<GetCategoryResponse> call, Throwable t) {
 //                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();

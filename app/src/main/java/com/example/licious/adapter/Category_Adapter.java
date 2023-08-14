@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
 
@@ -19,16 +20,16 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.ViewHolder> {
-    public static List<Master_Category_Response.Datum> ItemList;
+    public static List<GetMasterCategoryResponse.Datum> ItemList;
     private Context context;
     private final Category_Adapter.OnItemClickListener listener;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     Category_horizental_Adapter category_horizental_adapter;
     public interface OnItemClickListener {
-        void onItemClickCategory(Master_Category_Response.Datum item, int position, int type);
+        void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type);
     }
 
-    public Category_Adapter(Context context, List<Master_Category_Response.Datum> ItemList,Category_Adapter.OnItemClickListener listener) {
+    public Category_Adapter(Context context, List<GetMasterCategoryResponse.Datum> ItemList,Category_Adapter.OnItemClickListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;

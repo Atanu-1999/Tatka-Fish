@@ -23,6 +23,7 @@ import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.GetCategoryResponse;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class Subcategories extends AppCompatActivity {
 
     ImageView product_search;
     RecyclerView rv_category_sub_s;
-    List<Category_Response.Datum> category_response;
+    List<GetCategoryResponse.Datum> category_response;
     Category_horizental_Adapter category_horizental_adapter;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
@@ -98,15 +99,15 @@ public class Subcategories extends AppCompatActivity {
     }
 
     private void getCategory(Integer cId) {
-        Call<Category_Response> addAddress = ApiService.apiHolders().getCategory(2, token);
-        addAddress.enqueue(new Callback<Category_Response>() {
+        Call<GetCategoryResponse> addAddress = ApiService.apiHolders().getCategory(2, token);
+        addAddress.enqueue(new Callback<GetCategoryResponse>() {
             @Override
-            public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
+            public void onResponse(Call<GetCategoryResponse> call, Response<GetCategoryResponse> response) {
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
                 category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
                     @Override
-                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+                    public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
 
                     }
                 });
@@ -117,7 +118,7 @@ public class Subcategories extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Category_Response> call, Throwable t) {
+            public void onFailure(Call<GetCategoryResponse> call, Throwable t) {
                 Toast.makeText(Subcategories.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

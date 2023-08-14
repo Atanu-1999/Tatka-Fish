@@ -13,18 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
 import com.example.licious.listener.CategoriesListener;
+import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class Main_screen_Category_Adapter extends RecyclerView.Adapter<Main_screen_Category_Adapter.ViewHolder>{
-    public static List<Master_Category_Response.Datum> ItemList;
+    public static List<GetMasterCategoryResponse.Datum> ItemList;
     private Context context;
     private CategoriesListener listener;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
 
-    public Main_screen_Category_Adapter(Context context, List<Master_Category_Response.Datum> ItemList,CategoriesListener listener) {
+    public Main_screen_Category_Adapter(Context context, List<GetMasterCategoryResponse.Datum> ItemList,CategoriesListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;

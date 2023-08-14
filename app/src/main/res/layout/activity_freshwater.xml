@@ -4,77 +4,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Freshwater"
-    android:background="@color/line">
+    android:background="@color/line"
+    tools:context=".activity.Freshwater">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/header_bg">
+        android:background="@drawable/header_bg"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_weight="1"
+            android:orientation="horizontal"
             android:padding="@dimen/_10sdp">
 
             <ImageView
                 android:id="@+id/back"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:src="@drawable/baseline_keyboard_backspace_24"
-                android:padding="@dimen/_5sdp"/>
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/baseline_keyboard_backspace_24" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Freshwater"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:textSize="@dimen/_17sdp"/>
+                android:text="Freshwater"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_17sdp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3.5"
-            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:layout_weight="3.5"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:src="@drawable/baseline_search_24"
-                android:padding="@dimen/_5sdp"/>
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/baseline_search_24" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_sub_cat"
-        android:layout_below="@id/header"
+    <LinearLayout
+        android:id="@+id/ll_rv"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="@dimen/_10sdp"/>
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_items"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/cv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_90sdp"
+                android:padding="@dimen/_10sdp"
+                android:src="@drawable/katla" />
+
+            <TextView
+                android:id="@+id/tv_title_products"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="All"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sub_cat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/header"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <HorizontalScrollView
-        android:visibility="gone"
         android:id="@+id/horizontal_only"
-        android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_below="@id/ll_rv"
+        android:scrollbars="none"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/type"
@@ -95,8 +137,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"
-                    android:scaleType="fitXY"
                     android:padding="@dimen/_10sdp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/katla" />
 
                 <TextView
@@ -119,8 +161,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"
-                    android:scaleType="fitXY"
                     android:padding="@dimen/_10sdp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/katla" />
 
                 <TextView
@@ -258,169 +300,190 @@
         android:id="@+id/contenair"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rv_sub_cat">
+        android:layout_below="@id/ll_rv">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:layout_below="@id/header">
+            android:layout_below="@id/header"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/bottom_bg">
+                android:background="@drawable/bottom_bg"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginStart="@dimen/_10sdp">
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_totalItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/_7sdp"
                         android:text="106 items"
                         android:textColor="@color/black"
-                        android:padding="@dimen/_7sdp"
-                        android:textSize="@dimen/_16sdp"/>
+                        android:textSize="@dimen/_16sdp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="@dimen/_5sdp">
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="@dimen/_70sdp"
                         android:layout_height="@dimen/_70sdp"
-                        android:src="@drawable/katla"
-                        android:padding="@dimen/_5sdp"/>
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/katla" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_gravity="center"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Rohu Bengali Cuts"
                             android:layout_gravity="center"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:padding="@dimen/_3sdp"
-                            android:textSize="@dimen/_16sdp"
-                            android:layout_marginStart="@dimen/_5sdp"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Expertly crafted Rohu cuts for delicious recipes"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/_3sdp"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:gravity=""/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_7sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/fresh_layout"/>
-                        <include layout="@layout/fresh_layout"/>
-                        <include layout="@layout/fresh_layout"/>
-
-                    </LinearLayout>
-
-                </HorizontalScrollView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="@dimen/_5sdp">
-
-                    <ImageView
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="@dimen/_70sdp"
-                        android:src="@drawable/katla"
-                        android:padding="@dimen/_5sdp"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_gravity="center"
-                        android:gravity="right">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Catla Bengali Cuts"
-                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:text="Rohu Bengali Cuts"
                             android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:padding="@dimen/_3sdp"
                             android:textSize="@dimen/_16sdp"
-                            android:layout_marginStart="@dimen/_10sdp"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Expertly crafted Rohu cuts for delicious recipes"
                             android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:gravity=""
                             android:padding="@dimen/_3sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:gravity=""/>
+                            android:text="Expertly crafted Rohu cuts for delicious recipes" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <HorizontalScrollView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_sub_cat_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_7sdp">
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="@dimen/_10sdp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
 
-                        <include layout="@layout/fresh_layout"/>
-                        <include layout="@layout/fresh_layout"/>
-                        <include layout="@layout/fresh_layout"/>
 
-                    </LinearLayout>
 
-                </HorizontalScrollView>
+<!--                <HorizontalScrollView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/_10sdp"-->
+<!--                    android:layout_marginTop="@dimen/_7sdp"-->
+<!--                    android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                    android:scrollbars="none">-->
 
-                <include layout="@layout/subcategori_layout"/>
-                <include layout="@layout/subcategori_layout"/>
-                <include layout="@layout/subcategori_layout"/>
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal">-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </HorizontalScrollView>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="@dimen/_5sdp"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="@dimen/_70sdp"-->
+<!--                        android:layout_height="@dimen/_70sdp"-->
+<!--                        android:padding="@dimen/_5sdp"-->
+<!--                        android:src="@drawable/katla" />-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="right"-->
+<!--                        android:orientation="vertical">-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginStart="@dimen/_10sdp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:padding="@dimen/_3sdp"-->
+<!--                            android:text="Catla Bengali Cuts"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="@dimen/_16sdp"-->
+<!--                            android:textStyle="bold" />-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginStart="@dimen/_10sdp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity=""-->
+<!--                            android:padding="@dimen/_3sdp"-->
+<!--                            android:text="Expertly crafted Rohu cuts for delicious recipes" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </LinearLayout>-->
+
+<!--                <HorizontalScrollView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/_10sdp"-->
+<!--                    android:layout_marginTop="@dimen/_7sdp"-->
+<!--                    android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                    android:scrollbars="none">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal">-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                        <include layout="@layout/fresh_layout" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </HorizontalScrollView>-->
+
+<!--                <include layout="@layout/subcategori_layout" />-->
+
+<!--                <include layout="@layout/subcategori_layout" />-->
+
+<!--                <include layout="@layout/subcategori_layout" />-->
 
             </LinearLayout>
 

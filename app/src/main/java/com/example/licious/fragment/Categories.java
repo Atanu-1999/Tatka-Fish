@@ -30,6 +30,8 @@ import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.GetCategoryResponse;
+import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
 
 import java.util.List;
@@ -46,8 +48,8 @@ public class Categories extends Fragment {
     String token;
 
     Category_Adapter category_adapter;
-    List<Master_Category_Response.Datum> master_category_responses;
-    List<Category_Response.Datum> category_response;
+    List<GetMasterCategoryResponse.Datum> master_category_responses;
+    List<GetCategoryResponse.Datum> category_response;
     Category_horizental_Adapter category_horizental_adapter;
 
     SharedPreferences loginPref;
@@ -116,21 +118,25 @@ public class Categories extends Fragment {
 
     private void All_Categories(String token) {
         progressDialog.show();
-        Call<Master_Category_Response> login_apiCall = ApiService.apiHolders().category(token);
-        login_apiCall.enqueue(new Callback<Master_Category_Response>() {
+        Call<GetMasterCategoryResponse> login_apiCall = ApiService.apiHolders().category(token);
+        login_apiCall.enqueue(new Callback<GetMasterCategoryResponse>() {
             @Override
-            public void onResponse(Call<Master_Category_Response> call, Response<Master_Category_Response> response) {
+            public void onResponse(Call<GetMasterCategoryResponse> call, Response<GetMasterCategoryResponse> response) {
                 if (response.isSuccessful()){
                     progressDialog.dismiss();
                     String response1 = response.body().toString();
                     master_category_responses = response.body().getData();
                     category_adapter = new Category_Adapter(getContext(), master_category_responses, new Category_Adapter.OnItemClickListener() {
                         @Override
-                        public void onItemClickCategory(Master_Category_Response.Datum item, int position, int type) {
+                        public void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type) {
                             Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
                            // startActivity(new Intent(getContext(), Subcategories.class));
                             //getCategory(item.getId());
+                            int Id = item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("mcId",Id);
                             Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
+                            intent.putExtras(bundle);
                             startActivity(intent);
                         }
                     });
@@ -143,22 +149,22 @@ public class Categories extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Master_Category_Response> call, Throwable t) {
+            public void onFailure(Call<GetMasterCategoryResponse> call, Throwable t) {
                 progressDialog.dismiss();
             }
         });
     }
 
     private void getCategory(Integer cId) {
-        Call<Category_Response> addAddress = ApiService.apiHolders().getCategory(2, token);
-        addAddress.enqueue(new Callback<Category_Response>() {
+        Call<GetCategoryResponse> addAddress = ApiService.apiHolders().getCategory(2, token);
+        addAddress.enqueue(new Callback<GetCategoryResponse>() {
             @Override
-            public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
+            public void onResponse(Call<GetCategoryResponse> call, Response<GetCategoryResponse> response) {
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
                 category_horizental_adapter = new Category_horizental_Adapter(getContext(), category_response, new SubCategoriesListener() {
                     @Override
-                    public void onItemClickedCategories(Category_Response.Datum item, int position, int type) {
+                    public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
 
                     }
                 });
@@ -169,7 +175,7 @@ public class Categories extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Category_Response> call, Throwable t) {
+            public void onFailure(Call<GetCategoryResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

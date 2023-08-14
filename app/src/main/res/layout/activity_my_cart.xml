@@ -58,6 +58,7 @@
         android:layout_margin="@dimen/_10sdp">
 
         <LinearLayout
+            android:id="@+id/ll_amount_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -222,6 +223,7 @@
     </androidx.cardview.widget.CardView>
 
     <RelativeLayout
+        android:id="@+id/rl_noData"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -244,8 +246,7 @@
                 <ImageView
                     android:layout_width="@dimen/_250sdp"
                     android:layout_height="@dimen/_400sdp"
-                    android:src="@drawable/cart_background"
-                    android:scaleType="fitXY"/>
+                    android:src="@drawable/emptycart" />
 
             </RelativeLayout>
 

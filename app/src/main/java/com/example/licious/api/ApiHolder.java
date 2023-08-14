@@ -14,6 +14,9 @@ import com.example.licious.response.Category_Response;
 import com.example.licious.response.CouponsResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
+import com.example.licious.response.GetCategoryResponse;
+import com.example.licious.response.GetMasterCategoryResponse;
+import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.ImageResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.Otp_verify_Response;
@@ -22,6 +25,7 @@ import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
 import com.example.licious.response.SubCategoriesResponse;
+import com.example.licious.response.SubCategoryItemResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -50,7 +54,7 @@ public interface ApiHolder {
                                          @Field("otp") String otp);
 
     @GET("mastercategory")
-    Call<Master_Category_Response> category(@Query("token") String token);
+    Call<GetMasterCategoryResponse> category(@Query("token") String token);
 
     @GET("bsproduct")
     Call<Best_Seller_Response> bestSeller(@Query("token") String token);
@@ -123,9 +127,9 @@ public interface ApiHolder {
                                            @Field("status") String status,
                                            @Field("token") String token);
 
-    @GET("cproduct")
-    Call<Category_Response> getCategory(@Query("cId") int cId,
-                                        @Query("token") String token);
+    @GET("category")
+    Call<GetCategoryResponse> getCategory(@Query("mcId") int mcId,
+                                          @Query("token") String token);
 
     @POST("addtocart")
     @FormUrlEncoded
@@ -152,12 +156,16 @@ public interface ApiHolder {
     @GET("coupons")
     Call<CouponsResponse> getCoupons(@Query("token") String token);
 
-    @GET("scproduct")
-    Call<SubCategoriesResponse> getSubCategory(@Query("scId") int scId,
-                                               @Query("token") String token);
+    @GET("subcategory")
+    Call<GetSubCategoryResponse> getSubCategory(@Query("cId") int cId,
+                                                @Query("token") String token);
 
     @GET("slots")
     Call<SlotResponse> getTimeSlot(@Query("token") String token);
+
+    @GET("scproduct")
+    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("scId") int scId,
+                                                 @Query("token") String token);
 
 
 }

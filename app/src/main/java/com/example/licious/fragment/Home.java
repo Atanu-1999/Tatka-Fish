@@ -53,6 +53,7 @@ import com.example.licious.response.AddWishListResponse;
 import com.example.licious.model.Slider_Model;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
 
 import java.util.Calendar;
@@ -93,7 +94,7 @@ public class Home extends Fragment {
     RecyclerView rv_bestSeller, rv_topRated, rv_category;
 
     Top_Rated_Adapter top_rated_adapter;
-    List<Master_Category_Response.Datum> master_category_responses;
+    List<GetMasterCategoryResponse.Datum> master_category_responses;
     Main_screen_Category_Adapter main_screen_category_adapter;
 
     BestSellerListener listener;
@@ -297,17 +298,17 @@ public class Home extends Fragment {
 
     private void Category(String token) {
         progressDialog.show();
-        Call<Master_Category_Response> login_apiCall = ApiService.apiHolders().category(token);
-        login_apiCall.enqueue(new Callback<Master_Category_Response>() {
+        Call<GetMasterCategoryResponse> login_apiCall = ApiService.apiHolders().category(token);
+        login_apiCall.enqueue(new Callback<GetMasterCategoryResponse>() {
             @Override
-            public void onResponse(Call<Master_Category_Response> call, Response<Master_Category_Response> response) {
+            public void onResponse(Call<GetMasterCategoryResponse> call, Response<GetMasterCategoryResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String response1 = response.body().toString();
                     master_category_responses = response.body().getData();
                     main_screen_category_adapter = new Main_screen_Category_Adapter(getContext(), master_category_responses, new CategoriesListener() {
                         @Override
-                        public void onItemClickedCategories(Master_Category_Response.Datum item, int position, int type) {
+                        public void onItemClickedCategories(GetMasterCategoryResponse.Datum item, int position, int type) {
                             int cId = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("cId", cId);
@@ -326,7 +327,7 @@ public class Home extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Master_Category_Response> call, Throwable t) {
+            public void onFailure(Call<GetMasterCategoryResponse> call, Throwable t) {
 
             }
         });

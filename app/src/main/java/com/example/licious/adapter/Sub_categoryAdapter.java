@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.SubCategoriesItemListener;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.SubCategoriesResponse;
 import com.squareup.picasso.Picasso;
 
@@ -21,13 +23,15 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapter.ViewHolder>{
-    public static List<SubCategoriesResponse.Datum> ItemList;
+    public static List<GetSubCategoryResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    SubCategoriesItemListener listener;
 
-    public Sub_categoryAdapter(Context context, List<SubCategoriesResponse.Datum> ItemList) {
+    public Sub_categoryAdapter(Context context, List<GetSubCategoryResponse.Datum> ItemList,SubCategoriesItemListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -40,9 +44,9 @@ public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Sub_categoryAdapter.ViewHolder holder, int position) {
-        holder.tv_title_product.setText(ItemList.get(position).getProduct_title());
+        holder.tv_title_product.setText(ItemList.get(position).getName());
         Picasso.with(context)
-                .load(image_url+ItemList.get(position).getProduct_image())
+                .load(image_url+ItemList.get(position).getImage())
                 .into(holder.cv_image);
 
     }
@@ -63,6 +67,12 @@ public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapte
             tv_title_product = (TextView) itemView.findViewById(R.id.tv_title_products);
             ll_item = (LinearLayout) itemView.findViewById(R.id.ll_items);
 
+            ll_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedCategoriesItem(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
         }
     }
 }

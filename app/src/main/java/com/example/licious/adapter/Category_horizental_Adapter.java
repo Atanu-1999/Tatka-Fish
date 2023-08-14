@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.licious.R;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.squareup.picasso.Picasso;
 
@@ -23,12 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_horizental_Adapter.ViewHolder> {
 
-    public static List<Category_Response.Datum> ItemList;
+    public static List<GetCategoryResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     SubCategoriesListener listener;
 
-    public Category_horizental_Adapter(Context context, List<Category_Response.Datum> ItemList,SubCategoriesListener listener) {
+    public Category_horizental_Adapter(Context context, List<GetCategoryResponse.Datum> ItemList,SubCategoriesListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;
@@ -43,9 +44,9 @@ public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_h
 
     @Override
     public void onBindViewHolder(@NonNull Category_horizental_Adapter.ViewHolder holder, int position) {
-        holder.title.setText(ItemList.get(position).getProduct_title());
+        holder.title.setText(ItemList.get(position).getName());
         Picasso.with(context)
-                .load(image_url+ItemList.get(position).getProduct_image())
+                .load(image_url+ItemList.get(position).getImage())
                 .into(holder.iv_circle_image);
 
     }
