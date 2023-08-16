@@ -163,15 +163,13 @@ public interface ApiHolder {
     @GET("slots")
     Call<SlotResponse> getTimeSlot(@Query("token") String token);
 
-    @GET("scproduct")
-    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("scId") int scId,
-                                                 @Query("token") String token);
-
     @GET("cproduct")
-    Call<Category_Response> getCategoryProduct(@Query("cId") int cId,
+    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("cId") int scId,
                                                         @Query("token") String token);
 
-
+    @GET("mcproduct")
+    Call<Category_Response> getCategoryProduct(@Query("mcId") int mcId,
+                                               @Query("token") String token);
 
 
 }

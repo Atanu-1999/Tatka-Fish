@@ -1,7 +1,6 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,17 +18,18 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.CategoryProductAdapter;
 import com.example.licious.adapter.Category_horizental_Adapter;
-import com.example.licious.adapter.SubCategoryProductAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
+import com.example.licious.listener.MasterCategoryprouduct;
 import com.example.licious.listener.SubCategoriesListener;
-import com.example.licious.listener.SubCategoriesProductListener;
+import com.example.licious.response.AddToCartResponse;
+import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.GetCategoryResponse;
-import com.example.licious.response.SubCategoryItemResponse;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +51,8 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     String token;
     ProgressDialog progressDialog;
     CategoryProductAdapter categoryProductAdapter;
+    int product_id;
+    LinearLayout ll_items;
 
 
     @SuppressLint("MissingInflatedId")
@@ -66,6 +68,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //        btn_sea = findViewById(R.id.btn_sea);
         rv_category_sub_s= findViewById(R.id.rv_category_sub_ss);
         rv_sub_cat_product = findViewById(R.id.rv_sub_cat_product);
+        ll_items = findViewById(R.id.ll_items);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -114,7 +117,14 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //            }
 //        });
        // getCategory(cId);
-        getCategory(mcId);
+        getCategory(mcId);//Category
+        getCategorieesPoduct(mcId);//CategoryProduct
+        ll_items.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCategorieesPoduct(mcId);
+            }
+        });
     }
 
     private void getCategory(Integer mcId) {
@@ -159,7 +169,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
     }
 
-    private void getCategorieesPoduct() {
+    private void getCategorieesPoduct(int mcId) {
         progressDialog.show();
         Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(2,token);
         subCategoryDataProduct.enqueue(new Callback<Category_Response>() {
@@ -169,24 +179,22 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     category_response_product = response.body().getData();
-                    categoryProductAdapter =  new CategoryProductAdapter(getApplicationContext(), category_response_product);
+                    categoryProductAdapter =  new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
+                        @Override
+                        public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
+                            addWishList(item.getId(), item.getStatus());
+                        }
+
+                        @Override
+                        public void onItemClickedMasterCategoriesProductADDcart(Category_Response.Datum item, int position, int type) {
+
+                            product_id = item.getId();
+                            String prices = item.getPrice();
+                            addToCart(product_id, prices);//add to cart API
+                        }
+                    });
                     rv_sub_cat_product.setAdapter(categoryProductAdapter);
                     rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-//                    subCategoryProductAdapter = new SubCategoryProductAdapter(getApplicationContext(), subProductItem, new SubCategoriesProductListener() {
-//                        @Override
-//                        public void onItemClickedCategoriesProduct(SubCategoryItemResponse.Datum item, int position, int type) {
-//                            product_id = item.getId();
-//                            String prices = item.getPrice();
-//                          //  addToCart(product_id, prices);//add to cart API
-//                        }
-//
-//                        @Override
-//                        public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
-//                           // addWishList(item.getId(), item.getStatus());
-//                        }
-//                    });
-//                    rv_sub_cat_product.setAdapter(subCategoryProductAdapter);
-//                    rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 }
 
             }
@@ -197,5 +205,68 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //Add to cart
+    private void addToCart(int product_id, String price) {
+        progressDialog.show();
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        addAddress.enqueue(new Callback<AddToCartResponse>() {
+            @Override
+            public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(SubCatergoriesActivity.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("product_id", product_id);
+                    Intent i = new Intent(SubCatergoriesActivity.this, MyCart.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddToCartResponse> call, Throwable t) {
+                //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //WISHlIST
+    private void addWishList(Integer prod_id, String status) {
+        progressDialog.show();
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True", token);
+        addAddress.enqueue(new Callback<AddWishListResponse>() {
+            @Override
+            public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    String status = response.body().getStatus();
+                    if (Objects.equals(status, "true")) {
+                        // wishlist_status = true;
+                        Toast.makeText(SubCatergoriesActivity.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // wishlist_status = false;
+                        Toast.makeText(SubCatergoriesActivity.this, "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddWishListResponse> call, Throwable t) {
+                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCategorieesPoduct(mcId);//CategoryProduct
     }
 }

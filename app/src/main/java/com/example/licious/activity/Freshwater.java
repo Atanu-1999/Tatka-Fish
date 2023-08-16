@@ -80,7 +80,7 @@ public class Freshwater extends AppCompatActivity {
         ll_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // getSubCategory();
+                getSubCategortItem(cId);
             }
         });
 

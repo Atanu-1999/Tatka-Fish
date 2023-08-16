@@ -42,7 +42,7 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
     @Override
     public void onBindViewHolder(@NonNull SubCategoryProductAdapter.ViewHolder holder, int position) {
         holder.pd_title.setText(ItemList.get(position).getProduct_title());
-        holder.tv_pd_des.setText(ItemList.get(position).getDescription());
+        holder.tv_pd_des.setText(ItemList.get(position).getShort_description());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + ItemList.get(position).getWeight_type());
         holder.tv_pieces.setText(ItemList.get(position).getPieces());
         holder.tv_serves.setText(ItemList.get(position).getServes());

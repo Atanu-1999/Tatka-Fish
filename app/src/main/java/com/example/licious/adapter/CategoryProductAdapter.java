@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.MasterCategoryprouduct;
 import com.example.licious.listener.SubCategoriesProductListener;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.SubCategoryItemResponse;
@@ -23,10 +24,12 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
     public static List<Category_Response.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    MasterCategoryprouduct listener;
 
-    public CategoryProductAdapter(Context context, List<Category_Response.Datum> ItemList) {
+    public CategoryProductAdapter(Context context, List<Category_Response.Datum> ItemList, MasterCategoryprouduct listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -40,7 +43,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
     @Override
     public void onBindViewHolder(@NonNull CategoryProductAdapter.ViewHolder holder, int position) {
         holder.pd_title.setText(ItemList.get(position).getProduct_title());
-        holder.tv_pd_des.setText(ItemList.get(position).getDescription());
+        holder.tv_pd_des.setText(ItemList.get(position).getShort_description());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + ItemList.get(position).getWeight_type());
         holder.tv_pieces.setText(ItemList.get(position).getPieces());
         holder.tv_serves.setText(ItemList.get(position).getServes());
@@ -76,6 +79,21 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
             tv_offer = (TextView) itemView.findViewById(R.id.tv_offer);
             ll_add = (LinearLayout) itemView.findViewById(R.id.ll_add);
             IV_wishList = (ImageView) itemView.findViewById(R.id.IV_wishList);
+
+            ll_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClickedMasterCategoriesProductADDcart(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
+
+            IV_wishList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClickedMasterCategoriesProductWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
+
         }
     }
 }

@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e("ss","ss");
         /*network Connection Check*/
         if(!Check_Internet.isInternetAvailable(MainActivity.this)) {
             noInternetDialog = new Dialog(this);
