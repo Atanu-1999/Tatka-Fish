@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.WishListAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.listener.FavoriteListener;
+import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AllWishListResponse;
 
 import java.util.List;
@@ -34,6 +37,7 @@ public class Wishlist extends AppCompatActivity {
     List<AllWishListResponse.Datum> allWishList;
     WishListAdapter wishListAdapter;
     ProgressDialog progressDialog;
+    int product_id;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -67,7 +71,15 @@ public class Wishlist extends AppCompatActivity {
                 progressDialog.dismiss();
                 Toast.makeText(Wishlist.this, "Successfully", Toast.LENGTH_SHORT).show();
                 allWishList = response.body().getData();
-                wishListAdapter = new WishListAdapter(getApplication(),allWishList);
+                wishListAdapter = new WishListAdapter(getApplication(), allWishList, new FavoriteListener() {
+                    @Override
+                    public void onItemClickedAdd(AllWishListResponse.Datum item, int position, int type) {
+                        String pD_Id = item.getProduct_id();
+                        product_id = Integer.parseInt(pD_Id);
+                        String prices = item.getPrice();
+                        addToCart(product_id, prices);//add to cart API
+                    }
+                });
                 rv_all_wishList.setAdapter(wishListAdapter);
                 rv_all_wishList.setLayoutManager(new LinearLayoutManager(getApplication()));
 
@@ -82,11 +94,47 @@ public class Wishlist extends AppCompatActivity {
 
     }
 
+    // add to cart
+    private void addToCart(int product_id, String price) {
+        progressDialog.show();
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        addAddress.enqueue(new Callback<AddToCartResponse>() {
+            @Override
+            public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    getWishListData();
+                    Toast.makeText(Wishlist.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("product_id", product_id);
+                    Intent i = new Intent(Wishlist.this, MyCart.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddToCartResponse> call, Throwable t) {
+                //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void initi() {
         rv_all_wishList = findViewById(R.id.rv_all_wishList);
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWishListData();
     }
 }

@@ -5,6 +5,7 @@ import com.example.licious.response.AddRemoveResponse;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.AllAddressListResponse;
+import com.example.licious.response.AllCaterogyResponse;
 import com.example.licious.response.AllWishListResponse;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
@@ -175,6 +176,9 @@ public interface ApiHolder {
     @GET("productdtls")
     Call<ProductResponse> getProductDetails(@Query("product_id") int mcId,
                                             @Query("token") String token);
+
+    @GET("allcategory")
+    Call<AllCaterogyResponse> allCategory(@Query("token") String token);
 
 
 }

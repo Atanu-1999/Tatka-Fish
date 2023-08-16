@@ -5,23 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.FavoriteListener;
 import com.example.licious.response.AllWishListResponse;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHolder>{
     public static List<AllWishListResponse.Datum> ItemList;
     private Context context;
+    FavoriteListener listener;
+    String image_url = "https://tatkafish.in/superuser/public/uploads/";
 
-    public WishListAdapter(Context context, List<AllWishListResponse.Datum> ItemList) {
+    public WishListAdapter(Context context, List<AllWishListResponse.Datum> ItemList,FavoriteListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +46,9 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
         holder.tv_weight.setText(ItemList.get(position).getWeight() + ItemList.get(position).getWeight_type());
         holder.discount_price.setText(ItemList.get(position).getPrice());
         holder.tv_basePrice.setText(ItemList.get(position).getMrp());
+        Picasso.with(context)
+                .load(image_url+ItemList.get(position).getProduct_image())
+                .into(holder.iv_images);
 
     }
 
@@ -49,14 +60,23 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_productTitle,tv_weight,discount_price,tv_basePrice;
-        ImageView iv_images;
+        CircleImageView iv_images;
+        LinearLayout btn_addTocart;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_productTitle = (TextView) itemView.findViewById(R.id.tv_productTitle);
             tv_weight = (TextView) itemView.findViewById(R.id.tv_weight);
             discount_price = (TextView) itemView.findViewById(R.id.discount_price);
             tv_basePrice = (TextView) itemView.findViewById(R.id.tv_basePrice);
-            iv_images = (ImageView) itemView.findViewById(R.id.iv_images);
+            iv_images = (CircleImageView) itemView.findViewById(R.id.iv_images);
+            btn_addTocart = (LinearLayout) itemView.findViewById(R.id.btn_addTocart);
+
+            btn_addTocart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedAdd(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
 
         }
     }
