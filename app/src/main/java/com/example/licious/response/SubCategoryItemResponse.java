@@ -106,6 +106,17 @@ public class SubCategoryItemResponse {
         @SerializedName("createdAt")
         @Expose
         private String createdAt;
+        @SerializedName("wishlist_status")
+        @Expose
+        private String wishlist_status;
+
+        public String getWishlist_status() {
+            return wishlist_status;
+        }
+
+        public void setWishlist_status(String wishlist_status) {
+            this.wishlist_status = wishlist_status;
+        }
 
         public Integer getId() {
             return id;

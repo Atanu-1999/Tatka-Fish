@@ -19,6 +19,7 @@ import com.example.licious.response.Best_Seller_Response;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapter.ViewHolder> {
     public static List<Best_Seller_Response.Datum> ItemList;
@@ -61,7 +62,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_bestSeller);
 
-        if (status)
+        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
         {
             holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
         }

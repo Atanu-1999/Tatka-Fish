@@ -36,18 +36,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SubCatergoriesActivity extends AppCompatActivity {
-    LinearLayout btn_all,btn_fresh,btn_crab,btn_sea;
+    LinearLayout btn_all, btn_fresh, btn_crab, btn_sea;
     AllFish all = new AllFish();
     Crab crab = new Crab();
 
     ImageView product_search;
-    RecyclerView rv_category_sub_s,rv_sub_cat_product;
+    RecyclerView rv_category_sub_s, rv_sub_cat_product;
     List<GetCategoryResponse.Datum> category_response;
     List<Category_Response.Datum> category_response_product;
     Category_horizental_Adapter category_horizental_adapter;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    int id,cId,mcId;
+    int id, cId, mcId;
     String token;
     ProgressDialog progressDialog;
     CategoryProductAdapter categoryProductAdapter;
@@ -66,7 +66,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //        btn_fresh = findViewById(R.id.btn_fresh);
 //        btn_crab = findViewById(R.id.btn_crab);
 //        btn_sea = findViewById(R.id.btn_sea);
-        rv_category_sub_s= findViewById(R.id.rv_category_sub_ss);
+        rv_category_sub_s = findViewById(R.id.rv_category_sub_ss);
         rv_sub_cat_product = findViewById(R.id.rv_sub_cat_product);
         ll_items = findViewById(R.id.ll_items);
 
@@ -81,7 +81,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle!= null) {
+        if (bundle != null) {
             mcId = bundle.getInt("mcId");
         }
 
@@ -116,7 +116,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //              //  startActivity(new Intent(Subcategories.this,SearchActivity.class));
 //            }
 //        });
-       // getCategory(cId);
+        // getCategory(cId);
         getCategory(mcId);//Category
         getCategorieesPoduct(mcId);//CategoryProduct
         ll_items.setOnClickListener(new View.OnClickListener() {
@@ -137,15 +137,15 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //                Toast.makeText(getContext(), "Address Added Successfully", Toast.LENGTH_SHORT).show();
                 category_response = response.body().getData();
 
-               // getCategorieesPoduct();
+                // getCategorieesPoduct();
 
                 category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
                     @Override
                     public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
                         int id = item.getId();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("cId",id);
-                        Intent i = new Intent(SubCatergoriesActivity.this,Freshwater.class);
+                        bundle.putInt("cId", id);
+                        Intent i = new Intent(SubCatergoriesActivity.this, Freshwater.class);
                         i.putExtras(bundle);
                         startActivity(i);
                     }
@@ -171,7 +171,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
     private void getCategorieesPoduct(int mcId) {
         progressDialog.show();
-        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(2,token);
+        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(2, token);
         subCategoryDataProduct.enqueue(new Callback<Category_Response>() {
             @Override
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
@@ -179,10 +179,10 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     category_response_product = response.body().getData();
-                    categoryProductAdapter =  new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
+                    categoryProductAdapter = new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override
                         public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
-                            addWishList(item.getId(), item.getStatus());
+                            addWishList(item.getId(), item.getWishlist_status());
                         }
 
                         @Override
@@ -195,7 +195,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
                         @Override
                         public void onItemClickedItem(Category_Response.Datum item, int position, int type) {
-                            int id= item.getId();
+                            int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
                             Intent i = new Intent(SubCatergoriesActivity.this, ProductDetails.class);
@@ -208,6 +208,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                 }
 
             }
+
             @Override
             public void onFailure(Call<Category_Response> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -220,7 +221,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     //Add to cart
     private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -248,20 +249,13 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     //WISHlIST
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True", token);
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, status, token);
         addAddress.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    String status = response.body().getStatus();
-                    if (Objects.equals(status, "true")) {
-                        // wishlist_status = true;
-                        Toast.makeText(SubCatergoriesActivity.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // wishlist_status = false;
-                        Toast.makeText(SubCatergoriesActivity.this, "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
-                    }
+                    getCategorieesPoduct(mcId);
                 }
             }
 

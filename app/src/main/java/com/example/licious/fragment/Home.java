@@ -197,6 +197,20 @@ public class Home extends Fragment {
         }
         /*Method calling*/
         updateGreeting();
+        //Set Address
+        int add_Id = loginPref.getInt("add_id", 0);
+        String adds_one = loginPref.getString("adds_one", null);
+        String adds_two = loginPref.getString("adds_two", null);
+        String add_type = loginPref.getString("add_type", null);
+        String city = loginPref.getString("city", null);
+
+        if (add_Id == 0) {
+            txt_address_set.setText("No Address");
+        } else {
+            txt_address_set.setText(adds_one + " " + " " + adds_two + " " + city);
+        }
+
+
 //        product_one.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -347,7 +361,7 @@ public class Home extends Fragment {
                     top_rated_adapter = new Top_Rated_Adapter(getContext(), best_seller_response, true, new TopSellerListener() {
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
-                            addWishList(item.getId(), item.getStatus());
+                            addWishList(item.getId(), item.getWishlist_status());
                         }
 
                         @Override
@@ -368,7 +382,7 @@ public class Home extends Fragment {
 
                         @Override
                         public void onItemClickedItem(Best_Seller_Response.Datum item, int position, int type) {
-                            int id= item.getId();
+                            int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
                             Intent i = new Intent(getContext(), ProductDetails.class);
@@ -427,7 +441,7 @@ public class Home extends Fragment {
 
                         @Override
                         public void onItemClickedItem(Best_Seller_Response.Datum item, int position, int type) {
-                            int id= item.getId();
+                            int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
                             Intent i = new Intent(getContext(), ProductDetails.class);
@@ -479,20 +493,16 @@ public class Home extends Fragment {
 
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True", token);
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id,status, token);
         addAddress.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                    if (Objects.equals(status, "true")) {
-                        wishlist_status = true;
-                        Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        wishlist_status = false;
-                        Toast.makeText(getContext(), "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    TopRated(token);
+                    BestSeller(token);
                 }
             }
 

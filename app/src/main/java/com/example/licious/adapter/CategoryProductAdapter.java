@@ -19,6 +19,7 @@ import com.example.licious.response.SubCategoryItemResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProductAdapter.ViewHolder>{
     public static List<Category_Response.Datum> ItemList;
@@ -54,6 +55,14 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getProduct_image())
                 .into(holder.iv_bg);
+
+        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
+        {
+            holder.IV_wishList.setImageResource(R.drawable.baseline_favorite_border_24);
+        }
+        else {
+            holder.IV_wishList.setImageResource(R.drawable.baseline_favorite_24);
+        }
     }
 
     @Override

@@ -38,7 +38,7 @@ import retrofit2.Response;
 
 public class Freshwater extends AppCompatActivity {
     int cId;
-    RecyclerView rv_sub_cat,rv_sub_cat_product;
+    RecyclerView rv_sub_cat, rv_sub_cat_product;
     ProgressDialog progressDialog;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
@@ -64,7 +64,7 @@ public class Freshwater extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         //Extract the data…
         if (bundle != null) {
-            cId = bundle.getInt("cId",0);
+            cId = bundle.getInt("cId", 0);
         }
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -89,40 +89,41 @@ public class Freshwater extends AppCompatActivity {
     }
 
     private void getSubCategory(int cId) {
-            progressDialog.show();
-            Call<GetSubCategoryResponse> subCategoryData = ApiService.apiHolders().getSubCategory(cId,token);
-            subCategoryData.enqueue(new Callback<GetSubCategoryResponse>() {
-                @Override
-                public void onResponse(Call<GetSubCategoryResponse> call, Response<GetSubCategoryResponse> response) {
-                    if (response.isSuccessful()) {
-                        progressDialog.dismiss();
-                        assert response.body() != null;
-                        subCategories = response.body().getData();
-                        sub_categoryAdapter = new Sub_categoryAdapter(getApplicationContext(), subCategories, new SubCategoriesItemListener() {
-                            @Override
-                            public void onItemClickedCategoriesItem(GetSubCategoryResponse.Datum item, int position, int type) {
-                                int cId = item.getC_id();
-                                getSubCategortItem(cId);
-                            }
-                        });
-                        rv_sub_cat.setAdapter(sub_categoryAdapter);
-                        // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
-                        rv_sub_cat.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-                    }
-
-                }
-                @Override
-                public void onFailure(Call<GetSubCategoryResponse> call, Throwable t) {
-                    //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+        progressDialog.show();
+        Call<GetSubCategoryResponse> subCategoryData = ApiService.apiHolders().getSubCategory(cId, token);
+        subCategoryData.enqueue(new Callback<GetSubCategoryResponse>() {
+            @Override
+            public void onResponse(Call<GetSubCategoryResponse> call, Response<GetSubCategoryResponse> response) {
+                if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                    assert response.body() != null;
+                    subCategories = response.body().getData();
+                    sub_categoryAdapter = new Sub_categoryAdapter(getApplicationContext(), subCategories, new SubCategoriesItemListener() {
+                        @Override
+                        public void onItemClickedCategoriesItem(GetSubCategoryResponse.Datum item, int position, int type) {
+                            int cId = item.getC_id();
+                            getSubCategortItem(cId);
+                        }
+                    });
+                    rv_sub_cat.setAdapter(sub_categoryAdapter);
+                    // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
+                    rv_sub_cat.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
                 }
-            });
+
+            }
+
+            @Override
+            public void onFailure(Call<GetSubCategoryResponse> call, Throwable t) {
+                //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getSubCategortItem(int cId) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(2,token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(2, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -140,12 +141,12 @@ public class Freshwater extends AppCompatActivity {
 
                         @Override
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
-                            addWishList(item.getId(), item.getStatus());
+                            addWishList(item.getId(), item.getWishlist_status());
                         }
 
                         @Override
                         public void onItemClickedItem(SubCategoryItemResponse.Datum item, int position, int type) {
-                            int id= item.getId();
+                            int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
                             Intent i = new Intent(Freshwater.this, ProductDetails.class);
@@ -158,6 +159,7 @@ public class Freshwater extends AppCompatActivity {
                 }
 
             }
+
             @Override
             public void onFailure(Call<SubCategoryItemResponse> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -171,20 +173,21 @@ public class Freshwater extends AppCompatActivity {
     //WISHlIST
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, "True", token);
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, status, token);
         addAddress.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                    if (Objects.equals(status, "true")) {
-                       // wishlist_status = true;
-                        Toast.makeText(Freshwater.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                       // wishlist_status = false;
-                        Toast.makeText(Freshwater.this, "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
-                    }
+//                    if (Objects.equals(status, "true")) {
+                    // wishlist_status = true;
+                    Toast.makeText(Freshwater.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    getSubCategortItem(cId);
+//                    } else {
+//                       // wishlist_status = false;
+//                        Toast.makeText(Freshwater.this, "WishList Removed Successfully", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             }
 
@@ -196,10 +199,11 @@ public class Freshwater extends AppCompatActivity {
             }
         });
     }
+
     // add to cart
     private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {

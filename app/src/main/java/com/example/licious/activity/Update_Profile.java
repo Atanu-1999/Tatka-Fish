@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -122,6 +123,14 @@ public class Update_Profile extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        },5000);
+
 //        if (BlankId.equals(loginPref.getString("device_id", ""))) {
 //            edite_Fname.setText("");
 //            edite_Last_name.setText("");
@@ -137,6 +146,7 @@ public class Update_Profile extends AppCompatActivity {
             Dob_s = loginPref.getString("dob", null);
             gender_s = loginPref.getString("gender", null);
             image_s = loginPref.getString("image", null);
+            progressDialog.show();
 
             edite_Fname.setText(firstname);
             edite_Last_name.setText(lastName);
