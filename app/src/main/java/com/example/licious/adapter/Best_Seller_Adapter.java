@@ -69,13 +69,13 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
             holder.fav_image.setImageResource(R.drawable.baseline_favorite_24);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//               Intent i = new Intent(context, ProductDetails.class);
-//               context.startActivity(i);
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////               Intent i = new Intent(context, ProductDetails.class);
+////               context.startActivity(i);
+//            }
+//        });
 
     }
 
@@ -111,6 +111,13 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                 public void onClick(View view) {
                     //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
                     listener.onItemClickedWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1,status);
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                    listener.onItemClickedItem(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
                 }
             });
         }

@@ -21,6 +21,7 @@ import com.example.licious.response.ImageResponse;
 import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
+import com.example.licious.response.ProductResponse;
 import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
@@ -170,6 +171,10 @@ public interface ApiHolder {
     @GET("mcproduct")
     Call<Category_Response> getCategoryProduct(@Query("mcId") int mcId,
                                                @Query("token") String token);
+
+    @GET("productdtls")
+    Call<ProductResponse> getProductDetails(@Query("product_id") int mcId,
+                                            @Query("token") String token);
 
 
 }

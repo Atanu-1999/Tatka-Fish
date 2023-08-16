@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.activity.ProductDetails;
 import com.example.licious.activity.SubCatergoriesActivity;
 import com.example.licious.listener.BestSellerListener;
 import com.example.licious.R;
@@ -364,6 +365,16 @@ public class Home extends Fragment {
                                 addToCart(product_id, prices);//add to cart API
                             }
                         }
+
+                        @Override
+                        public void onItemClickedItem(Best_Seller_Response.Datum item, int position, int type) {
+                            int id= item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("products_id", id);
+                            Intent i = new Intent(getContext(), ProductDetails.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
                     });
                     rv_topRated.setAdapter(top_rated_adapter);
                     // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -404,7 +415,7 @@ public class Home extends Fragment {
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id,price);//add to cart API
+                                addToCart(product_id, price);//add to cart API
                             }
                         }
 
@@ -412,6 +423,16 @@ public class Home extends Fragment {
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
                             Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
                             addWishList(item.getId(), item.getStatus());
+                        }
+
+                        @Override
+                        public void onItemClickedItem(Best_Seller_Response.Datum item, int position, int type) {
+                            int id= item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("products_id", id);
+                            Intent i = new Intent(getContext(), ProductDetails.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
                         }
                     });
                     rv_bestSeller.setAdapter(best_seller_adapter);
@@ -431,7 +452,7 @@ public class Home extends Fragment {
 
     private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -449,9 +470,9 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddToCartResponse> call, Throwable t) {
-              //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-              //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
