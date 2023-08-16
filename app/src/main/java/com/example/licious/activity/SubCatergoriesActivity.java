@@ -192,6 +192,16 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                             String prices = item.getPrice();
                             addToCart(product_id, prices);//add to cart API
                         }
+
+                        @Override
+                        public void onItemClickedItem(Category_Response.Datum item, int position, int type) {
+                            int id= item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("products_id", id);
+                            Intent i = new Intent(SubCatergoriesActivity.this, ProductDetails.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
                     });
                     rv_sub_cat_product.setAdapter(categoryProductAdapter);
                     rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

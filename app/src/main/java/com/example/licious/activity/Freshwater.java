@@ -142,6 +142,16 @@ public class Freshwater extends AppCompatActivity {
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
                             addWishList(item.getId(), item.getStatus());
                         }
+
+                        @Override
+                        public void onItemClickedItem(SubCategoryItemResponse.Datum item, int position, int type) {
+                            int id= item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("products_id", id);
+                            Intent i = new Intent(Freshwater.this, ProductDetails.class);
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
                     });
                     rv_sub_cat_product.setAdapter(subCategoryProductAdapter);
                     rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

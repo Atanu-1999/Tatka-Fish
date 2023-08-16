@@ -154,6 +154,11 @@ public class ProductDetails extends AppCompatActivity {
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
                             addWishList(item.getId(), item.getStatus());
                         }
+
+                        @Override
+                        public void onItemClickedItem(SubCategoryItemResponse.Datum item, int position, int type) {
+
+                        }
                     });
                     rv_category_product.setAdapter(productListAdapter);
                     rv_category_product.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));

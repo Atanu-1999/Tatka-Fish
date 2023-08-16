@@ -65,7 +65,7 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_bg,IV_wishList;
         TextView pd_title,tv_pd_des,tv_weight,tv_pieces,tv_serves,prices,tv_basePrices,tv_offer;
-        LinearLayout ll_add;
+        LinearLayout ll_add,all_btn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_bg = (ImageView) itemView.findViewById(R.id.iv_bg);
@@ -79,6 +79,7 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
             tv_offer = (TextView) itemView.findViewById(R.id.tv_offer);
             ll_add = (LinearLayout) itemView.findViewById(R.id.ll_add);
             IV_wishList = (ImageView) itemView.findViewById(R.id.IV_wishList);
+            all_btn = (LinearLayout) itemView.findViewById(R.id.all_btn);
 
             ll_add.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,6 +92,12 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
                 @Override
                 public void onClick(View view) {
                     listener.onItemClickedCategoriesProductWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
+            all_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClickedItem(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
                 }
             });
 
