@@ -361,7 +361,12 @@ public class Home extends Fragment {
                     top_rated_adapter = new Top_Rated_Adapter(getContext(), best_seller_response, true, new TopSellerListener() {
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
-                            addWishList(item.getId(), item.getWishlist_status());
+                            if (Objects.equals(item.getWishlist_status(), "False")){
+                                addWishList(item.getId(),"True");
+                            }
+                            else {
+                                addWishList(item.getId(),"False");
+                            }
                         }
 
                         @Override
@@ -436,7 +441,13 @@ public class Home extends Fragment {
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
                             Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
-                            addWishList(item.getId(), item.getStatus());
+                            if (Objects.equals(item.getWishlist_status(), "False")){
+                                addWishList(item.getId(),"True");
+                            }
+                            else {
+                                addWishList(item.getId(),"False");
+                            }
+
                         }
 
                         @Override

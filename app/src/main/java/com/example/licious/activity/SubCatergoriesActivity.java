@@ -182,7 +182,12 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                     categoryProductAdapter = new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override
                         public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
-                            addWishList(item.getId(), item.getWishlist_status());
+                            if (Objects.equals(item.getWishlist_status(), "False")){
+                                addWishList(item.getId(),"True");
+                            }
+                            else {
+                                addWishList(item.getId(),"False");
+                            }
                         }
 
                         @Override

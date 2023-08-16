@@ -47,7 +47,7 @@ public class ProductDetails extends AppCompatActivity {
     ProgressDialog progressDialog;
     List<ProductResponse.Datum> productResponse;
     ImageView Iv_bg;
-    TextView tv_tittle_product, product_type, tv_weight, tv_pieces, tv_serves, tv_descrp,tv_product_price;
+    TextView tv_tittle_product, product_type, tv_weight, tv_pieces, tv_serves, tv_descrp, tv_product_price;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     Top_Rated_Adapter top_rated_adapter;
     RecyclerView rv_category_product;
@@ -79,8 +79,8 @@ public class ProductDetails extends AppCompatActivity {
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCart(product_id,tv_product_price.getText().toString());
-               // startActivity(new Intent(ProductDetails.this, MyCart.class));
+                addToCart(product_id, tv_product_price.getText().toString());
+                // startActivity(new Intent(ProductDetails.this, MyCart.class));
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +152,11 @@ public class ProductDetails extends AppCompatActivity {
 
                         @Override
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
-                            addWishList(item.getId(), item.getStatus());
+                            if (Objects.equals(item.getWishlist_status(), "False")) {
+                                addWishList(item.getId(), "True");
+                            } else {
+                                addWishList(item.getId(), "False");
+                            }
                         }
 
                         @Override
@@ -192,7 +196,7 @@ public class ProductDetails extends AppCompatActivity {
     // add to cart
     private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id,price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -216,6 +220,7 @@ public class ProductDetails extends AppCompatActivity {
             }
         });
     }
+
     //WISHlIST
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();

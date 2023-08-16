@@ -141,7 +141,12 @@ public class Freshwater extends AppCompatActivity {
 
                         @Override
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
-                            addWishList(item.getId(), item.getWishlist_status());
+                            if (Objects.equals(item.getWishlist_status(), "False")){
+                                addWishList(item.getId(),"True");
+                            }
+                            else {
+                                addWishList(item.getId(),"False");
+                            }
                         }
 
                         @Override
@@ -182,7 +187,7 @@ public class Freshwater extends AppCompatActivity {
                     String status = response.body().getStatus();
 //                    if (Objects.equals(status, "true")) {
                     // wishlist_status = true;
-                    Toast.makeText(Freshwater.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(Freshwater.this, response.message(), Toast.LENGTH_SHORT).show();
                     getSubCategortItem(cId);
 //                    } else {
 //                       // wishlist_status = false;
