@@ -27,6 +27,7 @@ import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.GetCategoryResponse;
+import com.example.licious.response.RemoveWishListResponse;
 
 import java.util.List;
 import java.util.Objects;
@@ -186,7 +187,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                                 addWishList(item.getId(),"True");
                             }
                             else {
-                                addWishList(item.getId(),"False");
+                                removeWishList(item.getId(),"False");
                             }
                         }
 
@@ -266,6 +267,29 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
+                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void removeWishList(Integer prod_id, String status) {
+        progressDialog.show();
+        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id,status, token);
+        addAddress.enqueue(new Callback<RemoveWishListResponse>() {
+            @Override
+            public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    String status = response.body().getStatus();
+                   // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                    getCategorieesPoduct(mcId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
                 Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();

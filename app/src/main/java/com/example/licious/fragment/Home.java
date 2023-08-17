@@ -56,6 +56,7 @@ import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.Master_Category_Response;
+import com.example.licious.response.RemoveWishListResponse;
 
 import java.util.Calendar;
 import java.util.List;
@@ -365,7 +366,7 @@ public class Home extends Fragment {
                                 addWishList(item.getId(),"True");
                             }
                             else {
-                                addWishList(item.getId(),"False");
+                                removeWishList(item.getId(),"False");
                             }
                         }
 
@@ -440,12 +441,12 @@ public class Home extends Fragment {
 
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
-                            Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
                             if (Objects.equals(item.getWishlist_status(), "False")){
                                 addWishList(item.getId(),"True");
                             }
                             else {
-                                addWishList(item.getId(),"False");
+                                removeWishList(item.getId(),"False");
                             }
 
                         }
@@ -519,6 +520,30 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void removeWishList(Integer prod_id, String status) {
+        progressDialog.show();
+        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id,status, token);
+        addAddress.enqueue(new Callback<RemoveWishListResponse>() {
+            @Override
+            public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    String status = response.body().getStatus();
+                    Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                    TopRated(token);
+                    BestSeller(token);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
