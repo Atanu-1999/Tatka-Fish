@@ -12,6 +12,7 @@ import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.Category_Response;
+import com.example.licious.response.CheckOutProccedResponse;
 import com.example.licious.response.CouponsResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
@@ -192,6 +193,17 @@ public interface ApiHolder {
     @GET("getorderdata")
     Call<OrderHistoryResponse> getOrderHistory(@Query("user_id") int user_id,
                                                @Query("token") String token);
+
+    @POST("addorder")
+    @FormUrlEncoded
+    Call<CheckOutProccedResponse> procedToCheckOut(@Field("user_id") int user_id,
+                                                   @Field("sub_total") int sub_total,
+                                                   @Field("delivery_charge") int delivery_charge,
+                                                   @Field("total") int total,
+                                                   @Field("delivery_date") String delivery_date,
+                                                   @Field("slot_id") int slot_id,
+                                                   @Field("address_id") int address_id,
+                                                   @Field("token") String token);
 
 
 }

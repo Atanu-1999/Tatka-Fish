@@ -55,7 +55,7 @@ public class OrdersPage extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
                 else {
-
+                    progressDialog.dismiss();
                 }
             }
 

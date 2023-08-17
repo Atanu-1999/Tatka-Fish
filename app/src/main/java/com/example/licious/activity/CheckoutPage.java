@@ -28,6 +28,7 @@ import com.example.licious.listener.DeleteListener;
 import com.example.licious.listener.SlotListener;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
+import com.example.licious.response.CheckOutProccedResponse;
 import com.example.licious.response.SlotResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -65,9 +66,10 @@ public class CheckoutPage extends AppCompatActivity {
     Boolean flag=false;
     TextView tv_slotTime;
     String SlotTime,delivery_date;
-    int delivery_charge;
+    int delivery_charge,SlotId;
     LinearLayout btn_cart;
     int add_Id;
+    int Totals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +124,7 @@ public class CheckoutPage extends AppCompatActivity {
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                placedOrder(id,sub_total,delivery_date,delivery_charge,totalAmount,SlotTime,add_Id,token);
+                placedOrder(id,delivery_date,delivery_charge,totalAmount,Totals,SlotId,add_Id,token);
             }
         });
 
@@ -154,6 +156,7 @@ public class CheckoutPage extends AppCompatActivity {
                                     flag = flag;
                                     Toast.makeText(getApplicationContext(),item.getSlot_name(),Toast.LENGTH_SHORT).show();
                                     SlotTime =item.getSlot_name();
+                                    SlotId = item.getId();
                                     delivery_charge = item.getDelivery_charge();
                                     tv_slotTime.setText(SlotTime);
                                     bottomSheetDialog.dismiss();
@@ -248,8 +251,27 @@ public class CheckoutPage extends AppCompatActivity {
         });
     }
 
-    private void placedOrder(int id, TextView sub_total,String delivery_date, int delivery_charge, int totalAmount, String slotTime, int add_id, String token) {
-        //place order code write here
+    private void placedOrder(int id,String delivery_date, int delivery_charge, int totalAmount,int Totals, int slotTime, int add_id, String token) {
+        progressDialog.show();
+        Call<CheckOutProccedResponse> slot = ApiService.apiHolders().procedToCheckOut(id,totalAmount,delivery_charge,Totals,delivery_date,slotTime,add_id,token);
+        slot.enqueue(new Callback<CheckOutProccedResponse>() {
+            @Override
+            public void onResponse(Call<CheckOutProccedResponse> call, Response<CheckOutProccedResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(CheckoutPage.this,"Success",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(CheckoutPage.this,"Something wrong",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CheckOutProccedResponse> call, Throwable t) {
+                 Toast.makeText(CheckoutPage.this,"Failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void getSlotDetails() {
@@ -331,8 +353,8 @@ public class CheckoutPage extends AppCompatActivity {
             tv_delivery_charge.setText("0");
         }
 
-        int Total = subtotal + deliveryCharges;
-        String T_total = String.valueOf(Total);
+        Totals = subtotal + deliveryCharges;
+        String T_total = String.valueOf(Totals);
         totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
         tv_totalAmount.setText(T_total);//set value final Total
     }
