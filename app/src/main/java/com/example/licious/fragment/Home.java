@@ -106,7 +106,7 @@ public class Home extends Fragment {
 
     private int currentPage = 0;
     private final long DELAY_MS = 3000; // Delay in milliseconds before flipping to the next page
-    private final long PERIOD_MS = 5000; // Time period between each auto-flipping
+    private final long PERIOD_MS = 3000; // Time period between each auto-flipping
 
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;

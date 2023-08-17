@@ -49,8 +49,115 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
 
-            <include layout="@layout/order_history_layout"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order Placed:"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sun,22 Jul 2023"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Order Id:"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tv_orderId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="bfhgbd5g4fd8g47g4"
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="5dp"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="right"
+                        android:layout_marginRight="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending"
+                            android:textSize="@dimen/_14sdp"
+                            android:textColor="@color/red"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="right"
+                        android:layout_marginRight="@dimen/_10sdp">
+
+                        <TextView
+                            android:id="@+id/tv_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Completed"
+                            android:textSize="@dimen/_14sdp"
+                            android:textColor="@color/address"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_oderHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
+
+<!--            <include layout="@layout/order_history_layout"/>-->
 
 
 

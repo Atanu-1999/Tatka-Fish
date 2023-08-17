@@ -8,7 +8,7 @@ import java.util.List;
 public class OrderHistoryResponse {
     @SerializedName("data")
     @Expose
-    private List<Datum> data;
+    private Data data;
     @SerializedName("code")
     @Expose
     private String code;
@@ -16,11 +16,11 @@ public class OrderHistoryResponse {
     @Expose
     private String message;
 
-    public List<Datum> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
@@ -40,13 +40,14 @@ public class OrderHistoryResponse {
         this.message = message;
     }
 
-    public class Datum {
+    public class Data {
+
         @SerializedName("order")
         @Expose
         private List<Order> order;
         @SerializedName("orderdetails")
         @Expose
-        private List<Orderdetails> orderdetails;
+        private List<Orderdetail> orderdetails;
 
         public List<Order> getOrder() {
             return order;
@@ -56,349 +57,348 @@ public class OrderHistoryResponse {
             this.order = order;
         }
 
-        public List<Orderdetails> getOrderdetails() {
+        public List<Orderdetail> getOrderdetails() {
             return orderdetails;
         }
 
-        public void setOrderdetails(List<Orderdetails> orderdetails) {
+        public void setOrderdetails(List<Orderdetail> orderdetails) {
             this.orderdetails = orderdetails;
         }
+    }
+    public class Order {
 
-        public class Order{
-            @SerializedName("id")
-            @Expose
-            private int id;
-            @SerializedName("order_no")
-            @Expose
-            private String order_no;
-            @SerializedName("order_date")
-            @Expose
-            private String order_date;
-            @SerializedName("slot_id")
-            @Expose
-            private int slot_id;
-            @SerializedName("status")
-            @Expose
-            private String status;
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("order_no")
+        @Expose
+        private String orderNo;
+        @SerializedName("order_date")
+        @Expose
+        private String orderDate;
+        @SerializedName("slot_id")
+        @Expose
+        private Integer slotId;
+        @SerializedName("status")
+        @Expose
+        private String status;
 
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getOrder_no() {
-                return order_no;
-            }
-
-            public void setOrder_no(String order_no) {
-                this.order_no = order_no;
-            }
-
-            public String getOrder_date() {
-                return order_date;
-            }
-
-            public void setOrder_date(String order_date) {
-                this.order_date = order_date;
-            }
-
-            public int getSlot_id() {
-                return slot_id;
-            }
-
-            public void setSlot_id(int slot_id) {
-                this.slot_id = slot_id;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
+        public Integer getId() {
+            return id;
         }
-        public class Orderdetails{
-            @SerializedName("id")
-            @Expose
-            private Integer id;
-            @SerializedName("mc_id")
-            @Expose
-            private Integer mc_id;
-            @SerializedName("c_id")
-            @Expose
-            private Integer c_id;
-            @SerializedName("sc_id")
-            @Expose
-            private String sc_id;
-            @SerializedName("product_title")
-            @Expose
-            private String product_title;
-            @SerializedName("product_image")
-            @Expose
-            private String product_image;
-            @SerializedName("short_description")
-            @Expose
-            private String short_description;
-            @SerializedName("weight")
-            @Expose
-            private String weight;
-            @SerializedName("weight_type")
-            @Expose
-            private String weight_type;
-            @SerializedName("pieces")
-            @Expose
-            private String pieces;
-            @SerializedName("serves")
-            @Expose
-            private String serves;
-            @SerializedName("mrp")
-            @Expose
-            private String mrp;
-            @SerializedName("offer")
-            @Expose
-            private String offer;
-            @SerializedName("price")
-            @Expose
-            private String price;
 
-            @SerializedName("description")
-            @Expose
-            private String description;
-            @SerializedName("product_type")
-            @Expose
-            private String product_type;
-            @SerializedName("best_seller")
-            @Expose
-            private String best_seller;
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
-            @SerializedName("top_rated")
-            @Expose
-            private String top_rated;
-            @SerializedName("recommended")
-            @Expose
-            private String recommended;
-            @SerializedName("status")
-            @Expose
-            private String status;
-            @SerializedName("wishlist_status")
-            @Expose
-            private String wishlist_status;
-            @SerializedName("createdAt")
-            @Expose
-            private String createdAt;
-            @SerializedName("order_id")
-            @Expose
-            private int order_id;
-            @SerializedName("product_id")
-            @Expose
-            private int product_id;
-            @SerializedName("qty")
-            @Expose
-            private int qty;
+        public String getOrderNo() {
+            return orderNo;
+        }
 
-            public Integer getId() {
-                return id;
-            }
+        public void setOrderNo(String orderNo) {
+            this.orderNo = orderNo;
+        }
 
-            public void setId(Integer id) {
-                this.id = id;
-            }
+        public String getOrderDate() {
+            return orderDate;
+        }
 
-            public Integer getMc_id() {
-                return mc_id;
-            }
+        public void setOrderDate(String orderDate) {
+            this.orderDate = orderDate;
+        }
 
-            public void setMc_id(Integer mc_id) {
-                this.mc_id = mc_id;
-            }
+        public Integer getSlotId() {
+            return slotId;
+        }
 
-            public Integer getC_id() {
-                return c_id;
-            }
+        public void setSlotId(Integer slotId) {
+            this.slotId = slotId;
+        }
 
-            public void setC_id(Integer c_id) {
-                this.c_id = c_id;
-            }
+        public String getStatus() {
+            return status;
+        }
 
-            public String getSc_id() {
-                return sc_id;
-            }
+        public void setStatus(String status) {
+            this.status = status;
+        }
+    }
+    public class Orderdetail {
 
-            public void setSc_id(String sc_id) {
-                this.sc_id = sc_id;
-            }
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("mc_id")
+        @Expose
+        private Integer mcId;
+        @SerializedName("c_id")
+        @Expose
+        private Integer cId;
+        @SerializedName("sc_id")
+        @Expose
+        private Integer scId;
+        @SerializedName("product_title")
+        @Expose
+        private String productTitle;
+        @SerializedName("product_image")
+        @Expose
+        private String productImage;
+        @SerializedName("short_description")
+        @Expose
+        private String shortDescription;
+        @SerializedName("weight")
+        @Expose
+        private Integer weight;
+        @SerializedName("weight_type")
+        @Expose
+        private String weightType;
+        @SerializedName("pieces")
+        @Expose
+        private String pieces;
+        @SerializedName("serves")
+        @Expose
+        private String serves;
+        @SerializedName("mrp")
+        @Expose
+        private String mrp;
+        @SerializedName("offer")
+        @Expose
+        private Integer offer;
+        @SerializedName("price")
+        @Expose
+        private String price;
+        @SerializedName("description")
+        @Expose
+        private String description;
+        @SerializedName("product_type")
+        @Expose
+        private String productType;
+        @SerializedName("best_seller")
+        @Expose
+        private String bestSeller;
+        @SerializedName("top_rated")
+        @Expose
+        private String topRated;
+        @SerializedName("recommended")
+        @Expose
+        private String recommended;
+        @SerializedName("status")
+        @Expose
+        private String status;
+        @SerializedName("wishlist_status")
+        @Expose
+        private String wishlistStatus;
+        @SerializedName("createdAt")
+        @Expose
+        private String createdAt;
+        @SerializedName("order_id")
+        @Expose
+        private Integer orderId;
+        @SerializedName("product_id")
+        @Expose
+        private Integer productId;
+        @SerializedName("qty")
+        @Expose
+        private String qty;
 
-            public String getProduct_title() {
-                return product_title;
-            }
+        public Integer getId() {
+            return id;
+        }
 
-            public void setProduct_title(String product_title) {
-                this.product_title = product_title;
-            }
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
-            public String getProduct_image() {
-                return product_image;
-            }
+        public Integer getMcId() {
+            return mcId;
+        }
 
-            public void setProduct_image(String product_image) {
-                this.product_image = product_image;
-            }
+        public void setMcId(Integer mcId) {
+            this.mcId = mcId;
+        }
 
-            public String getShort_description() {
-                return short_description;
-            }
+        public Integer getcId() {
+            return cId;
+        }
 
-            public void setShort_description(String short_description) {
-                this.short_description = short_description;
-            }
+        public void setcId(Integer cId) {
+            this.cId = cId;
+        }
 
-            public String getWeight() {
-                return weight;
-            }
+        public Integer getScId() {
+            return scId;
+        }
 
-            public void setWeight(String weight) {
-                this.weight = weight;
-            }
+        public void setScId(Integer scId) {
+            this.scId = scId;
+        }
 
-            public String getWeight_type() {
-                return weight_type;
-            }
+        public String getProductTitle() {
+            return productTitle;
+        }
 
-            public void setWeight_type(String weight_type) {
-                this.weight_type = weight_type;
-            }
+        public void setProductTitle(String productTitle) {
+            this.productTitle = productTitle;
+        }
 
-            public String getPieces() {
-                return pieces;
-            }
+        public String getProductImage() {
+            return productImage;
+        }
 
-            public void setPieces(String pieces) {
-                this.pieces = pieces;
-            }
+        public void setProductImage(String productImage) {
+            this.productImage = productImage;
+        }
 
-            public String getServes() {
-                return serves;
-            }
+        public String getShortDescription() {
+            return shortDescription;
+        }
 
-            public void setServes(String serves) {
-                this.serves = serves;
-            }
+        public void setShortDescription(String shortDescription) {
+            this.shortDescription = shortDescription;
+        }
 
-            public String getMrp() {
-                return mrp;
-            }
+        public Integer getWeight() {
+            return weight;
+        }
 
-            public void setMrp(String mrp) {
-                this.mrp = mrp;
-            }
+        public void setWeight(Integer weight) {
+            this.weight = weight;
+        }
 
-            public String getOffer() {
-                return offer;
-            }
+        public String getWeightType() {
+            return weightType;
+        }
 
-            public void setOffer(String offer) {
-                this.offer = offer;
-            }
+        public void setWeightType(String weightType) {
+            this.weightType = weightType;
+        }
 
-            public String getPrice() {
-                return price;
-            }
+        public String getPieces() {
+            return pieces;
+        }
 
-            public void setPrice(String price) {
-                this.price = price;
-            }
+        public void setPieces(String pieces) {
+            this.pieces = pieces;
+        }
 
-            public String getDescription() {
-                return description;
-            }
+        public String getServes() {
+            return serves;
+        }
 
-            public void setDescription(String description) {
-                this.description = description;
-            }
+        public void setServes(String serves) {
+            this.serves = serves;
+        }
 
-            public String getProduct_type() {
-                return product_type;
-            }
+        public String getMrp() {
+            return mrp;
+        }
 
-            public void setProduct_type(String product_type) {
-                this.product_type = product_type;
-            }
+        public void setMrp(String mrp) {
+            this.mrp = mrp;
+        }
 
-            public String getBest_seller() {
-                return best_seller;
-            }
+        public Integer getOffer() {
+            return offer;
+        }
 
-            public void setBest_seller(String best_seller) {
-                this.best_seller = best_seller;
-            }
+        public void setOffer(Integer offer) {
+            this.offer = offer;
+        }
 
-            public String getTop_rated() {
-                return top_rated;
-            }
+        public String getPrice() {
+            return price;
+        }
 
-            public void setTop_rated(String top_rated) {
-                this.top_rated = top_rated;
-            }
+        public void setPrice(String price) {
+            this.price = price;
+        }
 
-            public String getRecommended() {
-                return recommended;
-            }
+        public String getDescription() {
+            return description;
+        }
 
-            public void setRecommended(String recommended) {
-                this.recommended = recommended;
-            }
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
-            public String getStatus() {
-                return status;
-            }
+        public String getProductType() {
+            return productType;
+        }
 
-            public void setStatus(String status) {
-                this.status = status;
-            }
+        public void setProductType(String productType) {
+            this.productType = productType;
+        }
 
-            public String getWishlist_status() {
-                return wishlist_status;
-            }
+        public String getBestSeller() {
+            return bestSeller;
+        }
 
-            public void setWishlist_status(String wishlist_status) {
-                this.wishlist_status = wishlist_status;
-            }
+        public void setBestSeller(String bestSeller) {
+            this.bestSeller = bestSeller;
+        }
 
-            public String getCreatedAt() {
-                return createdAt;
-            }
+        public String getTopRated() {
+            return topRated;
+        }
 
-            public void setCreatedAt(String createdAt) {
-                this.createdAt = createdAt;
-            }
+        public void setTopRated(String topRated) {
+            this.topRated = topRated;
+        }
 
-            public int getOrder_id() {
-                return order_id;
-            }
+        public String getRecommended() {
+            return recommended;
+        }
 
-            public void setOrder_id(int order_id) {
-                this.order_id = order_id;
-            }
+        public void setRecommended(String recommended) {
+            this.recommended = recommended;
+        }
 
-            public int getProduct_id() {
-                return product_id;
-            }
+        public String getStatus() {
+            return status;
+        }
 
-            public void setProduct_id(int product_id) {
-                this.product_id = product_id;
-            }
+        public void setStatus(String status) {
+            this.status = status;
+        }
 
-            public int getQty() {
-                return qty;
-            }
+        public String getWishlistStatus() {
+            return wishlistStatus;
+        }
 
-            public void setQty(int qty) {
-                this.qty = qty;
-            }
+        public void setWishlistStatus(String wishlistStatus) {
+            this.wishlistStatus = wishlistStatus;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public Integer getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(Integer orderId) {
+            this.orderId = orderId;
+        }
+
+        public Integer getProductId() {
+            return productId;
+        }
+
+        public void setProductId(Integer productId) {
+            this.productId = productId;
+        }
+
+        public String getQty() {
+            return qty;
+        }
+
+        public void setQty(String qty) {
+            this.qty = qty;
         }
     }
 }
