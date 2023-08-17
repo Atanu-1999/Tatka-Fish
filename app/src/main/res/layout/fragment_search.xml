@@ -49,7 +49,8 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/_3sdp">
 
-                <EditText
+                <SearchView
+                    android:id="@+id/sv_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -91,6 +92,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_all_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/rv_Search_all_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp" />

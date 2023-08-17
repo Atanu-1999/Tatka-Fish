@@ -27,6 +27,7 @@ import com.example.licious.response.Pages_Response;
 import com.example.licious.response.ProductResponse;
 import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.RemoveWishListResponse;
+import com.example.licious.response.SearchResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
 import com.example.licious.response.SubCategoriesResponse;
@@ -204,6 +205,10 @@ public interface ApiHolder {
                                                    @Field("slot_id") int slot_id,
                                                    @Field("address_id") int address_id,
                                                    @Field("token") String token);
+
+    @GET("productsearch")
+    Call<SearchResponse> getSearch(@Query("search") String search,
+                                   @Query("token") String token);
 
 
 }
