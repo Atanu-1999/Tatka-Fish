@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
 import com.example.licious.response.AllAddressListResponse;
+import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.OrderHistoryResponse;
 import com.squareup.picasso.Picasso;
 
@@ -19,11 +20,11 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder>{
-    public static List<OrderHistoryResponse.Orderdetail> ItemList;
+    public static List<OrderHistoryDataResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
 
-    public OrderHistoryAdapter(Context context, List<OrderHistoryResponse.Orderdetail> ItemList) {
+    public OrderHistoryAdapter(Context context, List<OrderHistoryDataResponse.Datum> ItemList) {
         this.ItemList = ItemList;
         this.context = context;
     }

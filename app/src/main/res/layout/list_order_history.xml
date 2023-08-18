@@ -173,7 +173,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tomorrow 3 P.M"
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
             android:padding="@dimen/_5sdp"

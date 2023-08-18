@@ -19,8 +19,10 @@ import com.example.licious.response.EditAddressResponse;
 import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.GetSubCategoryResponse;
+import com.example.licious.response.HistoryResponse;
 import com.example.licious.response.ImageResponse;
 import com.example.licious.response.Master_Category_Response;
+import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.OrderHistoryResponse;
 import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
@@ -192,8 +194,12 @@ public interface ApiHolder {
     Call<AllCaterogyResponse> allCategory(@Query("token") String token);
 
     @GET("getorderdata")
-    Call<OrderHistoryResponse> getOrderHistory(@Query("user_id") int user_id,
-                                               @Query("token") String token);
+    Call<HistoryResponse> getOrderHistory(@Query("user_id") int user_id,
+                                                   @Query("token") String token);
+
+    @GET("getorderproductdata")
+    Call<OrderHistoryDataResponse> getOrderHistoryData(@Query("order_id") int order_id,
+                                              @Query("token") String token);
 
     @POST("addorder")
     @FormUrlEncoded
