@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "257771418834",
+    "project_id": "tatka-fish",
+    "storage_bucket": "tatka-fish.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257771418834:android:91ea5cbb1eaf37ac28690b",
+        "android_client_info": {
+          "package_name": "com.example.licious"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "257771418834-mj582cq3uuib5k4o3na7jrd6kvetnhro.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.licious",
+            "certificate_hash": "35673e5fb28ffe14ffe46bdd301f79865d8daa89"
+          }
+        },
+        {
+          "client_id": "257771418834-r1ffe1p0dvaqlsijek9m4km786te1lbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT6kT_fbvacGr5DvKAAFi2aDr07sv4YZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "257771418834-r1ffe1p0dvaqlsijek9m4km786te1lbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
