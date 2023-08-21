@@ -1,6 +1,8 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +22,8 @@ import com.example.licious.R;
 import com.example.licious.adapter.CategoryProductAdapter;
 import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.fragment.Account;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
 import com.example.licious.listener.MasterCategoryprouduct;
@@ -54,6 +59,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     CategoryProductAdapter categoryProductAdapter;
     int product_id;
     LinearLayout ll_items;
+    String BlankId = "";
 
 
     @SuppressLint("MissingInflatedId")
@@ -75,6 +81,10 @@ public class SubCatergoriesActivity extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+
+        // /*Device Id Get*/
+        String deviceId = DeviceUtils.getDeviceId(getApplicationContext());
+        Log.e("Device Id", "" + deviceId);
 
         //loading
         progressDialog = new ProgressDialog(this);
@@ -118,17 +128,23 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //            }
 //        });
         // getCategory(cId);
-        getCategory(mcId);//Category
-        getCategorieesPoduct(mcId);//CategoryProduct
+        Log.d("device_id", loginPref.getString("device_id", ""));
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getCategory(mcId, deviceId);//Category
+            getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+        } else {
+            getCategory(mcId, token);//Category
+            getCategorieesPoduct(mcId, token);//CategoryProduct
+        }
         ll_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCategorieesPoduct(mcId);
+                getCategorieesPoduct(mcId, token);
             }
         });
     }
 
-    private void getCategory(Integer mcId) {
+    private void getCategory(Integer mcId, String token) {
         progressDialog.show();
         Call<GetCategoryResponse> addAddress = ApiService.apiHolders().getCategory(mcId, token);
         addAddress.enqueue(new Callback<GetCategoryResponse>() {
@@ -170,9 +186,9 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
     }
 
-    private void getCategorieesPoduct(int mcId) {
+    private void getCategorieesPoduct(int mcId, String token) {
         progressDialog.show();
-        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(2, token);
+        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(mcId, token);
         subCategoryDataProduct.enqueue(new Callback<Category_Response>() {
             @Override
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
@@ -183,20 +199,36 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                     categoryProductAdapter = new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override
                         public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
-                            if (Objects.equals(item.getWishlist_status(), "False")){
-                                addWishList(item.getId(),"True");
-                            }
-                            else {
-                                removeWishList(item.getId(),"False");
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+
+
+                            } else {
+                                if (Objects.equals(item.getWishlist_status(), "False")) {
+                                    addWishList(item.getId(), "True");
+                                } else {
+                                    removeWishList(item.getId(), "False");
+                                }
                             }
                         }
 
                         @Override
                         public void onItemClickedMasterCategoriesProductADDcart(Category_Response.Datum item, int position, int type) {
-
-                            product_id = item.getId();
-                            String prices = item.getPrice();
-                            addToCart(product_id, prices);//add to cart API
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                product_id = item.getId();
+                                String prices = item.getPrice();
+                                addToCart(product_id, prices);//add to cart API
+                            }
                         }
 
                         @Override
@@ -261,7 +293,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    getCategorieesPoduct(mcId);
+                    getCategorieesPoduct(mcId, token);
                 }
             }
 
@@ -276,15 +308,15 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
     private void removeWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id,status, token);
+        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id, status, token);
         addAddress.enqueue(new Callback<RemoveWishListResponse>() {
             @Override
             public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                   // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    getCategorieesPoduct(mcId);
+                    // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                    getCategorieesPoduct(mcId, token);
                 }
             }
 
@@ -300,6 +332,6 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getCategorieesPoduct(mcId);//CategoryProduct
+        getCategorieesPoduct(mcId, token);//CategoryProduct
     }
 }

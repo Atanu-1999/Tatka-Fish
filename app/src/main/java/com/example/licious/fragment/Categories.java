@@ -42,9 +42,9 @@ import retrofit2.Response;
 
 public class Categories extends Fragment {
     LinearLayout type_one;
-    ImageView open,close;
+    ImageView open, close;
     HorizontalScrollView layout_view;
-    RecyclerView rv_category,rv_category_sub;
+    RecyclerView rv_category, rv_category_sub;
     String token;
 
     Category_Adapter category_adapter;
@@ -56,6 +56,7 @@ public class Categories extends Fragment {
     SharedPreferences.Editor editor;
     int id;
     ProgressDialog progressDialog;
+    String BlankId = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class Categories extends Fragment {
 
         View category = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        type_one =category.findViewById(R.id.type_one);
+        type_one = category.findViewById(R.id.type_one);
         open = category.findViewById(R.id.open);
         close = category.findViewById(R.id.close);
         layout_view = category.findViewById(R.id.layout_view);
@@ -110,8 +111,11 @@ public class Categories extends Fragment {
                 startActivity(new Intent(getContext(), Subcategories.class));
             }
         });
-
-        All_Categories(deviceId);
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            All_Categories(deviceId);
+        } else {
+            All_Categories(token);
+        }
 
         return category;
     }
@@ -122,7 +126,7 @@ public class Categories extends Fragment {
         login_apiCall.enqueue(new Callback<GetMasterCategoryResponse>() {
             @Override
             public void onResponse(Call<GetMasterCategoryResponse> call, Response<GetMasterCategoryResponse> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String response1 = response.body().toString();
                     master_category_responses = response.body().getData();
@@ -130,11 +134,11 @@ public class Categories extends Fragment {
                         @Override
                         public void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type) {
                             Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-                           // startActivity(new Intent(getContext(), Subcategories.class));
+                            // startActivity(new Intent(getContext(), Subcategories.class));
                             //getCategory(item.getId());
                             int Id = item.getId();
                             Bundle bundle = new Bundle();
-                            bundle.putInt("mcId",Id);
+                            bundle.putInt("mcId", Id);
                             Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
                             intent.putExtras(bundle);
                             startActivity(intent);
@@ -142,8 +146,7 @@ public class Categories extends Fragment {
                     });
                     rv_category.setAdapter(category_adapter);
                     rv_category.setLayoutManager(new LinearLayoutManager(getContext()));
-                }
-                else {
+                } else {
 
                 }
             }

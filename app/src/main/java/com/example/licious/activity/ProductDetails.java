@@ -1,6 +1,8 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +23,8 @@ import com.example.licious.adapter.ProductListAdapter;
 import com.example.licious.adapter.SubCategoryProductAdapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.fragment.Account;
 import com.example.licious.listener.SubCategoriesProductListener;
 import com.example.licious.listener.TopSellerListener;
 import com.example.licious.response.AddToCartResponse;
@@ -54,6 +59,8 @@ public class ProductDetails extends AppCompatActivity {
     RecyclerView rv_category_product;
     ProductListAdapter productListAdapter;
     List<SubCategoryItemResponse.Datum> subProductItem;
+    String BlankId = "";
+    String deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +84,22 @@ public class ProductDetails extends AppCompatActivity {
 
         btn_cart = findViewById(R.id.btn_cart);
         back = findViewById(R.id.back);
+        // /*Device Id Get*/
+        deviceId = DeviceUtils.getDeviceId(getApplicationContext());
+        Log.e("Device Id", "" + deviceId);
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCart(product_id, tv_product_price.getText().toString());
                 // startActivity(new Intent(ProductDetails.this, MyCart.class));
+                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                    FragmentManager fragmentManager = getSupportFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    Account account = new Account();
+//                    fragmentTransaction.replace(R.id.main_container, account);
+//                    fragmentTransaction.addToBackStack(null).commit();
+                } else {
+                    addToCart(product_id, tv_product_price.getText().toString());
+                }
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +108,13 @@ public class ProductDetails extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getProductDetails(product_id);
+        Log.d("device_id", loginPref.getString("device_id", ""));
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getProductDetails(product_id, deviceId);
+        } else {
+            getProductDetails(product_id, token);
+        }
+
     }
 
     private void initi() {
@@ -106,7 +130,7 @@ public class ProductDetails extends AppCompatActivity {
 
     }
 
-    private void getProductDetails(int product_id) {
+    private void getProductDetails(int product_id, String token) {
         progressDialog.show();
         Call<ProductResponse> productDetails = ApiService.apiHolders().getProductDetails(product_id, token);
         productDetails.enqueue(new Callback<ProductResponse>() {
@@ -118,7 +142,12 @@ public class ProductDetails extends AppCompatActivity {
                     setProductData(productResponse);//set data
                     String s_cId = productResponse.get(0).getSc_id();
                     int Id = Integer.parseInt(s_cId);
-                    getProductList(Id);
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        getProductList(Id, deviceId);
+                    } else {
+                        getProductList(Id, token);
+                    }
+
                     //top_rated_adapter = new Top_Rated_Adapter(getApplicationContext(),productResponse)
                     Toast.makeText(ProductDetails.this, "Successfully", Toast.LENGTH_SHORT).show();
                 }
@@ -133,9 +162,9 @@ public class ProductDetails extends AppCompatActivity {
         });
     }
 
-    private void getProductList(int id) {
+    private void getProductList(int id, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(2, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(id, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -146,17 +175,35 @@ public class ProductDetails extends AppCompatActivity {
                     productListAdapter = new ProductListAdapter(getApplicationContext(), subProductItem, new SubCategoriesProductListener() {
                         @Override
                         public void onItemClickedCategoriesProduct(SubCategoryItemResponse.Datum item, int position, int type) {
-                            product_id = item.getId();
-                            String prices = item.getPrice();
-                            addToCart(product_id, prices);//add to cart API
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                product_id = item.getId();
+                                String prices = item.getPrice();
+                                addToCart(product_id, prices);//add to cart API
+                            }
                         }
 
                         @Override
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
-                            if (Objects.equals(item.getWishlist_status(), "False")) {
-                                addWishList(item.getId(), "True");
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+
+
                             } else {
-                                removeWishList(item.getId(), "False");
+                                if (Objects.equals(item.getWishlist_status(), "False")) {
+                                    addWishList(item.getId(), "True");
+                                } else {
+                                    removeWishList(item.getId(), "False");
+                                }
                             }
                         }
 
@@ -232,7 +279,12 @@ public class ProductDetails extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     Toast.makeText(ProductDetails.this, "WishList Added Successfully", Toast.LENGTH_SHORT).show();
-                    getProductList(id);
+                    // getProductList(id, deviceId);
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        getProductList(id, deviceId);
+                    } else {
+                        getProductList(id, token);
+                    }
                 }
             }
 
@@ -254,7 +306,12 @@ public class ProductDetails extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     Toast.makeText(ProductDetails.this, "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    getProductList(id);
+                    // getProductList(id);
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        getProductList(id, deviceId);
+                    } else {
+                        getProductList(id, token);
+                    }
                 }
             }
 
@@ -270,6 +327,11 @@ public class ProductDetails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getProductDetails(product_id);
+        //getProductDetails(product_id);
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getProductList(id, deviceId);
+        } else {
+            getProductList(id, token);
+        }
     }
 }

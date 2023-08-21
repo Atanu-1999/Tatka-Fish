@@ -25,6 +25,7 @@ import com.example.licious.adapter.ALl_CategoryAdapter;
 import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.SeacrhItemListAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.listener.AllCategoryListener;
 import com.example.licious.listener.SearchItemClickListener;
 import com.example.licious.response.AddToCartResponse;
@@ -53,6 +54,7 @@ public class Search extends Fragment {
     SeacrhItemListAdapter seacrhItemListAdapter;
     List<SearchResponse.Datum> searchListresponse;
     int product_id;
+    String deviceId,BlankId="";
 
 
     @Override
@@ -79,7 +81,14 @@ public class Search extends Fragment {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
-        get_all_categories();
+        deviceId = DeviceUtils.getDeviceId(getContext()); //getDeviceID
+
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            get_all_categories(deviceId);
+        }
+        else {
+            get_all_categories(token);
+        }
 
         sv_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -102,13 +111,22 @@ public class Search extends Fragment {
     private void searchSku(String newText) {
         if (newText.isEmpty()) {
            // Toast.makeText(getContext(), "Please Enter Product Name", Toast.LENGTH_SHORT).show();
-            get_all_categories();
+            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                get_all_categories(deviceId);
+            }
+            else {
+                get_all_categories(token);
+            }
         } else {
-            search_api();
+            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                search_api(deviceId);
+            }else {
+                search_api(token);
+            }
         }
     }
 
-    private void search_api() {
+    private void search_api(String token) {
         progressDialog.show();
         Call<SearchResponse> category_apiCall = ApiService.apiHolders().getSearch(cName, token);
         category_apiCall.enqueue(new Callback<SearchResponse>() {
@@ -123,9 +141,20 @@ public class Search extends Fragment {
                     seacrhItemListAdapter = new SeacrhItemListAdapter(getContext(), searchListresponse, new SearchItemClickListener() {
                         @Override
                         public void onItemClickedSearchItem(SearchResponse.Datum item, int position, int type) {
-                            product_id = item.getId();
-                            String prices = item.getPrice();
-                            addToCart(product_id, prices);//add to cart API
+//                            product_id = item.getId();
+//                            String prices = item.getPrice();
+//                            addToCart(product_id, prices);//add to cart API
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                product_id = item.getId();
+                                String prices = item.getPrice();
+                                addToCart(product_id, prices);//add to cart API
+                            }
                         }
                     });
                     rv_Search_all_category.setAdapter(seacrhItemListAdapter);
@@ -145,7 +174,7 @@ public class Search extends Fragment {
 
     }
 
-    private void get_all_categories() {
+    private void get_all_categories(String token) {
         progressDialog.show();
         Call<AllCaterogyResponse> category_apiCall = ApiService.apiHolders().allCategory(token);
         category_apiCall.enqueue(new Callback<AllCaterogyResponse>() {

@@ -237,14 +237,27 @@ public class Home extends Fragment {
 //            }
 //        });
 
-        //Banner
-        Banner(deviceId);
-        //category
-        Category(deviceId);
-        //Best Seller
-        BestSeller(deviceId);
-        //Top Rated
-        TopRated(deviceId);
+        Log.d("device_id", loginPref.getString("device_id", ""));
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            //Banner
+            Banner(deviceId);
+            //category
+            Category(deviceId);
+            //Best Seller
+            BestSeller(deviceId);
+            //Top Rated
+            TopRated(deviceId);
+        } else {
+            //Banner
+            Banner(token);
+            //category
+            Category(token);
+            //Best Seller
+            BestSeller(token);
+            //Top Rated
+            TopRated(token);
+        }
+
 
         //onBackPressed
 //        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
@@ -327,7 +340,7 @@ public class Home extends Fragment {
                         public void onItemClickedCategories(GetMasterCategoryResponse.Datum item, int position, int type) {
                             int cId = item.getId();
                             Bundle bundle = new Bundle();
-                            bundle.putInt("cId", cId);
+                            bundle.putInt("mcId", cId);
                             Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
                             intent.putExtras(bundle);
                             startActivity(intent);
@@ -362,11 +375,19 @@ public class Home extends Fragment {
                     top_rated_adapter = new Top_Rated_Adapter(getContext(), best_seller_response, true, new TopSellerListener() {
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
-                            if (Objects.equals(item.getWishlist_status(), "False")){
-                                addWishList(item.getId(),"True");
-                            }
-                            else {
-                                removeWishList(item.getId(),"False");
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                //edit_sku_no.getText().clear();
+                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                if (Objects.equals(item.getWishlist_status(), "False")) {
+                                    addWishList(item.getId(), "True");
+                                } else {
+                                    removeWishList(item.getId(), "False");
+                                }
                             }
                         }
 
@@ -442,11 +463,19 @@ public class Home extends Fragment {
                         @Override
                         public void onItemClickedWishList(Best_Seller_Response.Datum item, int position, int type, Boolean status) {
                             //Toast.makeText(getContext(), item.getId().toString(), Toast.LENGTH_SHORT).show();
-                            if (Objects.equals(item.getWishlist_status(), "False")){
-                                addWishList(item.getId(),"True");
-                            }
-                            else {
-                                removeWishList(item.getId(),"False");
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                //edit_sku_no.getText().clear();
+                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                if (Objects.equals(item.getWishlist_status(), "False")) {
+                                    addWishList(item.getId(), "True");
+                                } else {
+                                    removeWishList(item.getId(), "False");
+                                }
                             }
 
                         }
@@ -505,7 +534,7 @@ public class Home extends Fragment {
 
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id,status, token);
+        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, status, token);
         addAddress.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
@@ -529,7 +558,7 @@ public class Home extends Fragment {
 
     private void removeWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id,status, token);
+        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id, status, token);
         addAddress.enqueue(new Callback<RemoveWishListResponse>() {
             @Override
             public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {

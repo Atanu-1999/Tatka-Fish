@@ -1,7 +1,9 @@
 package com.example.licious.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -174,15 +176,16 @@ public class Account extends Fragment {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences =getContext().getSharedPreferences("login_pref",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.apply();
-
-                Intent logoutIntent = new Intent(getContext(), MainActivity.class);
-                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logoutIntent);
-                Toast.makeText(getContext(),"LogOut Successfully",Toast.LENGTH_SHORT).show();
+                showPopup();
+//                SharedPreferences preferences =getContext().getSharedPreferences("login_pref",Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.clear();
+//                editor.apply();
+//
+//                Intent logoutIntent = new Intent(getContext(), MainActivity.class);
+//                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(logoutIntent);
+//                Toast.makeText(getContext(),"LogOut Successfully",Toast.LENGTH_SHORT).show();
             }
         });
         btn_order.setOnClickListener(new View.OnClickListener() {
@@ -252,5 +255,26 @@ public class Account extends Fragment {
 
             }
         });
+    }
+
+    private void showPopup() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage("Are you sure?")
+                .setPositiveButton("Logout", new DialogInterface.OnClickListener()                 {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences preferences =getContext().getSharedPreferences("login_pref",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.clear();
+                        editor.apply();
+
+                        Intent logoutIntent = new Intent(getContext(), MainActivity.class);
+                        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(logoutIntent);
+                    }
+                }).setNegativeButton("Cancel", null);
+
+        AlertDialog alert1 = alert.create();
+        alert1.show();
     }
 }

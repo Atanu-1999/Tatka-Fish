@@ -179,7 +179,7 @@ public interface ApiHolder {
     Call<SlotResponse> getTimeSlot(@Query("token") String token);
 
     @GET("cproduct")
-    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("cId") int scId,
+    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("cId") int cId,
                                                         @Query("token") String token);
 
     @GET("mcproduct")
