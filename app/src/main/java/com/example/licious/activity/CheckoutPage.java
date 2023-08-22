@@ -65,8 +65,8 @@ public class CheckoutPage extends AppCompatActivity {
     RecyclerView rv_slot;
     Boolean flag = false;
     TextView tv_slotTime;
-    String SlotTime, delivery_date;
-    int delivery_charge, SlotId;
+    String SlotTime, delivery_date="";
+    int delivery_charge, SlotId=0;
     LinearLayout btn_cart;
     int add_Id;
     int Totals;
@@ -124,9 +124,9 @@ public class CheckoutPage extends AppCompatActivity {
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   if (validation()) {
+                if (validation()) {
                     placedOrder(id, delivery_date, delivery_charge, totalAmount, Totals, SlotId, add_Id, token);
-             //   }
+                }
             }
         });
 
@@ -160,6 +160,8 @@ public class CheckoutPage extends AppCompatActivity {
                                     SlotTime = item.getSlot_name();
                                     SlotId = item.getId();
                                     delivery_charge = item.getDelivery_charge();
+                                    String dc=String.valueOf(delivery_charge);//delivery charge
+                                    tv_delivery_charge.setText("₹" + " " +dc);
                                     tv_slotTime.setText(SlotTime);
                                     bottomSheetDialog.dismiss();
                                 }
@@ -256,6 +258,10 @@ public class CheckoutPage extends AppCompatActivity {
     private boolean validation() {
         if (delivery_date.equals("")) {
             Toast.makeText(this, "Please select delivery date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (SlotId == 0){
+            Toast.makeText(this, "Please select time slot", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -357,10 +363,10 @@ public class CheckoutPage extends AppCompatActivity {
         int deliveryCharges = 0;
         if (delivery_charge != 0) {
             String t_dc = String.valueOf(delivery_charge);
-            tv_delivery_charge.setText(t_dc);// delivery charge
+            tv_delivery_charge.setText("₹" + " " + t_dc);// delivery charge
             deliveryCharges = delivery_charge;
         } else {
-            tv_delivery_charge.setText("0");
+            tv_delivery_charge.setText("₹" + " " + "0");
         }
 
         Totals = subtotal + deliveryCharges;

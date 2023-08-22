@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activity.Update_Profile">
 
     <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="@dimen/_7sdp"
@@ -105,6 +107,7 @@
                 android:layout_marginTop="@dimen/_10sdp">
 
                 <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -126,7 +129,6 @@
                             android:layout_height="match_parent"
                             android:hint="First Name"
                             android:textSize="@dimen/_15sdp"
-                            android:background="@null"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:layout_gravity="center"
@@ -138,6 +140,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    app:cardBackgroundColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -159,7 +162,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:background="@null"
                             android:hint="Last Name"
                             android:inputType="textPersonName"
                             android:padding="@dimen/_10sdp"
@@ -174,6 +176,7 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -210,6 +213,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -233,7 +237,6 @@
                         android:layout_height="match_parent"
                         android:hint="Email ID"
                         android:textSize="@dimen/_15sdp"
-                        android:background="@null"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:layout_gravity="center"
@@ -245,6 +248,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -272,6 +276,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="@dimen/_10sdp"
+                            android:textColor="@color/black"
                             android:text="Enter Your DOB"
                             android:textSize="@dimen/_14sdp"
                             android:textStyle="bold" />
@@ -318,18 +323,21 @@
                         android:id="@+id/radio_male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="Male"/>
 
                     <RadioButton
                         android:id="@+id/radio_female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="Female"/>
 
                     <RadioButton
                         android:id="@+id/radio_other"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="Other"/>
 
                 </RadioGroup>

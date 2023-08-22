@@ -31,6 +31,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tv_area"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg"/>
@@ -57,6 +58,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tv_building"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg">
@@ -84,6 +86,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tv_landmark"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg"/>
@@ -110,6 +113,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tv_city"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bottom_bg">
@@ -137,6 +141,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tv_mobile"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="10"

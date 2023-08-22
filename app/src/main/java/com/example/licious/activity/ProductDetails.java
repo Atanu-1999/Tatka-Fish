@@ -149,7 +149,7 @@ public class ProductDetails extends AppCompatActivity {
                     }
 
                     //top_rated_adapter = new Top_Rated_Adapter(getApplicationContext(),productResponse)
-                    Toast.makeText(ProductDetails.this, "Successfully", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(ProductDetails.this, "Successfully", Toast.LENGTH_SHORT).show();
                 }
             }
 

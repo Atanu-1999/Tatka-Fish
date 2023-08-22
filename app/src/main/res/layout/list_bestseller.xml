@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@color/white"
         android:layout_width="@dimen/_230sdp"
         android:layout_height="@dimen/_150sdp"
         android:layout_margin="@dimen/_5sdp"
@@ -111,6 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="₹185"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp" />
 
                 <LinearLayout

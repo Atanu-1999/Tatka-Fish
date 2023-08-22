@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@color/white"
         android:id="@+id/cv_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Order Placed:"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_16sdp"
                     android:textStyle="bold" />
 
@@ -37,6 +39,7 @@
                     android:layout_marginStart="5dp"
                     android:text="Sun,22 Jul 2023"
                     android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -58,6 +61,7 @@
                         android:layout_height="wrap_content"
                         android:text="Order Id:"
                         android:textSize="@dimen/_16sdp"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <TextView
@@ -66,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="bfhgbd5g4fd8g47g4"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold" />
 

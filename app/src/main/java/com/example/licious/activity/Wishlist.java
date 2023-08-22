@@ -69,7 +69,7 @@ public class Wishlist extends AppCompatActivity {
             @Override
             public void onResponse(Call<AllWishListResponse> call, Response<AllWishListResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Wishlist.this, "Successfully", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Wishlist.this, "Successfully", Toast.LENGTH_SHORT).show();
                 allWishList = response.body().getData();
                 wishListAdapter = new WishListAdapter(getApplication(), allWishList, new FavoriteListener() {
                     @Override

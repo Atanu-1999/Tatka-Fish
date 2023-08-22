@@ -150,7 +150,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onResponse(Call<AllAddressListResponse> call, Response<AllAddressListResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Address.this, "Successfully", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Address.this, "Successfully", Toast.LENGTH_SHORT).show();
                 allAddressList = response.body().getData();
                 addressListAdapter = new AddressListAdapter(getApplication(), allAddressList, new AddressListAdapter.OnItemClickListener() {
                     @Override
