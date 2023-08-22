@@ -161,7 +161,7 @@ public class Address extends AppCompatActivity {
 
                     @Override
                     public void onItemClickEdit(AllAddressListResponse.Datum item, int position, int type) {
-                        Toast.makeText(Address.this, "Hello", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(Address.this, "Hello", Toast.LENGTH_SHORT).show();
                         EditAddress(item, position);
                     }
 
@@ -191,7 +191,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<AllAddressListResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -299,7 +299,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<EditAddressResponse> call, Throwable t) {
                 //Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -320,7 +320,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -346,7 +346,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<AddAddressResponse> call, Throwable t) {
                 Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
+            //    progressDialog.dismiss();
             }
         });
     }

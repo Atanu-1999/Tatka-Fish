@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/line"
-    tools:context=".activity.Freshwater">
+    tools:context=".fragment.FreshWaterFragment">
 
     <LinearLayout
         android:id="@+id/header"
@@ -390,102 +388,102 @@
 
 
 
-<!--                <HorizontalScrollView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/_10sdp"-->
-<!--                    android:layout_marginTop="@dimen/_7sdp"-->
-<!--                    android:layout_marginEnd="@dimen/_10sdp"-->
-<!--                    android:scrollbars="none">-->
+                <!--                <HorizontalScrollView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/_10sdp"-->
+                <!--                    android:layout_marginTop="@dimen/_7sdp"-->
+                <!--                    android:layout_marginEnd="@dimen/_10sdp"-->
+                <!--                    android:scrollbars="none">-->
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="horizontal">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:orientation="horizontal">-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                    </LinearLayout>-->
+                <!--                    </LinearLayout>-->
 
-<!--                </HorizontalScrollView>-->
+                <!--                </HorizontalScrollView>-->
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="@dimen/_5sdp"-->
-<!--                    android:orientation="horizontal">-->
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_margin="@dimen/_5sdp"-->
+                <!--                    android:orientation="horizontal">-->
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="@dimen/_70sdp"-->
-<!--                        android:layout_height="@dimen/_70sdp"-->
-<!--                        android:padding="@dimen/_5sdp"-->
-<!--                        android:src="@drawable/katla" />-->
+                <!--                    <ImageView-->
+                <!--                        android:layout_width="@dimen/_70sdp"-->
+                <!--                        android:layout_height="@dimen/_70sdp"-->
+                <!--                        android:padding="@dimen/_5sdp"-->
+                <!--                        android:src="@drawable/katla" />-->
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:gravity="right"-->
-<!--                        android:orientation="vertical">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_gravity="center"-->
+                <!--                        android:gravity="right"-->
+                <!--                        android:orientation="vertical">-->
 
-<!--                        <TextView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginStart="@dimen/_10sdp"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:padding="@dimen/_3sdp"-->
-<!--                            android:text="Catla Bengali Cuts"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="@dimen/_16sdp"-->
-<!--                            android:textStyle="bold" />-->
+                <!--                        <TextView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginStart="@dimen/_10sdp"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:padding="@dimen/_3sdp"-->
+                <!--                            android:text="Catla Bengali Cuts"-->
+                <!--                            android:textColor="@color/black"-->
+                <!--                            android:textSize="@dimen/_16sdp"-->
+                <!--                            android:textStyle="bold" />-->
 
-<!--                        <TextView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginStart="@dimen/_10sdp"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:gravity=""-->
-<!--                            android:padding="@dimen/_3sdp"-->
-<!--                            android:text="Expertly crafted Rohu cuts for delicious recipes" />-->
+                <!--                        <TextView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginStart="@dimen/_10sdp"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:gravity=""-->
+                <!--                            android:padding="@dimen/_3sdp"-->
+                <!--                            android:text="Expertly crafted Rohu cuts for delicious recipes" />-->
 
-<!--                    </LinearLayout>-->
+                <!--                    </LinearLayout>-->
 
-<!--                </LinearLayout>-->
+                <!--                </LinearLayout>-->
 
-<!--                <HorizontalScrollView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/_10sdp"-->
-<!--                    android:layout_marginTop="@dimen/_7sdp"-->
-<!--                    android:layout_marginEnd="@dimen/_10sdp"-->
-<!--                    android:scrollbars="none">-->
+                <!--                <HorizontalScrollView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/_10sdp"-->
+                <!--                    android:layout_marginTop="@dimen/_7sdp"-->
+                <!--                    android:layout_marginEnd="@dimen/_10sdp"-->
+                <!--                    android:scrollbars="none">-->
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="horizontal">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:orientation="horizontal">-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                        <include layout="@layout/fresh_layout" />-->
+                <!--                        <include layout="@layout/fresh_layout" />-->
 
-<!--                    </LinearLayout>-->
+                <!--                    </LinearLayout>-->
 
-<!--                </HorizontalScrollView>-->
+                <!--                </HorizontalScrollView>-->
 
-<!--                <include layout="@layout/subcategori_layout" />-->
+                <!--                <include layout="@layout/subcategori_layout" />-->
 
-<!--                <include layout="@layout/subcategori_layout" />-->
+                <!--                <include layout="@layout/subcategori_layout" />-->
 
-<!--                <include layout="@layout/subcategori_layout" />-->
+                <!--                <include layout="@layout/subcategori_layout" />-->
 
             </LinearLayout>
 

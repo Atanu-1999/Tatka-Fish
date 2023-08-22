@@ -112,12 +112,14 @@ public class MyCart extends AppCompatActivity {
         btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("total_amount", Integer.parseInt(tpp));
-                Intent i = new Intent(MyCart.this, CheckoutPage.class);
-                i.putExtras(bundle);
-                startActivity(i);
-                //  startActivity(new Intent(MyCart.this, CheckoutPage.class));
+                if (validation()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("total_amount", Integer.parseInt(tpp));
+                    Intent i = new Intent(MyCart.this, CheckoutPage.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                    //  startActivity(new Intent(MyCart.this, CheckoutPage.class));
+                }
             }
         });
         checkout.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +136,14 @@ public class MyCart extends AppCompatActivity {
 //        });
 
         getCartDetails();
+    }
+
+    private boolean validation() {
+        if (tv_add_type.getText().toString().equals("")) {
+            Toast.makeText(this, "Please select address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void getCartDetails() {

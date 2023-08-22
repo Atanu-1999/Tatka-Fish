@@ -1,31 +1,34 @@
-package com.example.licious.activity;
+package com.example.licious.fragment;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.licious.R;
+import com.example.licious.activity.Freshwater;
+import com.example.licious.activity.MyCart;
+import com.example.licious.activity.ProductDetails;
+import com.example.licious.activity.SubCatergoriesActivity;
 import com.example.licious.adapter.CategoryProductAdapter;
 import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.fragment.Account;
-import com.example.licious.fragment.AllFish;
-import com.example.licious.fragment.Crab;
 import com.example.licious.listener.MasterCategoryprouduct;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.AddToCartResponse;
@@ -41,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubCatergoriesActivity extends AppCompatActivity {
+public class SubCategoriesFragment extends Fragment {
     LinearLayout btn_all, btn_fresh, btn_crab, btn_sea;
     AllFish all = new AllFish();
     Crab crab = new Crab();
@@ -61,37 +64,35 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     LinearLayout ll_items;
     String BlankId = "";
 
-
-    @SuppressLint("MissingInflatedId")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_catergories);
+    }
 
-//        product_search = findViewById(R.id.product_search);
-//        btn_all = findViewById(R.id.btn_all);
-//        btn_fresh = findViewById(R.id.btn_fresh);
-//        btn_crab = findViewById(R.id.btn_crab);
-//        btn_sea = findViewById(R.id.btn_sea);
-        rv_category_sub_s = findViewById(R.id.rv_category_sub_ss);
-        rv_sub_cat_product = findViewById(R.id.rv_sub_cat_product);
-        ll_items = findViewById(R.id.ll_items);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View subCat = inflater.inflate(R.layout.fragment_sub_categories, container, false);
+        rv_category_sub_s = subCat.findViewById(R.id.rv_category_sub_ss);
+        rv_sub_cat_product = subCat.findViewById(R.id.rv_sub_cat_product);
+        ll_items = subCat.findViewById(R.id.ll_items);
 
-        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
         // /*Device Id Get*/
-        String deviceId = DeviceUtils.getDeviceId(getApplicationContext());
+        String deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
 
         //loading
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getArguments();
         if (bundle != null) {
             mcId = bundle.getInt("mcId");
         }
@@ -142,7 +143,9 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                 getCategorieesPoduct(mcId, token);
             }
         });
+        return subCat;
     }
+
 
     private void getCategory(Integer mcId, String token) {
         progressDialog.show();
@@ -156,15 +159,20 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
                 // getCategorieesPoduct();
 
-                category_horizental_adapter = new Category_horizental_Adapter(getApplication(), category_response, new SubCategoriesListener() {
+                category_horizental_adapter = new Category_horizental_Adapter(getContext(), category_response, new SubCategoriesListener() {
                     @Override
                     public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
                         int id = item.getId();
                         Bundle bundle = new Bundle();
                         bundle.putInt("cId", id);
-                        Intent i = new Intent(SubCatergoriesActivity.this, Freshwater.class);
-                        i.putExtras(bundle);
-                        startActivity(i);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        FreshWaterFragment freshwater = new FreshWaterFragment();
+                        fragmentTransaction.replace(R.id.main_container, freshwater);
+                        fragmentTransaction.addToBackStack(null).commit();
+//                        Intent i = new Intent(getContext(), Freshwater.class);
+//                        i.putExtras(bundle);
+//                        startActivity(i);
                     }
                 });
 //                GridLayoutManager layoutManager = new GridLayoutManager(getApplication(), 3);
@@ -172,7 +180,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 //                rv_category_sub_s.setAdapter(category_horizental_adapter);
                 rv_category_sub_s.setAdapter(category_horizental_adapter);
                 // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
-                rv_category_sub_s.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                rv_category_sub_s.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
             }
 
@@ -180,7 +188,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
             public void onFailure(Call<GetCategoryResponse> call, Throwable t) {
 //                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,15 +204,15 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     category_response_product = response.body().getData();
-                    categoryProductAdapter = new CategoryProductAdapter(getApplicationContext(), category_response_product, new MasterCategoryprouduct() {
+                    categoryProductAdapter = new CategoryProductAdapter(getContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override
                         public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-//                                FragmentManager fragmentManager = getSupportFragmentManager();
-//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                                Account account = new Account();
-//                                fragmentTransaction.replace(R.id.main_container, account);
-//                                fragmentTransaction.addToBackStack(null).commit();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
 
 
                             } else {
@@ -219,7 +227,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                         @Override
                         public void onItemClickedMasterCategoriesProductADDcart(Category_Response.Datum item, int position, int type) {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 Account account = new Account();
                                 fragmentTransaction.replace(R.id.main_container, account);
@@ -236,13 +244,13 @@ public class SubCatergoriesActivity extends AppCompatActivity {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(SubCatergoriesActivity.this, ProductDetails.class);
+                            Intent i = new Intent(getContext(), ProductDetails.class);
                             i.putExtras(bundle);
                             startActivity(i);
                         }
                     });
                     rv_sub_cat_product.setAdapter(categoryProductAdapter);
-                    rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
 
             }
@@ -265,10 +273,10 @@ public class SubCatergoriesActivity extends AppCompatActivity {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(SubCatergoriesActivity.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
-                    Intent i = new Intent(SubCatergoriesActivity.this, MyCart.class);
+                    Intent i = new Intent(getContext(), MyCart.class);
                     i.putExtras(bundle);
                     startActivity(i);
                 }
@@ -299,7 +307,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -322,7 +330,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
-                Toast.makeText(SubCatergoriesActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -330,7 +338,7 @@ public class SubCatergoriesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         getCategorieesPoduct(mcId, token);//CategoryProduct
     }

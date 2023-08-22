@@ -63,10 +63,10 @@ public class CheckoutPage extends AppCompatActivity {
     TextView tv_totalAmount, sub_total, tv_delivery_charge, totalValue;
     SlotAdapter slotAdapter;
     RecyclerView rv_slot;
-    Boolean flag=false;
+    Boolean flag = false;
     TextView tv_slotTime;
-    String SlotTime,delivery_date;
-    int delivery_charge,SlotId;
+    String SlotTime, delivery_date;
+    int delivery_charge, SlotId;
     LinearLayout btn_cart;
     int add_Id;
     int Totals;
@@ -89,7 +89,7 @@ public class CheckoutPage extends AppCompatActivity {
         Date currentDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrowDate = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         today = dateFormat.format(currentDate);
         tomorrow = dateFormat.format(tomorrowDate);
         /*initialization*/
@@ -119,12 +119,14 @@ public class CheckoutPage extends AppCompatActivity {
         //get Data
         getCartDetails();
         //get slot time
-       // getSlotDetails();
+        // getSlotDetails();
 
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                placedOrder(id,delivery_date,delivery_charge,totalAmount,Totals,SlotId,add_Id,token);
+             //   if (validation()) {
+                    placedOrder(id, delivery_date, delivery_charge, totalAmount, Totals, SlotId, add_Id, token);
+             //   }
             }
         });
 
@@ -150,12 +152,12 @@ public class CheckoutPage extends AppCompatActivity {
                             assert response.body() != null;
                             slotResponse = response.body().getData();
 
-                            slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse,flag, new SlotListener() {
+                            slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse, flag, new SlotListener() {
                                 @Override
                                 public void onItemClickedSlot(SlotResponse.Datum item, int position, Boolean flag) {
                                     flag = flag;
-                                    Toast.makeText(getApplicationContext(),item.getSlot_name(),Toast.LENGTH_SHORT).show();
-                                    SlotTime =item.getSlot_name();
+                                    Toast.makeText(getApplicationContext(), item.getSlot_name(), Toast.LENGTH_SHORT).show();
+                                    SlotTime = item.getSlot_name();
                                     SlotId = item.getId();
                                     delivery_charge = item.getDelivery_charge();
                                     tv_slotTime.setText(SlotTime);
@@ -194,7 +196,7 @@ public class CheckoutPage extends AppCompatActivity {
                         txt_today.setBackground(getDrawable(R.drawable.timeslot_bg));
                         txt_tomorrow.setTextColor(getResources().getColor(R.color.black));
                         txt_today.setTextColor(getResources().getColor(R.color.white));
-                        delivery_date= today;
+                        delivery_date = today;
                     }
                 });
                 txt_tomorrow.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +206,7 @@ public class CheckoutPage extends AppCompatActivity {
                         txt_today.setBackground(getDrawable(R.drawable.time_bg));
                         txt_tomorrow.setTextColor(getResources().getColor(R.color.white));
                         txt_today.setTextColor(getResources().getColor(R.color.black));
-                        delivery_date= tomorrow;
+                        delivery_date = tomorrow;
                     }
                 });
 //                txt_slot1.setOnClickListener(new View.OnClickListener() {
@@ -251,24 +253,32 @@ public class CheckoutPage extends AppCompatActivity {
         });
     }
 
-    private void placedOrder(int id,String delivery_date, int delivery_charge, int totalAmount,int Totals, int slotTime, int add_id, String token) {
+    private boolean validation() {
+        if (delivery_date.equals("")) {
+            Toast.makeText(this, "Please select delivery date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void placedOrder(int id, String delivery_date, int delivery_charge, int totalAmount, int Totals, int slotTime, int add_id, String token) {
         progressDialog.show();
-        Call<CheckOutProccedResponse> slot = ApiService.apiHolders().procedToCheckOut(id,totalAmount,delivery_charge,Totals,delivery_date,slotTime,add_id,token);
+        Call<CheckOutProccedResponse> slot = ApiService.apiHolders().procedToCheckOut(id, totalAmount, delivery_charge, Totals, delivery_date, slotTime, add_id, token);
         slot.enqueue(new Callback<CheckOutProccedResponse>() {
             @Override
             public void onResponse(Call<CheckOutProccedResponse> call, Response<CheckOutProccedResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(CheckoutPage.this,"Success",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(CheckoutPage.this,"Something wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutPage.this, "Success", Toast.LENGTH_SHORT).show();
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(CheckoutPage.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<CheckOutProccedResponse> call, Throwable t) {
-                 Toast.makeText(CheckoutPage.this,"Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutPage.this, "Failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -344,12 +354,12 @@ public class CheckoutPage extends AppCompatActivity {
     private void setTotalAmount() {
         sub_total.setText("₹" + " " + totalAmount);///subTotal
         int subtotal = totalAmount;
-        int deliveryCharges=0;
-        if (delivery_charge!=0) {
+        int deliveryCharges = 0;
+        if (delivery_charge != 0) {
             String t_dc = String.valueOf(delivery_charge);
             tv_delivery_charge.setText(t_dc);// delivery charge
             deliveryCharges = delivery_charge;
-        }else {
+        } else {
             tv_delivery_charge.setText("0");
         }
 

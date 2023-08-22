@@ -44,11 +44,12 @@
             android:text="Today 31 May"
             android:layout_gravity="center"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:background="@drawable/timeslot_bg"
+            android:textColor="@color/black"
+            android:background="@drawable/time_bg"
             android:gravity="center"
             android:textSize="@dimen/_16sdp"
             android:layout_marginStart="@dimen/_10sdp"/>
+<!--        android:background="@drawable/timeslot_bg"-->
 
         <TextView
             android:id="@+id/txt_tomorrow"
@@ -57,6 +58,8 @@
             android:text="Tomorrow 01 May"
             android:layout_gravity="center"
             android:textStyle="bold"
+            android:textColor="@color/black"
+            android:background="@drawable/time_bg"
             android:gravity="center"
             android:textSize="@dimen/_16sdp"
             android:layout_marginStart="@dimen/_20sdp"/>

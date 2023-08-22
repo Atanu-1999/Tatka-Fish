@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -134,14 +136,20 @@ public class Categories extends Fragment {
                         @Override
                         public void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type) {
                             Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-                            // startActivity(new Intent(getContext(), Subcategories.class));
-                            //getCategory(item.getId());
                             int Id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", Id);
-                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+//                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
+//                            intent.putExtras(bundle);
+//                            startActivity(intent);
+
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                            subCategoriesFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_category.setAdapter(category_adapter);

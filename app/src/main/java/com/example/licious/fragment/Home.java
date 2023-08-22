@@ -341,9 +341,16 @@ public class Home extends Fragment {
                             int cId = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", cId);
-                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                            subCategoriesFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
+//                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
+////                            intent.putExtras(bundle);
+////                            startActivity(intent);
                         }
                     });
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);

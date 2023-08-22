@@ -1,38 +1,39 @@
-package com.example.licious.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.example.licious.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.adapter.Best_Seller_Adapter;
+import com.example.licious.activity.Freshwater;
+import com.example.licious.activity.MyCart;
+import com.example.licious.activity.ProductDetails;
 import com.example.licious.adapter.SubCategoryProductAdapter;
 import com.example.licious.adapter.Sub_categoryAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.fragment.Account;
 import com.example.licious.listener.SubCategoriesItemListener;
 import com.example.licious.listener.SubCategoriesProductListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
-import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.RemoveWishListResponse;
-import com.example.licious.response.SubCategoriesResponse;
 import com.example.licious.response.SubCategoryItemResponse;
 
 import java.util.List;
@@ -42,7 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Freshwater extends AppCompatActivity {
+
+public class FreshWaterFragment extends Fragment {
     int cId;
     RecyclerView rv_sub_cat, rv_sub_cat_product;
     ProgressDialog progressDialog;
@@ -58,34 +60,39 @@ public class Freshwater extends AppCompatActivity {
     TextView tv_totalItem;
     int product_id;
     String BlankId = "";
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_freshwater);
-        rv_sub_cat = findViewById(R.id.rv_sub_cat);
-        ll_items = findViewById(R.id.ll_items);
-        rv_sub_cat_product = findViewById(R.id.rv_sub_cat_product);
-        tv_totalItem = findViewById(R.id.tv_totalItem);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View freshWater = inflater.inflate(R.layout.fragment_fresh_water, container, false);
+        rv_sub_cat = freshWater.findViewById(R.id.rv_sub_cat);
+        ll_items = freshWater.findViewById(R.id.ll_items);
+        rv_sub_cat_product = freshWater.findViewById(R.id.rv_sub_cat_product);
+        tv_totalItem = freshWater.findViewById(R.id.tv_totalItem);
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle =getArguments();
         //Extract the data…
         if (bundle != null) {
             cId = bundle.getInt("cId", 0);
         }
 
-        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
         //loading
-        progressDialog = new ProgressDialog(Freshwater.this);
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
         // /*Device Id Get*/
-        String deviceId = DeviceUtils.getDeviceId(getApplicationContext());
+        String deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
 
         ll_items.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +115,8 @@ public class Freshwater extends AppCompatActivity {
             getSubCategortItem(cId, token);
         }
 
+
+        return freshWater;
     }
 
     private void getSubCategory(int cId, String token) {
@@ -120,7 +129,7 @@ public class Freshwater extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     subCategories = response.body().getData();
-                    sub_categoryAdapter = new Sub_categoryAdapter(getApplicationContext(), subCategories, new SubCategoriesItemListener() {
+                    sub_categoryAdapter = new Sub_categoryAdapter(getContext(), subCategories, new SubCategoriesItemListener() {
                         @Override
                         public void onItemClickedCategoriesItem(GetSubCategoryResponse.Datum item, int position, int type) {
                             int cId = item.getC_id();
@@ -129,7 +138,7 @@ public class Freshwater extends AppCompatActivity {
                     });
                     rv_sub_cat.setAdapter(sub_categoryAdapter);
                     // rv_bestSeller.setLayoutManager(new LinearLayoutManager(getContext()));
-                    rv_sub_cat.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                    rv_sub_cat.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                 }
 
             }
@@ -153,15 +162,15 @@ public class Freshwater extends AppCompatActivity {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     subProductItem = response.body().getData();
-                    subCategoryProductAdapter = new SubCategoryProductAdapter(getApplicationContext(), subProductItem, new SubCategoriesProductListener() {
+                    subCategoryProductAdapter = new SubCategoryProductAdapter(getContext(), subProductItem, new SubCategoriesProductListener() {
                         @Override
                         public void onItemClickedCategoriesProduct(SubCategoryItemResponse.Datum item, int position, int type) {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-//                                FragmentManager fragmentManager = getSupportFragmentManager();
-//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                                Account account = new Account();
-//                                fragmentTransaction.replace(R.id.main_container, account);
-//                                fragmentTransaction.addToBackStack(null).commit();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String prices = item.getPrice();
@@ -172,11 +181,11 @@ public class Freshwater extends AppCompatActivity {
                         @Override
                         public void onItemClickedCategoriesProductWishList(SubCategoryItemResponse.Datum item, int position, int type) {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-//                                FragmentManager fragmentManager = getSupportFragmentManager();
-//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                                Account account = new Account();
-//                                fragmentTransaction.replace(R.id.main_container, account);
-//                                fragmentTransaction.addToBackStack(null).commit();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
 
 
                             } else {
@@ -193,13 +202,13 @@ public class Freshwater extends AppCompatActivity {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(Freshwater.this, ProductDetails.class);
+                            Intent i = new Intent(getContext(), ProductDetails.class);
                             i.putExtras(bundle);
                             startActivity(i);
                         }
                     });
                     rv_sub_cat_product.setAdapter(subCategoryProductAdapter);
-                    rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    rv_sub_cat_product.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
 
             }
@@ -229,7 +238,7 @@ public class Freshwater extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(Freshwater.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -251,7 +260,7 @@ public class Freshwater extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
-                Toast.makeText(Freshwater.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -267,10 +276,10 @@ public class Freshwater extends AppCompatActivity {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(Freshwater.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
-                    Intent i = new Intent(Freshwater.this, MyCart.class);
+                    Intent i = new Intent(getContext(), MyCart.class);
                     i.putExtras(bundle);
                     startActivity(i);
                 }

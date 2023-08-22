@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -145,11 +147,11 @@ public class Search extends Fragment {
 //                            String prices = item.getPrice();
 //                            addToCart(product_id, prices);//add to cart API
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-//                                FragmentManager fragmentManager = getSupportFragmentManager();
-//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                                Account account = new Account();
-//                                fragmentTransaction.replace(R.id.main_container, account);
-//                                fragmentTransaction.addToBackStack(null).commit();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String prices = item.getPrice();
