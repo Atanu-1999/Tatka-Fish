@@ -63,6 +63,7 @@ public class SubCategoriesFragment extends Fragment {
     int product_id;
     LinearLayout ll_items;
     String BlankId = "";
+    ImageView back;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class SubCategoriesFragment extends Fragment {
         rv_category_sub_s = subCat.findViewById(R.id.rv_category_sub_ss);
         rv_sub_cat_product = subCat.findViewById(R.id.rv_sub_cat_product);
         ll_items = subCat.findViewById(R.id.ll_items);
+        back = subCat.findViewById(R.id.back);
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -96,6 +98,18 @@ public class SubCategoriesFragment extends Fragment {
         if (bundle != null) {
             mcId = bundle.getInt("mcId");
         }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Categories categories = new Categories();
+                fragmentTransaction.replace(R.id.main_container, categories);
+                //edit_sku_no.getText().clear();
+                fragmentTransaction.addToBackStack(null).commit();
+            }
+        });
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
 //        btn_all.setOnClickListener(new View.OnClickListener() {
@@ -165,9 +179,11 @@ public class SubCategoriesFragment extends Fragment {
                         int id = item.getId();
                         Bundle bundle = new Bundle();
                         bundle.putInt("cId", id);
+                        bundle.putInt("page", 2);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         FreshWaterFragment freshwater = new FreshWaterFragment();
+                        freshwater.setArguments(bundle);
                         fragmentTransaction.replace(R.id.main_container, freshwater);
                         fragmentTransaction.addToBackStack(null).commit();
 //                        Intent i = new Intent(getContext(), Freshwater.class);

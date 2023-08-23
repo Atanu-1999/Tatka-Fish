@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +15,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.adapter.CheckOutAdapter;
 import com.example.licious.adapter.MyCartAdapter;
@@ -38,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,6 +74,7 @@ public class CheckoutPage extends AppCompatActivity {
     LinearLayout btn_cart;
     int add_Id;
     int Totals;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,8 @@ public class CheckoutPage extends AppCompatActivity {
         totalValue = findViewById(R.id.totalValue);
         tv_slotTime = findViewById(R.id.tv_slotTime);
         btn_cart = findViewById(R.id.btn_cart);
+
+        dialog = new Dialog(CheckoutPage.this);
 
         /*Current date and tomorrow date pick*/
         Calendar calendar = Calendar.getInstance();
@@ -275,19 +282,57 @@ public class CheckoutPage extends AppCompatActivity {
             public void onResponse(Call<CheckOutProccedResponse> call, Response<CheckOutProccedResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(CheckoutPage.this, "Success", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(CheckoutPage.this, "Success", Toast.LENGTH_SHORT).show();
+                    openDailouge("true");
                 } else {
                     progressDialog.dismiss();
-                    Toast.makeText(CheckoutPage.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(CheckoutPage.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    openDailouge("false");
                 }
             }
 
             @Override
             public void onFailure(Call<CheckOutProccedResponse> call, Throwable t) {
-                Toast.makeText(CheckoutPage.this, "Failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CheckoutPage.this, "Failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                openDailouge("false");
             }
         });
+    }
+
+    private void openDailouge(String status) {
+//        dialog.setContentView(R.layout.payment_dialouge);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+       // dialog.setCancelable(false);
+
+        bottomSheetDialog = new BottomSheetDialog(CheckoutPage.this, R.style.BottomSheetTheme);
+        View view1 = LayoutInflater.from(CheckoutPage.this).inflate(R.layout.payment_dialouge,
+                (LinearLayout) findViewById(R.id.container));
+
+        ImageView iv_tick = view1.findViewById(R.id.iv_tick);
+        ImageView iv_msg = view1.findViewById(R.id.iv_msg);
+        TextView tv_back = view1.findViewById(R.id.tv_back);
+
+        if (Objects.equals(status, "true")){
+            iv_tick.setImageResource(R.drawable.success_tick);
+            iv_msg.setImageResource(R.drawable.sucess_message);
+        }
+        else {
+            iv_tick.setImageResource(R.drawable.failtrick);
+            iv_msg.setImageResource(R.drawable.failmsg);
+        }
+
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(CheckoutPage.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        bottomSheetDialog.setContentView(view1);
+        bottomSheetDialog.show();
+        bottomSheetDialog.setCanceledOnTouchOutside(false);
     }
 
     private void getSlotDetails() {

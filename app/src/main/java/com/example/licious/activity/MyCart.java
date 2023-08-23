@@ -2,6 +2,8 @@ package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,12 +14,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.MainActivity;
+import com.example.licious.fragment.SubCategoriesFragment;
 import com.example.licious.listener.DeleteListener;
 import com.example.licious.R;
 import com.example.licious.adapter.MyCartAdapter;
@@ -53,6 +57,7 @@ public class MyCart extends AppCompatActivity {
     LinearLayout ll_amount_view;
     RelativeLayout rl_noData;
     CardView checkout;
+    ImageView back;
 
 
     @SuppressLint("SetTextI18n")
@@ -70,6 +75,7 @@ public class MyCart extends AppCompatActivity {
         ll_amount_view = findViewById(R.id.ll_amount_view);
         rl_noData = findViewById(R.id.rl_noData);
         checkout = findViewById(R.id.checkout);
+        back = findViewById(R.id.back);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -90,6 +96,14 @@ public class MyCart extends AppCompatActivity {
             tv_add_type.setText(add_type);
             tv_address.setText(adds_one + adds_two + city);
         }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyCart.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         //loading
@@ -267,5 +281,13 @@ public class MyCart extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getCartDetails();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+       Intent intent = new Intent(MyCart.this,MainActivity.class);
+       startActivity(intent);
+
     }
 }

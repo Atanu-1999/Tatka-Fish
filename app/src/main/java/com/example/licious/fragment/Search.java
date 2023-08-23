@@ -191,12 +191,22 @@ public class Search extends Fragment {
                     aLl_categoryAdapter = new ALl_CategoryAdapter(getContext(), allCategory, new AllCategoryListener() {
                         @Override
                         public void onItemClickedItem(AllCaterogyResponse.Datum item, int position, int type) {
+//                            int id = item.getId();
+//                            Bundle bundle = new Bundle();
+//                            bundle.putInt("cId", id);
+//                            Intent i = new Intent(getContext(), Freshwater.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("cId", id);
-                            Intent i = new Intent(getContext(), Freshwater.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
+                            bundle.putInt("page", 1);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            FreshWaterFragment freshwater = new FreshWaterFragment();
+                            freshwater.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, freshwater);
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);

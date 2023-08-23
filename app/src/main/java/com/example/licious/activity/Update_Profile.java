@@ -89,11 +89,11 @@ public class Update_Profile extends AppCompatActivity {
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
-    String firstname,lastName,email_s,Dob_s,gender_s,image,image_s;
+    String firstname, lastName, email_s, Dob_s, gender_s, image, image_s;
     String BlankId = "";
     ProgressDialog progressDialog;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +129,7 @@ public class Update_Profile extends AppCompatActivity {
             public void run() {
                 progressDialog.dismiss();
             }
-        },5000);
+        }, 5000);
 
 //        if (BlankId.equals(loginPref.getString("device_id", ""))) {
 //            edite_Fname.setText("");
@@ -140,38 +140,46 @@ public class Update_Profile extends AppCompatActivity {
 //        }
 //        else {
 //        if (loginPref.getString("device_id", "")!=null){
-            firstname = loginPref.getString("first_name", null);
-            lastName = loginPref.getString("last_name", null);
-            email_s = loginPref.getString("email", null);
-            Dob_s = loginPref.getString("dob", null);
-            gender_s = loginPref.getString("gender", null);
-            image_s = loginPref.getString("image", null);
-            progressDialog.show();
+        firstname = loginPref.getString("first_name", null);
+        lastName = loginPref.getString("last_name", null);
+        email_s = loginPref.getString("email", null);
+        Dob_s = loginPref.getString("dob", null);
+        gender_s = loginPref.getString("gender", null);
+        image_s = loginPref.getString("image", null);
+        progressDialog.show();
 
+        if (firstname == null && email == null) {
+//            edite_Fname.setText("enter first name");
+//            edite_Last_name.setText("enter last name");
+//            et_email.setText("enter email");
+//            edit_user_dob.setText("DOB");
+//            edite_Fname.setHint("First Name");
+//            edite_Fname.setTextColor(R.color.black);
+        } else {
             edite_Fname.setText(firstname);
             edite_Last_name.setText(lastName);
             et_email.setText(email_s);
             edit_user_dob.setText(Dob_s);
-            if (Objects.equals(loginPref.getString("image", null), null)){
-                Picasso.with(getApplicationContext())
-                        .load(R.drawable.user)
-                        .into(Iv_profile);
-            }else {
-                Picasso.with(getApplicationContext())
-                        .load(image_url + image_s)
-                        .into(Iv_profile);
-            }
+        }
+        if (Objects.equals(loginPref.getString("image", null), null)) {
+            Picasso.with(getApplicationContext())
+                    .load(R.drawable.user)
+                    .into(Iv_profile);
+        } else {
+            Picasso.with(getApplicationContext())
+                    .load(image_url + image_s)
+                    .into(Iv_profile);
+        }
 
-            if (Objects.equals(gender_s, "Male")){
-                radio_male.setChecked(true);
-            }else if (Objects.equals(gender_s, "Female")){
-                radio_female.setChecked(true);
-            }
-            else {
-                radio_other.setChecked(true);
-            }
+        if (Objects.equals(gender_s, "Male")) {
+            radio_male.setChecked(true);
+        } else if (Objects.equals(gender_s, "Female")) {
+            radio_female.setChecked(true);
+        } else {
+            radio_other.setChecked(true);
+        }
 
-       // }
+        // }
 
         phoneNum = loginPref.getString("phone", "");
         tv_phone.setText(phoneNum);
@@ -314,7 +322,7 @@ public class Update_Profile extends AppCompatActivity {
         Dob = edit_user_dob.getText().toString();
 
         progressDialog.show();
-        Call<ProfileResponse> otp_verify = ApiService.apiHolders().UpdateProfile(token,id, f_name, l_name, email, phoneNum, Dob, gender);
+        Call<ProfileResponse> otp_verify = ApiService.apiHolders().UpdateProfile(token, id, f_name, l_name, email, phoneNum, Dob, gender);
         otp_verify.enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
@@ -326,35 +334,34 @@ public class Update_Profile extends AppCompatActivity {
                 edite_Fname.setText(response.body().getData().get(0).getFirst_name());
                 edite_Last_name.setText(response.body().getData().get(0).getLast_name());
                 et_email.setText(response.body().getData().get(0).getEmail());
-                 String rb_gender = response.body().getData().get(0).getGender();
-                if (rb_gender=="Male"){
+                String rb_gender = response.body().getData().get(0).getGender();
+                if (rb_gender == "Male") {
                     radio_male.setChecked(true);
-                }else if (rb_gender=="Female"){
+                } else if (rb_gender == "Female") {
                     radio_female.setChecked(true);
-                }
-                else {
+                } else {
                     radio_other.setChecked(true);
                 }
 
                 //add to sharedpref
-                String firstname_s=response.body().getData().get(0).getFirst_name();
-                String lastName_s=response.body().getData().get(0).getLast_name();
-                String email_ss=response.body().getData().get(0).getEmail();
-                String Dob_ss=response.body().getData().get(0).getDob();
-                String gender_ss=response.body().getData().get(0).getGender();
+                String firstname_s = response.body().getData().get(0).getFirst_name();
+                String lastName_s = response.body().getData().get(0).getLast_name();
+                String email_ss = response.body().getData().get(0).getEmail();
+                String Dob_ss = response.body().getData().get(0).getDob();
+                String gender_ss = response.body().getData().get(0).getGender();
 
-                editor.putString("first_name",firstname_s);
-                editor.putString("last_name",lastName_s);
-                editor.putString("email",email_ss);
-                editor.putString("dob",Dob_ss);
-                editor.putString("gender",gender_ss);
+                editor.putString("first_name", firstname_s);
+                editor.putString("last_name", lastName_s);
+                editor.putString("email", email_ss);
+                editor.putString("dob", Dob_ss);
+                editor.putString("gender", gender_ss);
                 editor.commit();
 
             }
 
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                Toast.makeText(Update_Profile.this, "failed" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -512,9 +519,9 @@ public class Update_Profile extends AppCompatActivity {
                 Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
                 assert response.body() != null;
                 Picasso.with(getApplicationContext())
-                        .load(image_url+response.body().getData().get(0).getImage())
+                        .load(image_url + response.body().getData().get(0).getImage())
                         .into(Iv_profile);
-                editor.putString("image",response.body().getData().get(0).getImage());
+                editor.putString("image", response.body().getData().get(0).getImage());
                 editor.commit();
             }
 
@@ -524,5 +531,11 @@ public class Update_Profile extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

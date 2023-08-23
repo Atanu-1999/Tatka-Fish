@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_tick"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:src="@drawable/success_tick" />
+
+        <ImageView
+            android:id="@+id/iv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_below="@+id/iv_tick"
+            android:src="@drawable/sucess_message" />
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_msg"
+            android:gravity="center"
+            android:text="Click here to back to home"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="italic"
+            android:layout_marginBottom="@dimen/_80sdp"/>
+
+
+    </RelativeLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_tick"-->
+    <!--        android:layout_marginTop="@dimen/_200sdp"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/_120sdp"-->
+    <!--        android:src="@drawable/success_tick"/>-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_msg"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/_120sdp"-->
+    <!--        android:src="@drawable/sucess_message"/>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_back"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Click here to back to home"-->
+    <!--        android:textStyle="italic"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:textSize="@dimen/_18sdp"-->
+    <!--        android:gravity="center"/>-->
+
+</RelativeLayout>

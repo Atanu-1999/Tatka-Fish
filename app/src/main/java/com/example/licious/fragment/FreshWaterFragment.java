@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,8 @@ public class FreshWaterFragment extends Fragment {
     TextView tv_totalItem;
     int product_id;
     String BlankId = "";
+    int page;
+    ImageView back;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +77,13 @@ public class FreshWaterFragment extends Fragment {
         ll_items = freshWater.findViewById(R.id.ll_items);
         rv_sub_cat_product = freshWater.findViewById(R.id.rv_sub_cat_product);
         tv_totalItem = freshWater.findViewById(R.id.tv_totalItem);
+        back  = freshWater.findViewById(R.id.back);
 
         Bundle bundle =getArguments();
         //Extract the data…
         if (bundle != null) {
             cId = bundle.getInt("cId", 0);
+            page = bundle.getInt("page", 0);
         }
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -94,6 +99,28 @@ public class FreshWaterFragment extends Fragment {
         // /*Device Id Get*/
         String deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (page==1){
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Search search = new Search();
+                    fragmentTransaction.replace(R.id.main_container, search);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
+                else if (page==2){
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                    fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
+            }
+        });
 
         ll_items.setOnClickListener(new View.OnClickListener() {
             @Override

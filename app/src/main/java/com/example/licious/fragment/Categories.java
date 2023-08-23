@@ -30,6 +30,7 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.adapter.Main_screen_Category_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
+import com.example.licious.listener.BackPressedListener;
 import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.GetCategoryResponse;
@@ -42,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Categories extends Fragment {
+public class Categories extends Fragment implements BackPressedListener {
     LinearLayout type_one;
     ImageView open, close;
     HorizontalScrollView layout_view;
@@ -59,6 +60,7 @@ public class Categories extends Fragment {
     int id;
     ProgressDialog progressDialog;
     String BlankId = "";
+    public static BackPressedListener backPressedListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -191,5 +193,15 @@ public class Categories extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        Home home = new Home();
+//        fragmentTransaction.replace(R.id.main_container, home);
+//        //edit_sku_no.getText().clear();
+//        fragmentTransaction.addToBackStack(null).commit();
     }
 }

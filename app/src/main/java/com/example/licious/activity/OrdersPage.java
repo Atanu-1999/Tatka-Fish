@@ -73,8 +73,9 @@ public class OrdersPage extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrdersPage.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(OrdersPage.this, MainActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
 
@@ -119,7 +120,8 @@ public class OrdersPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(OrdersPage.this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(OrdersPage.this, MainActivity.class);
+//        startActivity(intent);
+        finish();
     }
 }

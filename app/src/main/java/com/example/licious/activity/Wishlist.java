@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class Wishlist extends AppCompatActivity {
     WishListAdapter wishListAdapter;
     ProgressDialog progressDialog;
     int product_id;
+    ImageView back;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,6 +53,13 @@ public class Wishlist extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         initi();
         getWishListData();
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 //        btn_addTocart = findViewById(R.id.btn_addTocart);
 //        btn_addTocart.setOnClickListener(new View.OnClickListener() {
@@ -130,11 +140,18 @@ public class Wishlist extends AppCompatActivity {
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
+        back = findViewById(R.id.back);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getWishListData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
