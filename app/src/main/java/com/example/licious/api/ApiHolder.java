@@ -216,5 +216,9 @@ public interface ApiHolder {
     Call<SearchResponse> getSearch(@Query("search") String search,
                                    @Query("token") String token);
 
+    @GET("pages")
+    Call<Pages_Response> getPage(@Query("pageId") String pageId,
+                                   @Query("token") String token);
+
 
 }
