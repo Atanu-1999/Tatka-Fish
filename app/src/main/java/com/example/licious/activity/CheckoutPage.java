@@ -158,6 +158,7 @@ public class CheckoutPage extends AppCompatActivity {
                             progressDialog.dismiss();
                             assert response.body() != null;
                             slotResponse = response.body().getData();
+                            setTotalAmount();
 
                             slotAdapter = new SlotAdapter(getApplicationContext(), slotResponse, flag, new SlotListener() {
                                 @Override
@@ -170,13 +171,13 @@ public class CheckoutPage extends AppCompatActivity {
                                     String dc=String.valueOf(delivery_charge);//delivery charge
                                     tv_delivery_charge.setText("₹" + " " +dc);
                                     tv_slotTime.setText(SlotTime);
+                                    setTotalAmount();
                                     bottomSheetDialog.dismiss();
                                 }
                             });
                             GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
                             rv_slot.setLayoutManager(layoutManager);
                             rv_slot.setAdapter(slotAdapter);
-                            setTotalAmount();
                         }
                     }
 

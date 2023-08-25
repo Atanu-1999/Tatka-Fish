@@ -170,7 +170,7 @@ public class ProductDetailsFragment extends Fragment {
                     progressDialog.dismiss();
                     productResponse = response.body().getData();
                     setProductData(productResponse);//set data
-                    String s_cId = productResponse.get(0).getSc_id();
+                    String s_cId = productResponse.get(0).getC_id();
                     int Id = Integer.parseInt(s_cId);
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
                         getProductList(Id, deviceId);

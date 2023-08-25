@@ -49,7 +49,7 @@ public class ProductResponse {
         private Integer mc_id;
         @SerializedName("c_id")
         @Expose
-        private Integer c_id;
+        private String c_id;
         @SerializedName("sc_id")
         @Expose
         private String sc_id;
@@ -123,11 +123,11 @@ public class ProductResponse {
             this.mc_id = mc_id;
         }
 
-        public Integer getC_id() {
+        public String getC_id() {
             return c_id;
         }
 
-        public void setC_id(Integer c_id) {
+        public void setC_id(String c_id) {
             this.c_id = c_id;
         }
 

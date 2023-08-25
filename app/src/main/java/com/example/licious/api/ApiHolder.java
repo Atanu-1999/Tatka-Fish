@@ -21,9 +21,7 @@ import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.HistoryResponse;
 import com.example.licious.response.ImageResponse;
-import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.OrderHistoryDataResponse;
-import com.example.licious.response.OrderHistoryResponse;
 import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
 import com.example.licious.response.ProductResponse;
@@ -32,7 +30,6 @@ import com.example.licious.response.RemoveWishListResponse;
 import com.example.licious.response.SearchResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
-import com.example.licious.response.SubCategoriesResponse;
 import com.example.licious.response.SubCategoryItemResponse;
 
 import okhttp3.MultipartBody;
@@ -69,10 +66,6 @@ public interface ApiHolder {
 
     @GET("trproduct")
     Call<Best_Seller_Response> topRated(@Query("token") String token);
-
-    @GET("pages")
-    Call<Pages_Response> pages(@Query("pageId") String pageId,
-                               @Query("token") String token);
 
     @GET("banners")
     Call<BannerResponse> banner(@Query("token") String token);
