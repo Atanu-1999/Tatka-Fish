@@ -58,6 +58,7 @@
                     android:text="Welcome to Tatka Fish.Manage your orders,address &amp; other details"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/black"
                     android:layout_marginStart="@dimen/_9sdp"
                     android:layout_marginEnd="@dimen/_9sdp"/>
 

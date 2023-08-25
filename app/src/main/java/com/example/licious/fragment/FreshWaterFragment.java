@@ -180,6 +180,7 @@ public class FreshWaterFragment extends Fragment {
             public void onFailure(Call<GetSubCategoryResponse> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                ll_items.setVisibility(View.GONE);
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });

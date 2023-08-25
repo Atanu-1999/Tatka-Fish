@@ -62,6 +62,7 @@ public class OrderHistoryTracking extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(OrderHistoryTracking.this, OrdersPage.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -98,5 +99,6 @@ public class OrderHistoryTracking extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(OrderHistoryTracking.this, OrdersPage.class);
         startActivity(intent);
+        finish();
     }
 }

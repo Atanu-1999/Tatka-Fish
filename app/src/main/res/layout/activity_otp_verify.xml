@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.OTP_Verify"
     android:orientation="vertical"
+    android:background="@color/white"
     android:id="@+id/OTP_layout">
 
     <RelativeLayout
@@ -272,6 +273,7 @@
             android:padding="@dimen/_10sdp"/>
 
         <androidx.cardview.widget.CardView
+            app:cardBackgroundColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="@dimen/_5sdp"

@@ -210,7 +210,8 @@ public class SubCategoriesFragment extends Fragment {
             public void onFailure(Call<GetCategoryResponse> call, Throwable t) {
 //                Toast.makeText(SubCatergoriesActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                ll_items.setVisibility(View.GONE);
+                //Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
 

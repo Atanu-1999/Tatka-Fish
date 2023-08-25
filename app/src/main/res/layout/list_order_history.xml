@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <LinearLayout
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/time_bg"
-        android:layout_margin="@dimen/_5sdp">
+        android:layout_margin="@dimen/_1sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,6 +18,7 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="@dimen/_7sdp"
@@ -112,6 +114,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="₹185"
+                                android:textColor="@color/black"
                                 android:textSize="@dimen/_14sdp"/>
 
                             <LinearLayout
@@ -185,6 +188,7 @@
             android:padding="@dimen/_5sdp">
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_weight="1"
@@ -212,6 +216,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_weight="1"

@@ -87,73 +87,79 @@ public class Address extends AppCompatActivity {
         txt_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog = new BottomSheetDialog(Address.this, R.style.BottomSheetTheme);
-                View view1 = LayoutInflater.from(Address.this).inflate(R.layout.address_layout,
-                        (LinearLayout) findViewById(R.id.container));
-                TextView btn_save = (TextView) view1.findViewById(R.id.btn_save);
-                tv_area = (TextInputEditText) view1.findViewById(R.id.tv_area);
-                tv_building = (TextInputEditText) view1.findViewById(R.id.tv_building);
-                tv_landmark = (TextInputEditText) view1.findViewById(R.id.tv_landmark);
-                tv_city = (TextInputEditText) view1.findViewById(R.id.tv_city);
-                tv_mobile = (TextInputEditText) view1.findViewById(R.id.tv_mobile);
-                tv_home = (TextView) view1.findViewById(R.id.tv_home);
-                tv_other = (TextView) view1.findViewById(R.id.tv_other);
-                tv_work = (TextView) view1.findViewById(R.id.tv_work);
-                tv_mobile.setText(phoneNum);
+                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                    Toast.makeText(getApplicationContext(), "Please Login First", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    bottomSheetDialog = new BottomSheetDialog(Address.this, R.style.BottomSheetTheme);
+                    View view1 = LayoutInflater.from(Address.this).inflate(R.layout.address_layout,
+                            (LinearLayout) findViewById(R.id.container));
+                    TextView btn_save = (TextView) view1.findViewById(R.id.btn_save);
+                    tv_area = (TextInputEditText) view1.findViewById(R.id.tv_area);
+                    tv_building = (TextInputEditText) view1.findViewById(R.id.tv_building);
+                    tv_landmark = (TextInputEditText) view1.findViewById(R.id.tv_landmark);
+                    tv_city = (TextInputEditText) view1.findViewById(R.id.tv_city);
+                    tv_mobile = (TextInputEditText) view1.findViewById(R.id.tv_mobile);
+                    tv_home = (TextView) view1.findViewById(R.id.tv_home);
+                    tv_other = (TextView) view1.findViewById(R.id.tv_other);
+                    tv_work = (TextView) view1.findViewById(R.id.tv_work);
+                    tv_mobile.setText(phoneNum);
 
-                tv_home.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        address_type = "Home";
-                        tv_home.setBackgroundResource(R.drawable.bg_textview_color);
-                        tv_work.setBackgroundResource(R.drawable.textfield_bg);
-                        tv_other.setBackgroundResource(R.drawable.textfield_bg);
-                        // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-                    }
-                });
-                tv_work.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        address_type = "Work";
-                        tv_work.setBackgroundResource(R.drawable.bg_textview_color);
-                        tv_other.setBackgroundResource(R.drawable.textfield_bg);
-                        tv_home.setBackgroundResource(R.drawable.textfield_bg);
-                        // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-                    }
-                });
-                tv_other.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        address_type = "Other";
-                        tv_other.setBackgroundResource(R.drawable.bg_textview_color);
-                        tv_work.setBackgroundResource(R.drawable.textfield_bg);
-                        tv_home.setBackgroundResource(R.drawable.textfield_bg);
-                        //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    tv_home.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            address_type = "Home";
+                            tv_home.setBackgroundResource(R.drawable.bg_textview_color);
+                            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+                            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+                            // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    tv_work.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            address_type = "Work";
+                            tv_work.setBackgroundResource(R.drawable.bg_textview_color);
+                            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+                            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+                            // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    tv_other.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            address_type = "Other";
+                            tv_other.setBackgroundResource(R.drawable.bg_textview_color);
+                            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+                            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+                            //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                btn_save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (checkValidation()) {
-                            //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
-                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                Toast.makeText(getApplicationContext(), "Please Login First", Toast.LENGTH_SHORT).show();
+                    btn_save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (checkValidation()) {
+                                //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                Toast.makeText(getApplicationContext(), "Please Login First", Toast.LENGTH_SHORT).show();
 //                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 //                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                                Account account = new Account();
 //                                fragmentTransaction.replace(R.id.main_container, account);
 //                                fragmentTransaction.addToBackStack(null).commit();
-                            } else {
+//                            } else {
                                 Add_Address();
                                 bottomSheetDialog.dismiss();
+                                // }
                             }
                         }
-                    }
-                });
-                bottomSheetDialog.setContentView(view1);
-                bottomSheetDialog.show();
-                bottomSheetDialog.setCanceledOnTouchOutside(false);
+                    });
+                    bottomSheetDialog.setContentView(view1);
+                    bottomSheetDialog.show();
+                    bottomSheetDialog.setCanceledOnTouchOutside(false);
+                }
+
             }
         });
     }
@@ -167,6 +173,8 @@ public class Address extends AppCompatActivity {
                 progressDialog.dismiss();
                 //  Toast.makeText(Address.this, "Successfully", Toast.LENGTH_SHORT).show();
                 allAddressList = response.body().getData();
+                txt_noData.setVisibility(View.GONE);
+                rv_all_address.setVisibility(View.VISIBLE);
                 addressListAdapter = new AddressListAdapter(getApplication(), allAddressList, new AddressListAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(AllAddressListResponse.Datum item, int position, int type) {
