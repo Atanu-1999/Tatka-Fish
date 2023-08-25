@@ -248,10 +248,20 @@
                 android:gravity="center"
                 android:background="@color/line">
 
-                <ImageView
-                    android:layout_width="@dimen/_250sdp"
-                    android:layout_height="@dimen/_400sdp"
-                    android:src="@drawable/emptycart" />
+                <TextView
+                    android:id="@+id/txt_noData"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_300sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:text="No Item Found"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 

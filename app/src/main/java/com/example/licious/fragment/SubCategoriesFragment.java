@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.R;
@@ -50,6 +51,7 @@ public class SubCategoriesFragment extends Fragment {
     Crab crab = new Crab();
 
     ImageView product_search;
+    TextView txt_noData;
     RecyclerView rv_category_sub_s, rv_sub_cat_product;
     List<GetCategoryResponse.Datum> category_response;
     List<Category_Response.Datum> category_response_product;
@@ -64,6 +66,7 @@ public class SubCategoriesFragment extends Fragment {
     LinearLayout ll_items;
     String BlankId = "";
     ImageView back;
+    String deviceId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,15 +82,14 @@ public class SubCategoriesFragment extends Fragment {
         rv_sub_cat_product = subCat.findViewById(R.id.rv_sub_cat_product);
         ll_items = subCat.findViewById(R.id.ll_items);
         back = subCat.findViewById(R.id.back);
+        txt_noData = subCat.findViewById(R.id.txt_noData);
+        deviceId = DeviceUtils.getDeviceId(getContext());
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
-        // /*Device Id Get*/
-        String deviceId = DeviceUtils.getDeviceId(getContext());
-        Log.e("Device Id", "" + deviceId);
 
         //loading
         progressDialog = new ProgressDialog(getContext());
@@ -154,7 +156,11 @@ public class SubCategoriesFragment extends Fragment {
         ll_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCategorieesPoduct(mcId, token);
+                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                    getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+                } else {
+                    getCategorieesPoduct(mcId, token);
+                }
             }
         });
         return subCat;
@@ -220,6 +226,7 @@ public class SubCategoriesFragment extends Fragment {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     category_response_product = response.body().getData();
+                    txt_noData.setVisibility(View.GONE);
                     categoryProductAdapter = new CategoryProductAdapter(getContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override
                         public void onItemClickedMasterCategoriesProductWishList(Category_Response.Datum item, int position, int type) {
@@ -242,17 +249,27 @@ public class SubCategoriesFragment extends Fragment {
 
                         @Override
                         public void onItemClickedMasterCategoriesProductADDcart(Category_Response.Datum item, int position, int type) {
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+//                            } else {
+//                                product_id = item.getId();
+//                                String prices = item.getPrice();
+//                                addToCart(product_id, prices);//add to cart API
+
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                Account account = new Account();
-                                fragmentTransaction.replace(R.id.main_container, account);
-                                fragmentTransaction.addToBackStack(null).commit();
+                                product_id = item.getId();
+                                String price = item.getPrice();
+                                addToCart(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
-                                String prices = item.getPrice();
-                                addToCart(product_id, prices);//add to cart API
+                                String price = item.getPrice();
+                                addToCart(product_id, price, token);//add to cart API
                             }
+                            //   }
                         }
 
                         @Override
@@ -260,9 +277,16 @@ public class SubCategoriesFragment extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(getContext(), ProductDetails.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
+//                            Intent i = new Intent(getContext(), ProductDetails.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+                            productDetailsFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, productDetailsFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_sub_cat_product.setAdapter(categoryProductAdapter);
@@ -275,13 +299,15 @@ public class SubCategoriesFragment extends Fragment {
             public void onFailure(Call<Category_Response> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                rv_sub_cat_product.setVisibility(View.GONE);
+                txt_noData.setVisibility(View.VISIBLE);
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     //Add to cart
-    private void addToCart(int product_id, String price) {
+    private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

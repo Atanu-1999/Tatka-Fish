@@ -115,6 +115,7 @@ public class Home extends Fragment {
     Boolean wishlist_status = false;
     int product_id;
     ProgressDialog progressDialog;
+    String deviceId;
 
     public Home() {
     }
@@ -131,7 +132,7 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
         View home = inflater.inflate(R.layout.fragment_home, container, false);
         /*Device Id Get*/
-        String deviceId = DeviceUtils.getDeviceId(getContext());
+        deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
         /*Initialization*/
         txt_address_set = home.findViewById(R.id.txt_address_set);
@@ -400,18 +401,24 @@ public class Home extends Fragment {
 
                         @Override
                         public void onItemClickedAdd(Best_Seller_Response.Datum item, int position, int type) {
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                //edit_sku_no.getText().clear();
+//                                fragmentTransaction.addToBackStack(null).commit();
+//                            } else {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                Account account = new Account();
-                                fragmentTransaction.replace(R.id.main_container, account);
-                                //edit_sku_no.getText().clear();
-                                fragmentTransaction.addToBackStack(null).commit();
+                                product_id = item.getId();
+                                String price = item.getPrice();
+                                addToCart(product_id, price,deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
-                                String prices = item.getPrice();
-                                addToCart(product_id, prices);//add to cart API
+                                String price = item.getPrice();
+                                addToCart(product_id, price,token);//add to cart API
                             }
+                            //   }
                         }
 
                         @Override
@@ -419,9 +426,16 @@ public class Home extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(getContext(), ProductDetails.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
+//                            Intent i = new Intent(getContext(), ProductDetails.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+                            productDetailsFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, productDetailsFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_topRated.setAdapter(top_rated_adapter);
@@ -453,18 +467,25 @@ public class Home extends Fragment {
                         @Override
                         public void onItemClickedmy(Best_Seller_Response.Datum item, int position, int type) {
                             // SharedPreferences loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                //edit_sku_no.getText().clear();
+//                                fragmentTransaction.addToBackStack(null).commit();
+//                            } else {
+
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                Account account = new Account();
-                                fragmentTransaction.replace(R.id.main_container, account);
-                                //edit_sku_no.getText().clear();
-                                fragmentTransaction.addToBackStack(null).commit();
+                                product_id = item.getId();
+                                String price = item.getPrice();
+                                addToCart(product_id, price,deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price);//add to cart API
+                                addToCart(product_id, price,token);//add to cart API
                             }
+                            //  }
                         }
 
                         @Override
@@ -492,9 +513,17 @@ public class Home extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(getContext(), ProductDetails.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
+                            bundle.putString("page_type", "home");
+//                            Intent i = new Intent(getContext(), ProductDetails.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+                            productDetailsFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, productDetailsFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_bestSeller.setAdapter(best_seller_adapter);
@@ -512,7 +541,7 @@ public class Home extends Fragment {
         });
     }
 
-    private void addToCart(int product_id, String price) {
+    private void addToCart(int product_id, String price,String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

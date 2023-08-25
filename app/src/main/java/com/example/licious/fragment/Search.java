@@ -146,17 +146,26 @@ public class Search extends Fragment {
 //                            product_id = item.getId();
 //                            String prices = item.getPrice();
 //                            addToCart(product_id, prices);//add to cart API
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+//                            } else {
+//                                product_id = item.getId();
+//                                String prices = item.getPrice();
+//                                addToCart(product_id, prices);//add to cart API
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                Account account = new Account();
-                                fragmentTransaction.replace(R.id.main_container, account);
-                                fragmentTransaction.addToBackStack(null).commit();
+                                product_id = item.getId();
+                                String price = item.getPrice();
+                                addToCart(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
-                                String prices = item.getPrice();
-                                addToCart(product_id, prices);//add to cart API
+                                String price = item.getPrice();
+                                addToCart(product_id, price, token);//add to cart API
                             }
+                           // }
                         }
                     });
                     rv_Search_all_category.setAdapter(seacrhItemListAdapter);
@@ -224,7 +233,7 @@ public class Search extends Fragment {
         });
     }
 
-    private void addToCart(int product_id, String price) {
+    private void addToCart(int product_id, String price,String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.MainActivity;
+import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.fragment.SubCategoriesFragment;
 import com.example.licious.listener.DeleteListener;
 import com.example.licious.R;
@@ -58,6 +59,8 @@ public class MyCart extends AppCompatActivity {
     RelativeLayout rl_noData;
     CardView checkout;
     ImageView back;
+    String BlankId = "";
+    String deviceId;
 
 
     @SuppressLint("SetTextI18n")
@@ -76,6 +79,8 @@ public class MyCart extends AppCompatActivity {
         rl_noData = findViewById(R.id.rl_noData);
         checkout = findViewById(R.id.checkout);
         back = findViewById(R.id.back);
+
+        deviceId = DeviceUtils.getDeviceId(MyCart.this);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -148,8 +153,11 @@ public class MyCart extends AppCompatActivity {
 //                startActivity(new Intent(MyCart.this, SearchActivity.class));
 //            }
 //        });
-
-        getCartDetails();
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getCartDetails(deviceId);
+        }else {
+            getCartDetails(token);
+        }
     }
 
     private boolean validation() {
@@ -160,7 +168,7 @@ public class MyCart extends AppCompatActivity {
         return true;
     }
 
-    private void getCartDetails() {
+    private void getCartDetails(String token) {
         progressDialog.show();
 
         Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(id, token);
@@ -176,7 +184,11 @@ public class MyCart extends AppCompatActivity {
                         public void onItemClickedDelete(CartDetailsResponse.Datum item, int position, int type) {
                             //Toast.makeText(MyCart.this,"Deleted",Toast.LENGTH_SHORT).show();
                             int cartId = item.getId();
-                            deleteItem(cartId);
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                deleteItem(cartId,deviceId);
+                            }else {
+                                deleteItem(cartId,token);
+                            }
                         }
 
                         @Override
@@ -188,7 +200,11 @@ public class MyCart extends AppCompatActivity {
                             int qty = Integer.parseInt(item.getQty());
                             int qtn = 1 + qty;
                             if (qtn > 1) {
-                                addOrRemoveItem(Id, price, qtn);
+                                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                    addOrRemoveItem(deviceId,Id, price, qtn);
+                                }else {
+                                    addOrRemoveItem(token,Id, price, qtn);
+                                }
                             } else {
                                 Toast.makeText(MyCart.this, "Can not less than 1", Toast.LENGTH_SHORT).show();
                             }
@@ -203,7 +219,11 @@ public class MyCart extends AppCompatActivity {
                             int qty = Integer.parseInt(item.getQty());
                             int qtn = qty - 1;
                             if (qtn >= 1) {
-                                addOrRemoveItem(Id, price, qtn);
+                                if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                    addOrRemoveItem(deviceId,Id, price, qtn);
+                                }else {
+                                    addOrRemoveItem(token,Id, price, qtn);
+                                }
                             } else {
                                 Toast.makeText(MyCart.this, "Can not less than 1", Toast.LENGTH_SHORT).show();
                             }
@@ -235,7 +255,7 @@ public class MyCart extends AppCompatActivity {
         tv_subtotal.setText(tpp);
     }
 
-    private void addOrRemoveItem(int id, String price, int qty) {
+    private void addOrRemoveItem(String token,int id, String price, int qty) {
         progressDialog.show();
         Call<AddRemoveResponse> addAddress = ApiService.apiHolders().updatedCart(token, id, price, qty);
         addAddress.enqueue(new Callback<AddRemoveResponse>() {
@@ -244,7 +264,12 @@ public class MyCart extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     //  Toast.makeText(MyCart.this,"Added Item",Toast.LENGTH_SHORT).show();
-                    getCartDetails();
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        getCartDetails(deviceId);
+                    }else {
+                        getCartDetails(token);
+                    }
+
                 }
             }
 
@@ -256,7 +281,7 @@ public class MyCart extends AppCompatActivity {
         });
     }
 
-    private void deleteItem(int cartId) {
+    private void deleteItem(int cartId,String token) {
         progressDialog.show();
         Call<CartItemDeleteResponse> addAddress = ApiService.apiHolders().deleteCartItem(cartId, token);
         addAddress.enqueue(new Callback<CartItemDeleteResponse>() {
@@ -265,7 +290,11 @@ public class MyCart extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     Toast.makeText(MyCart.this, "Deleted Item", Toast.LENGTH_SHORT).show();
-                    getCartDetails();
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        getCartDetails(deviceId);
+                    }else {
+                        getCartDetails(token);
+                    }
                 }
             }
 
@@ -280,7 +309,11 @@ public class MyCart extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getCartDetails();
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getCartDetails(deviceId);
+        }else {
+            getCartDetails(token);
+        }
     }
 
     @Override

@@ -137,7 +137,7 @@ public class Categories extends Fragment implements BackPressedListener {
                     category_adapter = new Category_Adapter(getContext(), master_category_responses, new Category_Adapter.OnItemClickListener() {
                         @Override
                         public void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type) {
-                            Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
                             int Id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", Id);

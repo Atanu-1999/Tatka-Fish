@@ -58,11 +58,12 @@ public class FreshWaterFragment extends Fragment {
     Sub_categoryAdapter sub_categoryAdapter;
     LinearLayout ll_items;
     SubCategoryProductAdapter subCategoryProductAdapter;
-    TextView tv_totalItem;
+    TextView tv_totalItem,txt_noData;
     int product_id;
     String BlankId = "";
     int page;
     ImageView back;
+    String deviceId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,7 @@ public class FreshWaterFragment extends Fragment {
         rv_sub_cat_product = freshWater.findViewById(R.id.rv_sub_cat_product);
         tv_totalItem = freshWater.findViewById(R.id.tv_totalItem);
         back  = freshWater.findViewById(R.id.back);
+        txt_noData = freshWater.findViewById(R.id.txt_noData);
 
         Bundle bundle =getArguments();
         //Extract the data…
@@ -96,8 +98,8 @@ public class FreshWaterFragment extends Fragment {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
-        // /*Device Id Get*/
-        String deviceId = DeviceUtils.getDeviceId(getContext());
+        // /*Device Id Get*
+        deviceId = DeviceUtils.getDeviceId(getContext());
         Log.e("Device Id", "" + deviceId);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +150,7 @@ public class FreshWaterFragment extends Fragment {
 
     private void getSubCategory(int cId, String token) {
         progressDialog.show();
-        Call<GetSubCategoryResponse> subCategoryData = ApiService.apiHolders().getSubCategory(2, token);
+        Call<GetSubCategoryResponse> subCategoryData = ApiService.apiHolders().getSubCategory(cId, token);
         subCategoryData.enqueue(new Callback<GetSubCategoryResponse>() {
             @Override
             public void onResponse(Call<GetSubCategoryResponse> call, Response<GetSubCategoryResponse> response) {
@@ -160,7 +162,11 @@ public class FreshWaterFragment extends Fragment {
                         @Override
                         public void onItemClickedCategoriesItem(GetSubCategoryResponse.Datum item, int position, int type) {
                             int cId = item.getC_id();
-                            getSubCategortItem(cId,token);
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                getSubCategortItem(cId, deviceId);
+                            }else {
+                                getSubCategortItem(cId, token);
+                            }
                         }
                     });
                     rv_sub_cat.setAdapter(sub_categoryAdapter);
@@ -181,7 +187,7 @@ public class FreshWaterFragment extends Fragment {
 
     private void getSubCategortItem(int cId, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(2, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(cId, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -192,17 +198,26 @@ public class FreshWaterFragment extends Fragment {
                     subCategoryProductAdapter = new SubCategoryProductAdapter(getContext(), subProductItem, new SubCategoriesProductListener() {
                         @Override
                         public void onItemClickedCategoriesProduct(SubCategoryItemResponse.Datum item, int position, int type) {
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+//                            } else {
+//                                product_id = item.getId();
+//                                String prices = item.getPrice();
+//                                addToCart(product_id, prices);//add to cart API
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                Account account = new Account();
-                                fragmentTransaction.replace(R.id.main_container, account);
-                                fragmentTransaction.addToBackStack(null).commit();
+                                product_id = item.getId();
+                                String price = item.getPrice();
+                                addToCart(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
-                                String prices = item.getPrice();
-                                addToCart(product_id, prices);//add to cart API
+                                String price = item.getPrice();
+                                addToCart(product_id, price, token);//add to cart API
                             }
+                          //  }
                         }
 
                         @Override
@@ -213,8 +228,6 @@ public class FreshWaterFragment extends Fragment {
                                 Account account = new Account();
                                 fragmentTransaction.replace(R.id.main_container, account);
                                 fragmentTransaction.addToBackStack(null).commit();
-
-
                             } else {
                                 if (Objects.equals(item.getWishlist_status(), "False")) {
                                     addWishList(item.getId(), "True");
@@ -229,9 +242,16 @@ public class FreshWaterFragment extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
-                            Intent i = new Intent(getContext(), ProductDetails.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
+//                            Intent i = new Intent(getContext(), ProductDetails.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+                            productDetailsFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, productDetailsFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_sub_cat_product.setAdapter(subCategoryProductAdapter);
@@ -244,6 +264,8 @@ public class FreshWaterFragment extends Fragment {
             public void onFailure(Call<SubCategoryItemResponse> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                rv_sub_cat_product.setVisibility(View.GONE);
+                txt_noData.setVisibility(View.VISIBLE);
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -295,7 +317,7 @@ public class FreshWaterFragment extends Fragment {
     }
 
     // add to cart
-    private void addToCart(int product_id, String price) {
+    private void addToCart(int product_id, String price,String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

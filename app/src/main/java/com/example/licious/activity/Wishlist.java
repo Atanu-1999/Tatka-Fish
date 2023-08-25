@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.R;
@@ -41,6 +42,7 @@ public class Wishlist extends AppCompatActivity {
     ProgressDialog progressDialog;
     int product_id;
     ImageView back;
+    TextView txt_noData;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -97,8 +99,10 @@ public class Wishlist extends AppCompatActivity {
             @Override
             public void onFailure(Call<AllWishListResponse> call, Throwable t) {
                // Toast.makeText(Wishlist.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(Wishlist.this, "failed" , Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Wishlist.this, "failed" , Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                txt_noData.setVisibility(View.VISIBLE);
+                rv_all_wishList.setVisibility(View.GONE);
             }
         });
 
@@ -141,6 +145,7 @@ public class Wishlist extends AppCompatActivity {
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
         back = findViewById(R.id.back);
+        txt_noData = findViewById(R.id.txt_noData);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.AddressListAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.fragment.Account;
 import com.example.licious.response.AddAddressResponse;
 import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.DeleteResponse;
@@ -50,6 +53,8 @@ public class Address extends AppCompatActivity {
     AddressListAdapter.OnItemClickListener listener;
     String address_type = "";
     ProgressDialog progressDialog;
+    TextView txt_noData;
+    String BlankId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class Address extends AppCompatActivity {
         txt_add = findViewById(R.id.txt_add);
         rv_all_address = findViewById(R.id.rv_all_address);
         back = findViewById(R.id.back);
+        txt_noData = findViewById(R.id.txt_noData);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -131,8 +137,17 @@ public class Address extends AppCompatActivity {
                     public void onClick(View v) {
                         if (checkValidation()) {
                             //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
-                            Add_Address();
-                            bottomSheetDialog.dismiss();
+                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                                Toast.makeText(getApplicationContext(), "Please Login First", Toast.LENGTH_SHORT).show();
+//                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                                Account account = new Account();
+//                                fragmentTransaction.replace(R.id.main_container, account);
+//                                fragmentTransaction.addToBackStack(null).commit();
+                            } else {
+                                Add_Address();
+                                bottomSheetDialog.dismiss();
+                            }
                         }
                     }
                 });
@@ -161,7 +176,7 @@ public class Address extends AppCompatActivity {
 
                     @Override
                     public void onItemClickEdit(AllAddressListResponse.Datum item, int position, int type) {
-                      //  Toast.makeText(Address.this, "Hello", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Address.this, "Hello", Toast.LENGTH_SHORT).show();
                         EditAddress(item, position);
                     }
 
@@ -191,7 +206,9 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<AllAddressListResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-               // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                txt_noData.setVisibility(View.VISIBLE);
+                rv_all_address.setVisibility(View.GONE);
                 progressDialog.dismiss();
             }
         });
@@ -273,11 +290,11 @@ public class Address extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  if (checkValidation()) {
-                    //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
-                    UpdateAddress(address_id, addrs_one, addrs_second, landMark, city, phone,addr_type);
-                    bottomSheetDialog.dismiss();
-              //  }
+                //  if (checkValidation()) {
+                //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+                UpdateAddress(address_id, addrs_one, addrs_second, landMark, city, phone, addr_type);
+                bottomSheetDialog.dismiss();
+                //  }
             }
         });
         bottomSheetDialog.setContentView(view1);
@@ -299,7 +316,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<EditAddressResponse> call, Throwable t) {
                 //Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-               // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -320,7 +337,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-              //  Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -346,7 +363,7 @@ public class Address extends AppCompatActivity {
             @Override
             public void onFailure(Call<AddAddressResponse> call, Throwable t) {
                 Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
-            //    progressDialog.dismiss();
+                //    progressDialog.dismiss();
             }
         });
     }

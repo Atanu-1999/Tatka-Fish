@@ -44,7 +44,7 @@ public class OrdersPage extends AppCompatActivity {
     String token;
     ProgressDialog progressDialog;
     List<HistoryResponse.Datum> historyResponse;
-    TextView tv_date, tv_orderId, tv_status;
+    TextView tv_date, tv_orderId, tv_status,txt_noData;
     OrderHistoryAdapter orderHistoryAdapter;
     RecyclerView rv_oderHistory;
     OrderHistoryDataAdapter orderHistoryDataAdapter;
@@ -59,6 +59,7 @@ public class OrdersPage extends AppCompatActivity {
         tv_status = findViewById(R.id.tv_status);
         rv_oderHistory = findViewById(R.id.rv_oderHistory);
         back = findViewById(R.id.back);
+        txt_noData = findViewById(R.id.txt_noData);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -113,6 +114,8 @@ public class OrdersPage extends AppCompatActivity {
             @Override
             public void onFailure(Call<HistoryResponse> call, Throwable t) {
                 progressDialog.dismiss();
+                txt_noData.setVisibility(View.VISIBLE);
+                rv_oderHistory.setVisibility(View.GONE);
             }
         });
     }

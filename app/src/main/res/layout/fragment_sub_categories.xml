@@ -131,7 +131,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_7sdp"
-                    android:text="106 items"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_16sdp" />
 
@@ -191,10 +190,17 @@
                 android:layout_marginTop="@dimen/_7sdp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="@dimen/_10sdp" />
-            <FrameLayout
-                android:id="@+id/subCat_container"
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txt_noData"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="@dimen/_300sdp"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="No Item Found"
+                android:textSize="16dp" />
 
 
 
