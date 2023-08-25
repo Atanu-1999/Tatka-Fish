@@ -180,7 +180,7 @@ public interface ApiHolder {
                                                @Query("token") String token);
 
     @GET("productdtls")
-    Call<ProductResponse> getProductDetails(@Query("product_id") int mcId,
+    Call<ProductResponse> getProductDetails(@Query("product_id") int product_id,
                                             @Query("token") String token);
 
     @GET("allcategory")

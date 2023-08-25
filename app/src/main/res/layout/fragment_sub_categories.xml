@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_90sdp"
                 android:padding="@dimen/_10sdp"
-                android:src="@drawable/katla" />
+                android:src="@drawable/allicon" />
 
             <TextView
                 android:id="@+id/tv_title_products"
