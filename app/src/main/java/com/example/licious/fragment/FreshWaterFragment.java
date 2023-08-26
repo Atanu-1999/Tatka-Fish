@@ -22,15 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.activity.Freshwater;
 import com.example.licious.activity.MyCart;
-import com.example.licious.activity.ProductDetails;
 import com.example.licious.adapter.SubCategoryProductAdapter;
 import com.example.licious.adapter.Sub_categoryAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.listener.SubCategoriesItemListener;
-import com.example.licious.listener.SubCategoriesProductListener;
+import com.example.licious.adapter.listener.SubCategoriesItemListener;
+import com.example.licious.adapter.listener.SubCategoriesProductListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.GetSubCategoryResponse;

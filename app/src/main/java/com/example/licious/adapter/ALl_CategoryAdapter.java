@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.listener.AllCategoryListener;
-import com.example.licious.listener.SubCategoriesListener;
+import com.example.licious.adapter.listener.AllCategoryListener;
 import com.example.licious.response.AllCaterogyResponse;
-import com.example.licious.response.GetCategoryResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

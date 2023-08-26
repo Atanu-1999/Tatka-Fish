@@ -23,19 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.activity.SubCatergoriesActivity;
 import com.example.licious.activity.Subcategories;
 import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.Category_horizental_Adapter;
-import com.example.licious.adapter.Main_screen_Category_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.listener.BackPressedListener;
-import com.example.licious.listener.SubCategoriesListener;
-import com.example.licious.response.Category_Response;
+import com.example.licious.adapter.listener.BackPressedListener;
+import com.example.licious.adapter.listener.SubCategoriesListener;
 import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.GetMasterCategoryResponse;
-import com.example.licious.response.Master_Category_Response;
 
 import java.util.List;
 

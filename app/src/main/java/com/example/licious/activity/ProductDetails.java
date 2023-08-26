@@ -1,8 +1,6 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,16 +18,12 @@ import android.widget.Toast;
 
 import com.example.licious.R;
 import com.example.licious.adapter.ProductListAdapter;
-import com.example.licious.adapter.SubCategoryProductAdapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.fragment.Account;
-import com.example.licious.listener.SubCategoriesProductListener;
-import com.example.licious.listener.TopSellerListener;
+import com.example.licious.adapter.listener.SubCategoriesProductListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
-import com.example.licious.response.Category_Response;
 import com.example.licious.response.ProductResponse;
 import com.example.licious.response.RemoveWishListResponse;
 import com.example.licious.response.SubCategoryItemResponse;

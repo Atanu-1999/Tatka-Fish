@@ -1,4 +1,4 @@
-package com.example.licious.listener;
+package com.example.licious.adapter.listener;
 
 import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.SubCategoryItemResponse;

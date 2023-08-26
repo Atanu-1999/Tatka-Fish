@@ -1,5 +1,8 @@
 package com.example.licious.activity;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,7 +25,10 @@ import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.api.ApiService;
 import com.example.licious.response.Otp_verify_Response;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +41,7 @@ public class OTP_Verify extends AppCompatActivity {
     EditText otp1,otp2,otp3,otp4,otp5;
     RelativeLayout OTP_layout;
     SharedPreferences loginPref;
+    String fb_token;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -55,6 +63,25 @@ public class OTP_Verify extends AppCompatActivity {
         btn_continue = findViewById(R.id.btn_continue);
         //sharedPref
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        fb_token = task.getResult();
+
+                        // Log and toast
+//                        String msg = getString(R.string.next, token);
+//                        Log.d(TAG, msg);
+//                        Toast.makeText(OTP_Verify.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         btn_resend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +257,7 @@ public class OTP_Verify extends AppCompatActivity {
         phone = String.valueOf(getIntent().getExtras().get("NUMBER"));
         device_id = String.valueOf(getIntent().getExtras().get("DEVICE_ID"));
         otp = otp1.getText().toString()+otp2.getText().toString()+otp3.getText().toString()+otp4.getText().toString()+otp5.getText().toString();
-        Call<Otp_verify_Response> otp_verify = ApiService.apiHolders().otp_verify(phone,device_id,otp);
+        Call<Otp_verify_Response> otp_verify = ApiService.apiHolders().otp_verify(phone,device_id,otp,fb_token);
         otp_verify.enqueue(new Callback<Otp_verify_Response>() {
             @Override
             public void onResponse(Call<Otp_verify_Response> call, Response<Otp_verify_Response> response) {

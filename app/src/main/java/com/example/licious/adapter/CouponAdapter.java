@@ -11,10 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.listener.CouponListener;
-import com.example.licious.listener.DeleteListener;
-import com.example.licious.response.CartDetailsResponse;
-import com.example.licious.response.CheckOutResponse;
+import com.example.licious.adapter.listener.CouponListener;
 import com.example.licious.response.CouponsResponse;
 
 import java.util.List;

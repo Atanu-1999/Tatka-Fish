@@ -25,6 +25,7 @@ import com.example.licious.R;
 import com.example.licious.activity.Address;
 import com.example.licious.activity.ContactUs;
 import com.example.licious.activity.FAQ;
+import com.example.licious.activity.FireBaseActivity;
 import com.example.licious.activity.OTP_Verify;
 import com.example.licious.activity.OrdersPage;
 import com.example.licious.activity.Pages;
@@ -134,7 +135,7 @@ public class Account extends Fragment {
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getContext(), FireBaseActivity.class));
             }
         });
         contactUs.setOnClickListener(new View.OnClickListener() {

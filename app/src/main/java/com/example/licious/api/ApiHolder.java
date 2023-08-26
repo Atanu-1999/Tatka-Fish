@@ -21,6 +21,7 @@ import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.HistoryResponse;
 import com.example.licious.response.ImageResponse;
+import com.example.licious.response.NotificationListResponse;
 import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
@@ -56,7 +57,8 @@ public interface ApiHolder {
     @FormUrlEncoded
     Call<Otp_verify_Response> otp_verify(@Field("phone") String phone,
                                          @Field("device_id") String device_id,
-                                         @Field("otp") String otp);
+                                         @Field("otp") String otp,
+                                         @Field("fb_token") String fb_token);
 
     @GET("mastercategory")
     Call<GetMasterCategoryResponse> category(@Query("token") String token);
@@ -175,6 +177,9 @@ public interface ApiHolder {
     Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("cId") int cId,
                                                         @Query("token") String token);
 
+    @GET("rproduct")
+    Call<SubCategoryItemResponse> getRecommendedProduct(@Query("token") String token);
+
     @GET("mcproduct")
     Call<Category_Response> getCategoryProduct(@Query("mcId") int mcId,
                                                @Query("token") String token);
@@ -188,11 +193,11 @@ public interface ApiHolder {
 
     @GET("getorderdata")
     Call<HistoryResponse> getOrderHistory(@Query("user_id") int user_id,
-                                                   @Query("token") String token);
+                                          @Query("token") String token);
 
     @GET("getorderproductdata")
     Call<OrderHistoryDataResponse> getOrderHistoryData(@Query("order_id") int order_id,
-                                              @Query("token") String token);
+                                                       @Query("token") String token);
 
     @POST("addorder")
     @FormUrlEncoded
@@ -211,7 +216,11 @@ public interface ApiHolder {
 
     @GET("pages")
     Call<Pages_Response> getPage(@Query("pageId") String pageId,
-                                   @Query("token") String token);
+                                 @Query("token") String token);
+
+    @GET("notifications")
+    Call<NotificationListResponse> getNotification(@Query("user_id") int user_id,
+                                                   @Query("token") String token);
 
 
 }

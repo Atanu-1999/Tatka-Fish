@@ -11,10 +11,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.listener.OrderHistoryListener;
+import com.example.licious.adapter.listener.OrderHistoryListener;
 import com.example.licious.response.HistoryResponse;
-import com.example.licious.response.OrderHistoryResponse;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

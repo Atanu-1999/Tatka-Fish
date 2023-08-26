@@ -10,18 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.adapter.CheckOutAdapter;
 import com.example.licious.adapter.CouponAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.listener.CouponListener;
-import com.example.licious.response.CartDetailsResponse;
-import com.example.licious.response.CartItemDeleteResponse;
+import com.example.licious.adapter.listener.CouponListener;
 import com.example.licious.response.CouponsResponse;
 
 import java.util.List;

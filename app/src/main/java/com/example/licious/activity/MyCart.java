@@ -2,8 +2,6 @@ package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,8 +20,7 @@ import android.widget.Toast;
 
 import com.example.licious.MainActivity;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.fragment.SubCategoriesFragment;
-import com.example.licious.listener.DeleteListener;
+import com.example.licious.adapter.listener.DeleteListener;
 import com.example.licious.R;
 import com.example.licious.adapter.MyCartAdapter;
 import com.example.licious.api.ApiService;

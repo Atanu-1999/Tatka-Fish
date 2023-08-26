@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,18 +22,15 @@ import android.widget.Toast;
 import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.adapter.CheckOutAdapter;
-import com.example.licious.adapter.MyCartAdapter;
 import com.example.licious.adapter.SlotAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.listener.DeleteListener;
-import com.example.licious.listener.SlotListener;
+import com.example.licious.adapter.listener.DeleteListener;
+import com.example.licious.adapter.listener.SlotListener;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.CheckOutProccedResponse;
 import com.example.licious.response.SlotResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -20,21 +20,16 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.licious.R;
-import com.example.licious.activity.Freshwater;
 import com.example.licious.activity.MyCart;
-import com.example.licious.activity.SubCatergoriesActivity;
 import com.example.licious.adapter.ALl_CategoryAdapter;
-import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.SeacrhItemListAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.listener.AllCategoryListener;
-import com.example.licious.listener.SearchItemClickListener;
+import com.example.licious.adapter.listener.AllCategoryListener;
+import com.example.licious.adapter.listener.SearchItemClickListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AllCaterogyResponse;
-import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.SearchResponse;
-import com.example.licious.response.SubCategoryItemResponse;
 
 import java.util.List;
 

@@ -23,12 +23,11 @@ import android.widget.Toast;
 
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
-import com.example.licious.activity.ProductDetails;
 import com.example.licious.adapter.ProductListAdapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.listener.SubCategoriesProductListener;
+import com.example.licious.adapter.listener.SubCategoriesProductListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.ProductResponse;
@@ -140,8 +139,10 @@ public class ProductDetailsFragment extends Fragment {
         Log.d("device_id", loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             getProductDetails(product_id, deviceId);
+            getProductList(deviceId);
         } else {
             getProductDetails(product_id, token);
+            getProductList(token);
         }
 
         return ProductDetails;
@@ -172,11 +173,11 @@ public class ProductDetailsFragment extends Fragment {
                     setProductData(productResponse);//set data
                     String s_cId = productResponse.get(0).getC_id();
                     int Id = Integer.parseInt(s_cId);
-                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        getProductList(Id, deviceId);
-                    } else {
-                        getProductList(Id, token);
-                    }
+//                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                        getProductList(Id, deviceId);
+//                    } else {
+//                        getProductList(token);
+//                    }
 
                     //top_rated_adapter = new Top_Rated_Adapter(getApplicationContext(),productResponse)
                     // Toast.makeText(ProductDetails.this, "Successfully", Toast.LENGTH_SHORT).show();
@@ -192,9 +193,9 @@ public class ProductDetailsFragment extends Fragment {
         });
     }
 
-    private void getProductList(int id, String token) {
+    private void getProductList(String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(id, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getRecommendedProduct(token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -322,9 +323,9 @@ public class ProductDetailsFragment extends Fragment {
                     Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
                     // getProductList(id, deviceId);
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        getProductList(id, deviceId);
+                        getProductList(deviceId);
                     } else {
-                        getProductList(id, token);
+                        getProductList(token);
                     }
                 }
             }
@@ -349,9 +350,9 @@ public class ProductDetailsFragment extends Fragment {
                     Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
                     // getProductList(id);
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        getProductList(id, deviceId);
+                        getProductList(deviceId);
                     } else {
-                        getProductList(id, token);
+                        getProductList(token);
                     }
                 }
             }

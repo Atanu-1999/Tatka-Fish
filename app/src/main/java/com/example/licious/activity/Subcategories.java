@@ -1,10 +1,8 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,10 +19,8 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
-import com.example.licious.listener.SubCategoriesListener;
-import com.example.licious.response.Category_Response;
+import com.example.licious.adapter.listener.SubCategoriesListener;
 import com.example.licious.response.GetCategoryResponse;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 

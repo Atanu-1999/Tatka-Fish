@@ -1,7 +1,6 @@
 package com.example.licious.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,22 +13,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.licious.MainActivity;
 import com.example.licious.R;
-import com.example.licious.adapter.ALl_CategoryAdapter;
 import com.example.licious.adapter.OrderHistoryAdapter;
 import com.example.licious.adapter.OrderHistoryDataAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.fragment.Account;
-import com.example.licious.listener.AllCategoryListener;
-import com.example.licious.listener.OrderHistoryListener;
-import com.example.licious.response.AllCaterogyResponse;
+import com.example.licious.adapter.listener.OrderHistoryListener;
 import com.example.licious.response.HistoryResponse;
-import com.example.licious.response.OrderHistoryDataResponse;
-import com.example.licious.response.OrderHistoryResponse;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import retrofit2.Call;

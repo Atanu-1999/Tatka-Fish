@@ -34,12 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.licious.activity.ProductDetails;
-import com.example.licious.activity.SubCatergoriesActivity;
-import com.example.licious.listener.BestSellerListener;
+import com.example.licious.adapter.listener.BestSellerListener;
 import com.example.licious.R;
-import com.example.licious.listener.CategoriesListener;
-import com.example.licious.listener.TopSellerListener;
+import com.example.licious.adapter.listener.CategoriesListener;
+import com.example.licious.adapter.listener.TopSellerListener;
 import com.example.licious.activity.MyCart;
 import com.example.licious.adapter.BannerAdapter;
 import com.example.licious.adapter.Best_Seller_Adapter;
@@ -55,7 +53,6 @@ import com.example.licious.model.Slider_Model;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.GetMasterCategoryResponse;
-import com.example.licious.response.Master_Category_Response;
 import com.example.licious.response.RemoveWishListResponse;
 
 import java.util.Calendar;

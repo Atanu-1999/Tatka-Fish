@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.listener.SlotListener;
+import com.example.licious.adapter.listener.SlotListener;
 import com.example.licious.response.SlotResponse;
-import com.example.licious.response.SubCategoriesResponse;
 
 import java.util.List;
 
