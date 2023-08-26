@@ -183,6 +183,7 @@ public class SubCategoriesFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putInt("cId", id);
                         bundle.putInt("page", 2);
+                        bundle.putInt("mcId", mcId);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         FreshWaterFragment freshwater = new FreshWaterFragment();

@@ -44,9 +44,9 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
         holder.pd_title.setText(ItemList.get(position).getProduct_title());
         holder.tv_pd_des.setText(ItemList.get(position).getShort_description());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + ItemList.get(position).getWeight_type());
-        holder.tv_pieces.setText(ItemList.get(position).getPieces());
-        holder.tv_serves.setText(ItemList.get(position).getServes());
-        holder.prices.setText(ItemList.get(position).getPrice());
+        holder.tv_pieces.setText(ItemList.get(position).getPieces() + " " + "Pieces");
+        holder.tv_serves.setText(ItemList.get(position).getServes() + " " + "Serves");
+        holder.prices.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_basePrices.setText(ItemList.get(position).getMrp());
         holder.tv_offer.setText(ItemList.get(position).getOffer());
 

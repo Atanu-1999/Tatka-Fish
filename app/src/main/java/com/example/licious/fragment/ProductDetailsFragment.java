@@ -276,10 +276,10 @@ public class ProductDetailsFragment extends Fragment {
                 .load(image_url + productResponse.get(0).getProduct_image())
                 .into(Iv_bg);
         tv_tittle_product.setText(productResponse.get(0).getProduct_title());
-        tv_serves.setText(productResponse.get(0).getServes());
+        tv_serves.setText(productResponse.get(0).getServes() + " " + "serves");
         tv_descrp.setText(productResponse.get(0).getDescription());
         tv_weight.setText(productResponse.get(0).getWeight() + productResponse.get(0).getWeight_type());
-        tv_pieces.setText(productResponse.get(0).getPieces());
+        tv_pieces.setText(productResponse.get(0).getPieces() + " " + "Pieces");
         tv_product_price.setText(productResponse.get(0).getPrice());
     }
 

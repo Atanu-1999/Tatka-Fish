@@ -44,7 +44,7 @@ import retrofit2.Response;
 
 
 public class FreshWaterFragment extends Fragment {
-    int cId;
+    int cId,mcId;
     RecyclerView rv_sub_cat, rv_sub_cat_product;
     ProgressDialog progressDialog;
     SharedPreferences loginPref;
@@ -84,6 +84,7 @@ public class FreshWaterFragment extends Fragment {
         if (bundle != null) {
             cId = bundle.getInt("cId", 0);
             page = bundle.getInt("page", 0);
+            mcId = bundle.getInt("mcId", 0);
         }
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -112,9 +113,12 @@ public class FreshWaterFragment extends Fragment {
                     fragmentTransaction.addToBackStack(null).commit();
                 }
                 else if (page==2){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("mcId", mcId);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                    subCategoriesFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
                     //edit_sku_no.getText().clear();
                     fragmentTransaction.addToBackStack(null).commit();
