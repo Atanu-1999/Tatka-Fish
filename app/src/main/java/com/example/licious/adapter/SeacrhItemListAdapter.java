@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.adapter.listener.SearchItemClickListener;
+import com.example.licious.listener.SearchItemClickListener;
 import com.example.licious.response.SearchResponse;
 import com.squareup.picasso.Picasso;
 

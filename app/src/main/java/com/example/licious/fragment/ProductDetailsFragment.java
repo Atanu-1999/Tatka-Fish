@@ -27,7 +27,7 @@ import com.example.licious.adapter.ProductListAdapter;
 import com.example.licious.adapter.Top_Rated_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.adapter.listener.SubCategoriesProductListener;
+import com.example.licious.listener.SubCategoriesProductListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.ProductResponse;

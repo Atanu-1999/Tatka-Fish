@@ -28,8 +28,8 @@ import com.example.licious.adapter.Category_Adapter;
 import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.adapter.listener.BackPressedListener;
-import com.example.licious.adapter.listener.SubCategoriesListener;
+import com.example.licious.listener.BackPressedListener;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.GetMasterCategoryResponse;
 

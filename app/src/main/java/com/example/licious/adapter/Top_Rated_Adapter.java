@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.adapter.listener.TopSellerListener;
+import com.example.licious.listener.TopSellerListener;
 import com.example.licious.response.Best_Seller_Response;
 import com.squareup.picasso.Picasso;
 

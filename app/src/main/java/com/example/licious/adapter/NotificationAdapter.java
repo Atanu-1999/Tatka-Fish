@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.adapter.listener.NotificationListener;
+import com.example.licious.listener.NotificationListener;
 import com.example.licious.response.NotificationListResponse;
 
 import java.util.List;

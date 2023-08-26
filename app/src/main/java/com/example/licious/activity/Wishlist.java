@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.licious.R;
 import com.example.licious.adapter.WishListAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.adapter.listener.FavoriteListener;
+import com.example.licious.listener.FavoriteListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AllWishListResponse;
 

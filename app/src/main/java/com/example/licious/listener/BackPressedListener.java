@@ -1,4 +1,4 @@
-package com.example.licious.adapter.listener;
+package com.example.licious.listener;
 
 public interface BackPressedListener {
     void onBackPressed();

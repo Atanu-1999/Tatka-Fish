@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.licious.MainActivity;
 import com.example.licious.authentication.DeviceUtils;
-import com.example.licious.adapter.listener.DeleteListener;
+import com.example.licious.listener.DeleteListener;
 import com.example.licious.R;
 import com.example.licious.adapter.MyCartAdapter;
 import com.example.licious.api.ApiService;

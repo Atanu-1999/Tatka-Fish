@@ -19,7 +19,7 @@ import com.example.licious.adapter.Category_horizental_Adapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.fragment.AllFish;
 import com.example.licious.fragment.Crab;
-import com.example.licious.adapter.listener.SubCategoriesListener;
+import com.example.licious.listener.SubCategoriesListener;
 import com.example.licious.response.GetCategoryResponse;
 
 import java.util.List;

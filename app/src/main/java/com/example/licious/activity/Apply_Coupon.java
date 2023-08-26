@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.example.licious.R;
 import com.example.licious.adapter.CouponAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.adapter.listener.CouponListener;
+import com.example.licious.listener.CouponListener;
 import com.example.licious.response.CouponsResponse;
 
 import java.util.List;

@@ -17,7 +17,7 @@ import com.example.licious.R;
 import com.example.licious.adapter.OrderHistoryAdapter;
 import com.example.licious.adapter.OrderHistoryDataAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.adapter.listener.OrderHistoryListener;
+import com.example.licious.listener.OrderHistoryListener;
 import com.example.licious.response.HistoryResponse;
 
 import java.util.List;

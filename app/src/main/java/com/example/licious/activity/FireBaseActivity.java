@@ -7,27 +7,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.adapter.NotificationAdapter;
 import com.example.licious.api.ApiService;
-import com.example.licious.adapter.listener.NotificationListener;
+import com.example.licious.listener.NotificationListener;
 import com.example.licious.response.NotificationListResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;

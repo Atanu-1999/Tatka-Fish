@@ -27,6 +27,7 @@ import com.example.licious.response.Otp_verify_Response;
 import com.example.licious.response.Pages_Response;
 import com.example.licious.response.ProductResponse;
 import com.example.licious.response.ProfileResponse;
+import com.example.licious.response.RatingResponse;
 import com.example.licious.response.RemoveWishListResponse;
 import com.example.licious.response.SearchResponse;
 import com.example.licious.response.SendOtp_Response;
@@ -221,6 +222,15 @@ public interface ApiHolder {
     @GET("notifications")
     Call<NotificationListResponse> getNotification(@Query("user_id") int user_id,
                                                    @Query("token") String token);
+
+
+    @POST("sendfeedback")
+    @FormUrlEncoded
+    Call<RatingResponse> ratingfeedback(@Field("user_id") int user_id,
+                                        @Field("order_no") String order_no,
+                                        @Field("star") String star,
+                                        @Field("description") String description,
+                                        @Field("token") String token);
 
 
 }

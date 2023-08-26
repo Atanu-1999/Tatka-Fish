@@ -34,10 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.licious.adapter.listener.BestSellerListener;
+import com.example.licious.listener.BestSellerListener;
 import com.example.licious.R;
-import com.example.licious.adapter.listener.CategoriesListener;
-import com.example.licious.adapter.listener.TopSellerListener;
+import com.example.licious.listener.CategoriesListener;
+import com.example.licious.listener.TopSellerListener;
 import com.example.licious.activity.MyCart;
 import com.example.licious.adapter.BannerAdapter;
 import com.example.licious.adapter.Best_Seller_Adapter;

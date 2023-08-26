@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
+import com.example.licious.listener.RepeatOrderListener;
 import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.OrderHistoryResponse;
@@ -23,10 +25,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public static List<OrderHistoryDataResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
+    RepeatOrderListener listener;
 
-    public OrderHistoryAdapter(Context context, List<OrderHistoryDataResponse.Datum> ItemList) {
+    public OrderHistoryAdapter(Context context, List<OrderHistoryDataResponse.Datum> ItemList, RepeatOrderListener listener) {
         this.ItemList = ItemList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -59,6 +63,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title,tv_weight,tv_discountPrice,tv_basePrice,tv_qnt;
         CircleImageView iv_image;
+        LinearLayout btn_feedback,ll_order;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
@@ -67,6 +72,21 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             tv_basePrice = (TextView) itemView.findViewById(R.id.tv_basePrice);
             tv_qnt = (TextView) itemView.findViewById(R.id.tv_qnt);
             iv_image = (CircleImageView) itemView.findViewById(R.id.iv_image);
+            btn_feedback = (LinearLayout) itemView.findViewById(R.id.btn_cart);
+            ll_order = (LinearLayout) itemView.findViewById(R.id.ll_order);
+
+            ll_order.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedRepeatOrder(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
+            btn_feedback.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClickedFeedback(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
+                }
+            });
         }
     }
 }

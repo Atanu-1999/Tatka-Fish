@@ -1,4 +1,4 @@
-package com.example.licious.adapter.listener;
+package com.example.licious.listener;
 
 import com.example.licious.response.AllCaterogyResponse;
 import com.example.licious.response.AllWishListResponse;

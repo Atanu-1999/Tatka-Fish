@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.licious.R;
-import com.example.licious.adapter.listener.FavoriteListener;
+import com.example.licious.listener.FavoriteListener;
 import com.example.licious.response.AllWishListResponse;
 import com.squareup.picasso.Picasso;
 
