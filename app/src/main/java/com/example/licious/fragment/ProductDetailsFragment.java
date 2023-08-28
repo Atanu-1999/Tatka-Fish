@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
 import com.example.licious.adapter.ProductListAdapter;
@@ -64,6 +65,7 @@ public class ProductDetailsFragment extends Fragment {
     String BlankId = "";
     String deviceId;
     RelativeLayout rl_product;
+    int cId,mcId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,9 @@ public class ProductDetailsFragment extends Fragment {
         if (bundle != null) {
             product_id = bundle.getInt("products_id");
             page_type = bundle.getString("page_type", null);
+
+            cId = bundle.getInt("cId", 0);
+            mcId = bundle.getInt("mcId", 0);
         }
         initi();
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -131,12 +136,33 @@ public class ProductDetailsFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               getActivity().finish();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Home home = new Home();
-//                fragmentTransaction.replace(R.id.main_container, home);
-//                fragmentTransaction.addToBackStack(null).commit();
+                if (Objects.equals(page_type, "home")) {
+                    Intent i = new Intent(getContext(), MainActivity.class);
+                    startActivity(i);
+                }
+                else if (Objects.equals(page_type, "subCat")) {
+                   // getActivity().finish();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("mcId", mcId);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                    subCategoriesFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
+                else if (Objects.equals(page_type, "frehwater")){
+                   // getActivity().finish();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("cId",cId);
+                    bundle.putInt("mcId",mcId);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    FreshWaterFragment freshWaterFragment = new FreshWaterFragment();
+                    freshWaterFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, freshWaterFragment);
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
 
             }
         });

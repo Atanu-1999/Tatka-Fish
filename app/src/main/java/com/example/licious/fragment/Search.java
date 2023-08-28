@@ -204,7 +204,7 @@ public class Search extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("cId", id);
-                            bundle.putInt("page", 1);
+                            bundle.putString("page_type", "search");
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             FreshWaterFragment freshwater = new FreshWaterFragment();

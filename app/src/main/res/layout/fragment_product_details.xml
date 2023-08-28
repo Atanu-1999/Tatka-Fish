@@ -27,6 +27,15 @@
                 android:layout_height="@dimen/_40sdp"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/baseline_keyboard_backspace_24" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Details"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textSize="@dimen/_17sdp"/>
 
         </LinearLayout>
 

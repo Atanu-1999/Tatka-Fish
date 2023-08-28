@@ -343,6 +343,7 @@ public class Home extends Fragment {
                             int cId = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", cId);
+                            bundle.putString("page_type", "home");
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
@@ -427,6 +428,7 @@ public class Home extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
+                            bundle.putString("page_type", "home");
 //                            Intent i = new Intent(getContext(), ProductDetails.class);
 //                            i.putExtras(bundle);
 //                            startActivity(i);

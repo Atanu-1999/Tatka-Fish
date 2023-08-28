@@ -63,6 +63,7 @@ public class FreshWaterFragment extends Fragment {
     int product_id;
     String BlankId = "";
     int page;
+    String page_type;
     ImageView back;
     String deviceId;
     @Override
@@ -87,7 +88,7 @@ public class FreshWaterFragment extends Fragment {
         //Extract the data…
         if (bundle != null) {
             cId = bundle.getInt("cId", 0);
-            page = bundle.getInt("page", 0);
+            page_type = bundle.getString("page_type", null);
             mcId = bundle.getInt("mcId", 0);
         }
 
@@ -108,7 +109,7 @@ public class FreshWaterFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (page==1){
+                if (Objects.equals(page_type, "search")){
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Search search = new Search();
@@ -116,7 +117,18 @@ public class FreshWaterFragment extends Fragment {
                     //edit_sku_no.getText().clear();
                     fragmentTransaction.addToBackStack(null).commit();
                 }
-                else if (page==2){
+                else if (Objects.equals(page_type, "subCat")){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("mcId", mcId);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
+                    subCategoriesFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
+                else {
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -249,6 +261,9 @@ public class FreshWaterFragment extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
+                            bundle.putString("page_type", "frehwater");
+                            bundle.putInt("cId",cId);
+                            bundle.putInt("mcId",mcId);
 //                            Intent i = new Intent(getContext(), ProductDetails.class);
 //                            i.putExtras(bundle);
 //                            startActivity(i);

@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.activity.MyCart;
 import com.example.licious.adapter.CategoryProductAdapter;
@@ -67,6 +68,7 @@ public class SubCategoriesFragment extends Fragment {
     ImageView back;
     String deviceId;
     RelativeLayout rl_subCat;
+    String pageType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,17 +102,24 @@ public class SubCategoriesFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mcId = bundle.getInt("mcId");
+            pageType = bundle.getString("page_type");
         }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Categories categories = new Categories();
-                fragmentTransaction.replace(R.id.main_container, categories);
-                //edit_sku_no.getText().clear();
-                fragmentTransaction.addToBackStack(null).commit();
+                if (Objects.equals(pageType, "home")) {
+                    Intent i = new Intent(getContext(),MainActivity.class);
+                    startActivity(i);
+                }
+                else {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Categories categories = new Categories();
+                    fragmentTransaction.replace(R.id.main_container, categories);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
+                }
             }
         });
 
@@ -186,7 +195,7 @@ public class SubCategoriesFragment extends Fragment {
                         int id = item.getId();
                         Bundle bundle = new Bundle();
                         bundle.putInt("cId", id);
-                        bundle.putInt("page", 2);
+                        bundle.putString("page_type", "subCat");
                         bundle.putInt("mcId", mcId);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -280,6 +289,8 @@ public class SubCategoriesFragment extends Fragment {
                             int id = item.getId();
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
+                            bundle.putString("page_type", "subCat");
+                            bundle.putInt("mcId", mcId);
 //                            Intent i = new Intent(getContext(), ProductDetails.class);
 //                            i.putExtras(bundle);
 //                            startActivity(i);
