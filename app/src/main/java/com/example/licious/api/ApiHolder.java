@@ -16,6 +16,7 @@ import com.example.licious.response.CheckOutProccedResponse;
 import com.example.licious.response.CouponsResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
+import com.example.licious.response.FaqResponse;
 import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.GetSubCategoryResponse;
@@ -244,6 +245,9 @@ public interface ApiHolder {
     Call<RepeatOrderResponse> getReOrder(@Field("user_id") int user_id,
                                          @Field("order_id") int order_id,
                                          @Field("token") String token);
+
+    @GET("faqs")
+    Call<FaqResponse> getFaq(@Query("token") String token);
 
 
 }

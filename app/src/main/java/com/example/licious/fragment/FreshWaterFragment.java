@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class FreshWaterFragment extends Fragment {
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
     String token;
-    TextView rl_freshwater;
+    RelativeLayout rl_freshwater;
     int id;
     List<GetSubCategoryResponse.Datum> subCategories;
     List<SubCategoryItemResponse.Datum> subProductItem;
