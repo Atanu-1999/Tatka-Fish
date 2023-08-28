@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ import com.example.licious.R;
 import com.example.licious.api.ApiService;
 import com.example.licious.response.ImageResponse;
 import com.example.licious.response.ProfileResponse;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -92,6 +94,7 @@ public class Update_Profile extends AppCompatActivity {
     String firstname, lastName, email_s, Dob_s, gender_s, image, image_s;
     String BlankId = "";
     ProgressDialog progressDialog;
+    RelativeLayout rl_update;
 
     @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
@@ -112,6 +115,7 @@ public class Update_Profile extends AppCompatActivity {
         radio_female = findViewById(R.id.radio_female);
         radio_other = findViewById(R.id.radio_other);
         Iv_profile = findViewById(R.id.Iv_profile);
+        rl_update = findViewById(R.id.rl_update);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -286,10 +290,39 @@ public class Update_Profile extends AppCompatActivity {
         txt_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatedProfile();
+                if (checkValidation()) {
+                    updatedProfile();
+                }
             }
         });
     }
+
+    private boolean checkValidation() {
+//        if (address_type.equals("")) {
+//            Toast.makeText(Update_Profile.this, "Please Upload image first", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//        else
+        if (edite_Fname.getText().toString().trim().length() == 0) {
+            edite_Fname.setError("Please enter first name");
+            edite_Fname.requestFocus();
+            return false;
+        } else if (edite_Last_name.getText().toString().trim().length() == 0) {
+            edite_Last_name.setError("please enter last name");
+            edite_Last_name.requestFocus();
+            return false;
+        } else if (et_email.getText().toString().trim().length() == 0) {
+            et_email.setError("please enter email");
+            et_email.requestFocus();
+            return false;
+        } else if (edit_user_dob.getText().toString().trim().length() == 0) {
+            edit_user_dob.setError("please enter DOB");
+            edit_user_dob.requestFocus();
+            return false;
+    }
+        return true;
+}
+
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -356,6 +389,15 @@ public class Update_Profile extends AppCompatActivity {
                 editor.putString("dob", Dob_ss);
                 editor.putString("gender", gender_ss);
                 editor.commit();
+
+//                Snackbar errorBar;
+//                errorBar = Snackbar.make(rl_update , "Profile Update Successfully", Snackbar.LENGTH_LONG);
+//                errorBar.setTextColor(getResources().getColor(R.color.white));
+//                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                errorBar.show();
+
+                finish();
 
             }
 

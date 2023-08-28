@@ -34,6 +34,7 @@ import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.GetSubCategoryResponse;
 import com.example.licious.response.RemoveWishListResponse;
 import com.example.licious.response.SubCategoryItemResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class FreshWaterFragment extends Fragment {
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
     String token;
+    TextView rl_freshwater;
     int id;
     List<GetSubCategoryResponse.Datum> subCategories;
     List<SubCategoryItemResponse.Datum> subProductItem;
@@ -78,6 +80,7 @@ public class FreshWaterFragment extends Fragment {
         tv_totalItem = freshWater.findViewById(R.id.tv_totalItem);
         back  = freshWater.findViewById(R.id.back);
         txt_noData = freshWater.findViewById(R.id.txt_noData);
+        rl_freshwater = freshWater.findViewById(R.id.rl_freshwater);
 
         Bundle bundle =getArguments();
         //Extract the data…
@@ -284,14 +287,25 @@ public class FreshWaterFragment extends Fragment {
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_freshwater, "WishList Added Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     getSubCategortItem(cId,token);
                 }
             }
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_freshwater, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -305,6 +319,12 @@ public class FreshWaterFragment extends Fragment {
             public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_freshwater, "WishList Remove Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
                     getSubCategortItem(cId,token);
                 }
@@ -312,9 +332,13 @@ public class FreshWaterFragment extends Fragment {
 
             @Override
             public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_freshwater, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }
@@ -328,7 +352,12 @@ public class FreshWaterFragment extends Fragment {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_freshwater, "Added Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
                     Intent i = new Intent(getContext(), MyCart.class);
@@ -342,6 +371,12 @@ public class FreshWaterFragment extends Fragment {
             public void onFailure(Call<AddToCartResponse> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_freshwater, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });

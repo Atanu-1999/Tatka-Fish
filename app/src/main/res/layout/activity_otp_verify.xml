@@ -193,12 +193,13 @@
             android:padding="@dimen/_5sdp"/>
 
         <LinearLayout
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_7sdp">
 
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/forgot_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -214,7 +215,7 @@
                 android:gravity="right">
 
                 <TextView
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:id="@+id/btn_resend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

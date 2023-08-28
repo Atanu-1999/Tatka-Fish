@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.example.licious.response.AddWishListResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.GetCategoryResponse;
 import com.example.licious.response.RemoveWishListResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +66,7 @@ public class SubCategoriesFragment extends Fragment {
     String BlankId = "";
     ImageView back;
     String deviceId;
+    RelativeLayout rl_subCat;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class SubCategoriesFragment extends Fragment {
         ll_items = subCat.findViewById(R.id.ll_items);
         back = subCat.findViewById(R.id.back);
         txt_noData = subCat.findViewById(R.id.txt_noData);
+        rl_subCat = subCat.findViewById(R.id.rl_subCat);
         deviceId = DeviceUtils.getDeviceId(getContext());
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -314,7 +318,14 @@ public class SubCategoriesFragment extends Fragment {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_subCat, "Successfully Added", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
                     Intent i = new Intent(getContext(), MyCart.class);
@@ -328,6 +339,12 @@ public class SubCategoriesFragment extends Fragment {
             public void onFailure(Call<AddToCartResponse> call, Throwable t) {
                 //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_subCat, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -342,14 +359,27 @@ public class SubCategoriesFragment extends Fragment {
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_subCat, "WishList Added Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     getCategorieesPoduct(mcId, token);
                 }
             }
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_subCat, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -364,6 +394,12 @@ public class SubCategoriesFragment extends Fragment {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_subCat, "WishList Remove Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
                     getCategorieesPoduct(mcId, token);
                 }
@@ -371,8 +407,13 @@ public class SubCategoriesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_subCat, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

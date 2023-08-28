@@ -91,6 +91,8 @@ public class FireBaseActivity extends AppCompatActivity {
                     rv_notificationList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 } else {
                     progressDialog.dismiss();
+                    txt_noData.setVisibility(View.VISIBLE);
+                    rv_notificationList.setVisibility(View.GONE);
                 }
             }
 
@@ -98,7 +100,7 @@ public class FireBaseActivity extends AppCompatActivity {
             public void onFailure(Call<NotificationListResponse> call, Throwable t) {
                 progressDialog.dismiss();
                 txt_noData.setVisibility(View.VISIBLE);
-                rv_notificationList.setVisibility(View.GONE);
+                rv_notificationList.setVisibility(View.INVISIBLE);
             }
         });
     }

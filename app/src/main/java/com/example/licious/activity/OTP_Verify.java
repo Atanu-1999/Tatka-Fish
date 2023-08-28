@@ -25,6 +25,8 @@ import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.api.ApiService;
 import com.example.licious.response.Otp_verify_Response;
+import com.example.licious.response.RepeatResponse;
+import com.example.licious.response.SendOtp_Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,11 +39,12 @@ import retrofit2.Response;
 public class OTP_Verify extends AppCompatActivity {
     TextView btn_continue,count_time,btn_resend,YourOtp;
     LinearLayout timer_layout;
-    String timeStr = "10",otp,OTP,phone,device_id;
+    String timeStr = "30",otp,OTP,phone,device_id;
     EditText otp1,otp2,otp3,otp4,otp5;
     RelativeLayout OTP_layout;
     SharedPreferences loginPref;
     String fb_token;
+    TextView forgot_pass;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -61,6 +64,7 @@ public class OTP_Verify extends AppCompatActivity {
         btn_resend = findViewById(R.id.btn_resend);
         count_time = findViewById(R.id.count_time);
         btn_continue = findViewById(R.id.btn_continue);
+        forgot_pass =findViewById(R.id.forgot_pass);
         //sharedPref
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
 
@@ -94,9 +98,11 @@ public class OTP_Verify extends AppCompatActivity {
                         long seconds = millisUntilFinished / 1000;
                         String SetTime = String.valueOf(seconds);
                         count_time.setText(SetTime);
+                        ResendOTP(phone);
                     }
                     public void onFinish() {
                         btn_resend.setVisibility(View.VISIBLE);
+                        forgot_pass.setVisibility(View.VISIBLE);
                         timer_layout.setVisibility(View.GONE);
                     }
                 }.start();
@@ -281,6 +287,36 @@ public class OTP_Verify extends AppCompatActivity {
             @Override
             public void onFailure(Call<Otp_verify_Response> call, Throwable t) {
                 //Toast.makeText(OTP_Verify.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void ResendOTP(String phone) {
+        Call<RepeatResponse> login_apiCall = ApiService.apiHolders().re_sent_otp(phone, device_id);
+        login_apiCall.enqueue(new Callback<RepeatResponse>() {
+            @Override
+            public void onResponse(Call<RepeatResponse> call, Response<RepeatResponse> response) {
+                if (response.isSuccessful()) {
+                    String response1 = response.body().toString();
+                    Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(OTP_Verify.this,MainActivity.class);
+                    SharedPreferences.Editor editor = loginPref.edit();
+                    String deviceId = response.body().getData().get(0).getDeviceId();
+                    String phoneNumber = response.body().getData().get(0).getPhone();
+                    int userId = response.body().getData().get(0).getId();
+                    editor.putString("device_id",deviceId);
+                    editor.putString("phone",phoneNumber);
+                    editor.putInt("userId",userId);
+                    editor.commit();
+                    startActivity(i);
+                } else {
+                    Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RepeatResponse> call, Throwable t) {
                 Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
             }
         });

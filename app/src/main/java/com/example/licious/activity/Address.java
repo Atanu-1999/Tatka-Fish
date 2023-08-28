@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
@@ -55,6 +57,8 @@ public class Address extends AppCompatActivity {
     ProgressDialog progressDialog;
     TextView txt_noData;
     String BlankId = "";
+    RelativeLayout Rl_layout;
+    int addr_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,7 @@ public class Address extends AppCompatActivity {
         rv_all_address = findViewById(R.id.rv_all_address);
         back = findViewById(R.id.back);
         txt_noData = findViewById(R.id.txt_noData);
+        Rl_layout = findViewById(R.id.Rl_layout);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -75,6 +80,12 @@ public class Address extends AppCompatActivity {
         progressDialog = new ProgressDialog(Address.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
+
+        Bundle bundle = getIntent().getExtras();
+        //Extract the data…
+        if (bundle != null) {
+            addr_type = bundle.getInt("addr_type", 0);
+        }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +100,7 @@ public class Address extends AppCompatActivity {
             public void onClick(View v) {
                 if (BlankId.equals(loginPref.getString("device_id", ""))) {
                     Toast.makeText(getApplicationContext(), "Please Login First", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     bottomSheetDialog = new BottomSheetDialog(Address.this, R.style.BottomSheetTheme);
                     View view1 = LayoutInflater.from(Address.this).inflate(R.layout.address_layout,
                             (LinearLayout) findViewById(R.id.container));
@@ -190,20 +200,25 @@ public class Address extends AppCompatActivity {
 
                     @Override
                     public void onItemClickCheck(AllAddressListResponse.Datum item, int position, int type, boolean isChecked) {
-                        int add_Id = item.getAddress_id();
-                        String adds_one = item.getAddress_line_one();
-                        String adds_two = item.getAddress_line_two();
-                        String add_type = item.getAddress_type();
-                        String city = item.getCity();
+                        if (addr_type==1) {
+                            int add_Id = item.getAddress_id();
+                            String adds_one = item.getAddress_line_one();
+                            String adds_two = item.getAddress_line_two();
+                            String add_type = item.getAddress_type();
+                            String city = item.getCity();
 
-                        editor.putInt("add_id", add_Id);
-                        editor.putString("adds_one", adds_one);
-                        editor.putString("adds_two", adds_two);
-                        editor.putString("add_type", add_type);
-                        editor.putString("city", city);
-                        editor.commit();
+                            editor.putInt("add_id", add_Id);
+                            editor.putString("adds_one", adds_one);
+                            editor.putString("adds_two", adds_two);
+                            editor.putString("add_type", add_type);
+                            editor.putString("city", city);
+                            editor.commit();
 
-                        startActivity(new Intent(Address.this, MyCart.class));
+                            startActivity(new Intent(Address.this, MyCart.class));
+                        }
+                        else {
+                            finish();
+                        }
                     }
                 });
                 rv_all_address.setAdapter(addressListAdapter);
@@ -216,7 +231,7 @@ public class Address extends AppCompatActivity {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
                 txt_noData.setVisibility(View.VISIBLE);
-                rv_all_address.setVisibility(View.GONE);
+                rv_all_address.setVisibility(View.INVISIBLE);
                 progressDialog.dismiss();
             }
         });
@@ -236,6 +251,8 @@ public class Address extends AppCompatActivity {
         tv_other = (TextView) view1.findViewById(R.id.tv_other);
         tv_work = (TextView) view1.findViewById(R.id.tv_work);
 
+        address_type = "";
+
 
         tv_area.setText(item.getAddress_line_one());
         String addrs_one = item.getAddress_line_one();
@@ -250,59 +267,59 @@ public class Address extends AppCompatActivity {
         int address_id = item.getAddress_id();
         String addr_type = item.getAddress_type();
 
-        if (Objects.equals(addr_type, "Home")) {
-            tv_home.setBackgroundResource(R.drawable.bg_textview_color);
-            tv_work.setBackgroundResource(R.drawable.textfield_bg);
-            tv_other.setBackgroundResource(R.drawable.textfield_bg);
-        } else if (Objects.equals(addr_type, "Work")) {
-            tv_work.setBackgroundResource(R.drawable.bg_textview_color);
-            tv_other.setBackgroundResource(R.drawable.textfield_bg);
-            tv_home.setBackgroundResource(R.drawable.textfield_bg);
-        } else if (Objects.equals(addr_type, "Other")) {
-            tv_other.setBackgroundResource(R.drawable.bg_textview_color);
-            tv_work.setBackgroundResource(R.drawable.textfield_bg);
-            tv_home.setBackgroundResource(R.drawable.textfield_bg);
-        }
+//        if (Objects.equals(addr_type, "Home")) {
+//            tv_home.setBackgroundResource(R.drawable.bg_textview_color);
+//            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+//            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+//        } else if (Objects.equals(addr_type, "Work")) {
+//            tv_work.setBackgroundResource(R.drawable.bg_textview_color);
+//            tv_other.setBackgroundResource(R.drawable.textfield_bg);
+//            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+//        } else if (Objects.equals(addr_type, "Other")) {
+//            tv_other.setBackgroundResource(R.drawable.bg_textview_color);
+//            tv_work.setBackgroundResource(R.drawable.textfield_bg);
+//            tv_home.setBackgroundResource(R.drawable.textfield_bg);
+//        }
 
-//        tv_home.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                address_type = "Home";
-//                tv_home.setBackgroundResource(R.drawable.bg_textview_color);
-//                tv_work.setBackgroundResource(R.drawable.textfield_bg);
-//                tv_other.setBackgroundResource(R.drawable.textfield_bg);
-//                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        tv_work.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                address_type = "Work";
-//                tv_work.setBackgroundResource(R.drawable.bg_textview_color);
-//                tv_other.setBackgroundResource(R.drawable.textfield_bg);
-//                tv_home.setBackgroundResource(R.drawable.textfield_bg);
-//                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        tv_other.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                address_type = "Other";
-//                tv_other.setBackgroundResource(R.drawable.bg_textview_color);
-//                tv_work.setBackgroundResource(R.drawable.textfield_bg);
-//                tv_home.setBackgroundResource(R.drawable.textfield_bg);
-//                //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        tv_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                address_type = "Home";
+                tv_home.setBackgroundResource(R.drawable.bg_textview_color);
+                tv_work.setBackgroundResource(R.drawable.textfield_bg);
+                tv_other.setBackgroundResource(R.drawable.textfield_bg);
+                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+            }
+        });
+        tv_work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                address_type = "Work";
+                tv_work.setBackgroundResource(R.drawable.bg_textview_color);
+                tv_other.setBackgroundResource(R.drawable.textfield_bg);
+                tv_home.setBackgroundResource(R.drawable.textfield_bg);
+                // Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+            }
+        });
+        tv_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                address_type = "Other";
+                tv_other.setBackgroundResource(R.drawable.bg_textview_color);
+                tv_work.setBackgroundResource(R.drawable.textfield_bg);
+                tv_home.setBackgroundResource(R.drawable.textfield_bg);
+                //  Toast.makeText(Address.this,address_type,Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  if (checkValidation()) {
-                //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
-                UpdateAddress(address_id, addrs_one, addrs_second, landMark, city, phone, addr_type);
-                bottomSheetDialog.dismiss();
-                //  }
+                if (checkValidation()) {
+                    //Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+                    UpdateAddress(address_id, addrs_one, addrs_second, landMark, city, phone, address_type);
+                    bottomSheetDialog.dismiss();
+                }
             }
         });
         bottomSheetDialog.setContentView(view1);
@@ -317,7 +334,14 @@ public class Address extends AppCompatActivity {
             @Override
             public void onResponse(Call<EditAddressResponse> call, Response<EditAddressResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Address.this, "Address updated Successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Address.this, "Address updated Successfully", Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "Address updated Successfully", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+
                 getAllAddress();
             }
 
@@ -325,6 +349,14 @@ public class Address extends AppCompatActivity {
             public void onFailure(Call<EditAddressResponse> call, Throwable t) {
                 //Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 // Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+
+
                 progressDialog.dismiss();
             }
         });
@@ -338,7 +370,15 @@ public class Address extends AppCompatActivity {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "Address Added Successfully", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+                // Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+
+
                 getAllAddress();
             }
 
@@ -346,6 +386,12 @@ public class Address extends AppCompatActivity {
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
 //                Toast.makeText(Address.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 //  Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 progressDialog.dismiss();
             }
         });
@@ -364,13 +410,27 @@ public class Address extends AppCompatActivity {
             @Override
             public void onResponse(Call<AddAddressResponse> call, Response<AddAddressResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "Address Added Successfully", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+
                 getAllAddress();
             }
 
             @Override
             public void onFailure(Call<AddAddressResponse> call, Throwable t) {
-                Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Address.this, "failed", Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(Rl_layout, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //    progressDialog.dismiss();
             }
         });

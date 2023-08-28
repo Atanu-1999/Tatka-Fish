@@ -48,7 +48,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
         holder.tv_serves.setText(ItemList.get(position).getServes() + " " + "Serves");
         holder.prices.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_basePrices.setText(ItemList.get(position).getMrp());
-        holder.tv_offer.setText(ItemList.get(position).getOffer());
+        holder.tv_offer.setText(ItemList.get(position).getOffer() + "% off");
 
         Picasso.with(context)
                 .load(image_url+ItemList.get(position).getProduct_image())

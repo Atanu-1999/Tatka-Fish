@@ -16,6 +16,7 @@ import com.example.licious.R;
 import com.example.licious.adapter.AddressListAdapter;
 import com.example.licious.adapter.OrderHistoryAdapter;
 import com.example.licious.api.ApiService;
+import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.response.AllAddressListResponse;
 import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.Pages_Response;
@@ -33,11 +34,15 @@ public class Pages extends AppCompatActivity {
     SharedPreferences.Editor editor;
     ProgressDialog progressDialog;
     int id;
+    String deviceId;
+    String BlankId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pages);
+
+        deviceId = DeviceUtils.getDeviceId(Pages.this);
 
         SharedPreferences loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         token = loginPref.getString("device_id", "");
@@ -64,19 +69,31 @@ public class Pages extends AppCompatActivity {
             }
         });
 
-        if (pageId.equals("1")){
-            getOrderHistory("1");
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            if (pageId.equals("1")){
+                getOrderHistory("1",deviceId);
+            }
+            else if (pageId.equals("2")){
+                getOrderHistory("2",deviceId);
+            }
+            else if (pageId.equals("3"))
+            {
+                getOrderHistory("3",deviceId);
+            }
         }
-        else if (pageId.equals("2")){
-            getOrderHistory("2");
-        }
-        else if (pageId.equals("3"))
-        {
-            getOrderHistory("3");
+        else {
+
+            if (pageId.equals("1")) {
+                getOrderHistory("1",token);
+            } else if (pageId.equals("2")) {
+                getOrderHistory("2",token);
+            } else if (pageId.equals("3")) {
+                getOrderHistory("3",token);
+            }
         }
     }
 
-    private void getOrderHistory(String page) {
+    private void getOrderHistory(String page,String token) {
         progressDialog.show();
         Call<Pages_Response> category_apiCall = ApiService.apiHolders().getPage(page, token);
         category_apiCall.enqueue(new Callback<Pages_Response>() {

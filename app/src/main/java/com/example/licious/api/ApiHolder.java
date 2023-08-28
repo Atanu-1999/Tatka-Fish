@@ -30,6 +30,7 @@ import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.RatingResponse;
 import com.example.licious.response.RemoveWishListResponse;
 import com.example.licious.response.RepeatOrderResponse;
+import com.example.licious.response.RepeatResponse;
 import com.example.licious.response.SearchResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
@@ -54,6 +55,11 @@ public interface ApiHolder {
     @FormUrlEncoded
     Call<SendOtp_Response> sent_otp(@Field("phone") String phone,
                                     @Field("device_id") String device_id);
+
+    @POST("resendotp")
+    @FormUrlEncoded
+    Call<RepeatResponse> re_sent_otp(@Field("phone") String phone,
+                                  @Field("device_id") String device_id);
 
     @POST("verifyotp")
     @FormUrlEncoded

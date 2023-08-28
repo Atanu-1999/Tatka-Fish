@@ -27,6 +27,7 @@ import com.example.licious.api.ApiService;
 import com.example.licious.response.AddRemoveResponse;
 import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class MyCart extends AppCompatActivity {
     int tp = 0;
     String tpp;
     LinearLayout ll_amount_view;
-    RelativeLayout rl_noData;
+    RelativeLayout rl_noData,rl_cart;
     CardView checkout;
     ImageView back;
     String BlankId = "";
@@ -76,6 +77,7 @@ public class MyCart extends AppCompatActivity {
         rl_noData = findViewById(R.id.rl_noData);
         checkout = findViewById(R.id.checkout);
         back = findViewById(R.id.back);
+        rl_cart = findViewById(R.id.rl_cart);
 
         deviceId = DeviceUtils.getDeviceId(MyCart.this);
 
@@ -122,7 +124,11 @@ public class MyCart extends AppCompatActivity {
         txt_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MyCart.this, Address.class));
+                Bundle bundle = new Bundle();
+                bundle.putInt("addr_type", 1);
+                Intent i = new Intent(MyCart.this, Address.class);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
         btn_proceed.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +267,12 @@ public class MyCart extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     //  Toast.makeText(MyCart.this,"Added Item",Toast.LENGTH_SHORT).show();
+//                    Snackbar errorBar;
+//                    errorBar = Snackbar.make(rl_cart, "Added", Snackbar.LENGTH_LONG);
+//                    errorBar.setTextColor(getResources().getColor(R.color.white));
+//                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                    errorBar.show();
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
                         getCartDetails(deviceId);
                     }else {
@@ -274,6 +286,12 @@ public class MyCart extends AppCompatActivity {
             public void onFailure(Call<AddRemoveResponse> call, Throwable t) {
                 // Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_cart, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }
@@ -286,7 +304,13 @@ public class MyCart extends AppCompatActivity {
             public void onResponse(Call<CartItemDeleteResponse> call, Response<CartItemDeleteResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(MyCart.this, "Deleted Item", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(MyCart.this, "Deleted Item", Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_cart, "Deleted Item", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
                         getCartDetails(deviceId);
                     }else {
@@ -299,6 +323,12 @@ public class MyCart extends AppCompatActivity {
             public void onFailure(Call<CartItemDeleteResponse> call, Throwable t) {
                 //Toast.makeText(MyCart.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_cart, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }

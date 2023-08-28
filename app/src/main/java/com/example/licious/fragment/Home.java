@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
 import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.RemoveWishListResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.List;
@@ -80,6 +82,7 @@ public class Home extends Fragment {
 
     private LocationManager locationManager;
     private LocationListener locationListener;
+    RelativeLayout rl_home;
 
    /* private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -142,6 +145,7 @@ public class Home extends Fragment {
         rv_topRated = home.findViewById(R.id.rv_topRated);
         rv_category = home.findViewById(R.id.rv_category_s);
         viewPager = home.findViewById(R.id.view_pager);
+        rl_home = home.findViewById(R.id.rl_home);
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -546,7 +550,15 @@ public class Home extends Fragment {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_home, "Successfully Added", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
                     Intent i = new Intent(getContext(), MyCart.class);
@@ -574,7 +586,15 @@ public class Home extends Fragment {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                    Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_home, "WishList Added Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
                     TopRated(token);
                     BestSeller(token);
                 }
@@ -582,8 +602,14 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_home, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -598,7 +624,15 @@ public class Home extends Fragment {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                    Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_home, "WishList Remove Successfully", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
                     TopRated(token);
                     BestSeller(token);
                 }
@@ -606,8 +640,13 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<RemoveWishListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_home, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
