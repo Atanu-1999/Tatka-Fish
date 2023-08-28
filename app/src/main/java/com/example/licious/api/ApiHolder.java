@@ -29,6 +29,7 @@ import com.example.licious.response.ProductResponse;
 import com.example.licious.response.ProfileResponse;
 import com.example.licious.response.RatingResponse;
 import com.example.licious.response.RemoveWishListResponse;
+import com.example.licious.response.RepeatOrderResponse;
 import com.example.licious.response.SearchResponse;
 import com.example.licious.response.SendOtp_Response;
 import com.example.licious.response.SlotResponse;
@@ -231,6 +232,12 @@ public interface ApiHolder {
                                         @Field("star") String star,
                                         @Field("description") String description,
                                         @Field("token") String token);
+
+    @POST("reorder")
+    @FormUrlEncoded
+    Call<RepeatOrderResponse> getReOrder(@Field("user_id") int user_id,
+                                         @Field("order_id") int order_id,
+                                         @Field("token") String token);
 
 
 }

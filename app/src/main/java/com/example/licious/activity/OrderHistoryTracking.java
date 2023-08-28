@@ -25,8 +25,10 @@ import com.example.licious.R;
 import com.example.licious.adapter.OrderHistoryAdapter;
 import com.example.licious.api.ApiService;
 import com.example.licious.listener.RepeatOrderListener;
+import com.example.licious.response.NotificationListResponse;
 import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.RatingResponse;
+import com.example.licious.response.RepeatOrderResponse;
 
 import java.util.List;
 
@@ -95,7 +97,8 @@ public class OrderHistoryTracking extends AppCompatActivity {
                     orderHistoryAdapter = new OrderHistoryAdapter(getApplicationContext(), orderList, new RepeatOrderListener() {
                         @Override
                         public void onItemClickedRepeatOrder(OrderHistoryDataResponse.Datum item, int position, int type) {
-
+                            int orderId=item.getOrderId();
+                            reOrder(orderId);
                         }
 
                         @Override
@@ -112,6 +115,35 @@ public class OrderHistoryTracking extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<OrderHistoryDataResponse> call, Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void reOrder(int orderId) {
+        progressDialog.show();
+        Call<RepeatOrderResponse> category_apiCall = ApiService.apiHolders().getReOrder(id,orderId,token);
+        category_apiCall.enqueue(new Callback<RepeatOrderResponse>() {
+            @Override
+            public void onResponse(Call<RepeatOrderResponse> call, Response<RepeatOrderResponse> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    progressDialog.dismiss();
+                    int product_id = response.body().getData().get(0).getProductId();
+                    Toast.makeText(OrderHistoryTracking.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("product_id", product_id);
+                    Intent i = new Intent(OrderHistoryTracking.this, MyCart.class);
+                    i.putExtras(bundle);
+                    startActivity(i);
+
+                } else {
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RepeatOrderResponse> call, Throwable t) {
                 progressDialog.dismiss();
             }
         });
