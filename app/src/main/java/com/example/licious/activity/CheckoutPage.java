@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.CheckOutProccedResponse;
 import com.example.licious.response.SlotResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -70,7 +72,9 @@ public class CheckoutPage extends AppCompatActivity {
     int add_Id;
     int Totals;
     Dialog dialog;
-    String coupon_amount;
+    int coupon_amount,coupon_off_amount;
+    TextView tv_coupoun_charge;
+    RelativeLayout rl_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,8 @@ public class CheckoutPage extends AppCompatActivity {
         totalValue = findViewById(R.id.totalValue);
         tv_slotTime = findViewById(R.id.tv_slotTime);
         btn_cart = findViewById(R.id.btn_cart);
+        tv_coupoun_charge = findViewById(R.id.tv_coupoun_charge);
+        rl_view = findViewById(R.id.rl_view);
 
         dialog = new Dialog(CheckoutPage.this);
 
@@ -117,8 +123,11 @@ public class CheckoutPage extends AppCompatActivity {
         if (bundle != null) {
             coupon_id = bundle.getInt("coupon_id", 0);
             totalAmount = bundle.getInt("total_amount", 0);
-            coupon_amount = bundle.getString("coupon_amount",null);
+            coupon_off_amount = bundle.getInt("coupon_off_amount",0);
+            coupon_amount = bundle.getInt("coupon_amount",0);
         }
+
+
 
         //get Data
         getCartDetails();
@@ -416,8 +425,40 @@ public class CheckoutPage extends AppCompatActivity {
 
         Totals = subtotal + deliveryCharges;
         String T_total = String.valueOf(Totals);
-        totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
-        tv_totalAmount.setText(T_total);//set value final Total
+
+        if (coupon_amount!= 0) {
+            if (coupon_amount > subtotal) {
+                totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
+                tv_totalAmount.setText(T_total);//set value final Total
+                tv_coupoun_charge.setText("₹" + " " + "0");
+               // Toast.makeText(getApplicationContext(),"less",Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_view, "This coupon is not valid for this product", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+            } else {
+                int c_amnt = Totals - coupon_off_amount;
+                String ff_total = String.valueOf(c_amnt);
+                totalValue.setText("₹" + " " + ff_total); //set value after delivery charge add
+                tv_totalAmount.setText(ff_total);//set value final Total
+                tv_coupoun_charge.setText(String.valueOf("₹" + " " + coupon_off_amount));
+                //Toast.makeText(getApplicationContext(),"Greater",Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_view, "Coupon Applied", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+            }
+        }else {
+            totalValue.setText("₹" + " " + T_total); //set value after delivery charge add
+            tv_totalAmount.setText(T_total);//set value final Total
+            tv_coupoun_charge.setText("₹" + " " + "0");
+           // Toast.makeText(getApplicationContext(),"no coupoun",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void deleteItem(int cartId) {

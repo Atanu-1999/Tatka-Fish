@@ -100,10 +100,12 @@ public class Apply_Coupon extends AppCompatActivity {
                         @Override
                         public void onItemClickedCoupon(CouponsResponse.Datum item, int position, int type) {
                             int id = item.getId();
-                            String coupon_amount = String.valueOf(item.getOffAmount());
+                            int coupon_off_amount = item.getOffAmount();
+                            int coupon_amount = item.getApplyigAmount();
                             Bundle bundle = new Bundle();
                             bundle.putInt("coupon_id",id);
-                            bundle.putString("coupon_amount",coupon_amount);
+                            bundle.putInt("coupon_off_amount",coupon_off_amount);
+                            bundle.putInt("coupon_amount",coupon_amount);
                             bundle.putInt("total_amount",totalAmount);
 //                            startActivity(new Intent(Apply_Coupon.this, CheckoutPage.class));
                             Intent i = new Intent(Apply_Coupon.this,CheckoutPage.class);
