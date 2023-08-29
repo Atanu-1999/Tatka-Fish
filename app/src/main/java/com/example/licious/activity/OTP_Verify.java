@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ public class OTP_Verify extends AppCompatActivity {
     String fb_token;
     TextView forgot_pass;
     private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 123;
+    ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -70,6 +72,12 @@ public class OTP_Verify extends AppCompatActivity {
         forgot_pass =findViewById(R.id.forgot_pass);
         //sharedPref
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+
+//        //loading
+//        progressDialog = new ProgressDialog(OTP_Verify.this);
+//        progressDialog.setIndeterminate(true);
+//        progressDialog.setMessage("Loading...");
+
 
         // Check if notification permission is granted
         if (!isNotificationPermissionGranted()) {
@@ -304,7 +312,13 @@ public class OTP_Verify extends AppCompatActivity {
             @Override
             public void onResponse(Call<Otp_verify_Response> call, Response<Otp_verify_Response> response) {
                if (response.body().getVerify()==true){
-                   Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                   Snackbar errorBar;
+                   errorBar = Snackbar.make(OTP_layout , "Successfully Login", Snackbar.LENGTH_LONG);
+                   errorBar.setTextColor(getResources().getColor(R.color.white));
+                   errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                   errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                   errorBar.show();
                    Intent i = new Intent(OTP_Verify.this,MainActivity.class);
                    SharedPreferences.Editor editor = loginPref.edit();
                    String deviceId = response.body().getData().get(0).getDeviceId();
@@ -317,13 +331,26 @@ public class OTP_Verify extends AppCompatActivity {
                    startActivity(i);
                }
                else {
-                   Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                  // Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                   Snackbar errorBar;
+                   errorBar = Snackbar.make(OTP_layout , "Fail", Snackbar.LENGTH_LONG);
+                   errorBar.setTextColor(getResources().getColor(R.color.white));
+                   errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                   errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                   errorBar.show();
+
                }
             }
             @Override
             public void onFailure(Call<Otp_verify_Response> call, Throwable t) {
                 //Toast.makeText(OTP_Verify.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(OTP_layout ,  R.string.otp_verify, Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }
@@ -335,7 +362,13 @@ public class OTP_Verify extends AppCompatActivity {
             public void onResponse(Call<RepeatResponse> call, Response<RepeatResponse> response) {
                 if (response.isSuccessful()) {
                     String response1 = response.body().toString();
-                    Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(OTP_Verify.this, "Success"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(OTP_layout , "Successfully Login", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                     Intent i = new Intent(OTP_Verify.this,MainActivity.class);
                     SharedPreferences.Editor editor = loginPref.edit();
                     String deviceId = response.body().getData().get(0).getDeviceId();
@@ -347,13 +380,25 @@ public class OTP_Verify extends AppCompatActivity {
                     editor.commit();
                     startActivity(i);
                 } else {
-                    Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(OTP_Verify.this, "Fail"+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(OTP_layout , "Fail", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                 }
             }
 
             @Override
             public void onFailure(Call<RepeatResponse> call, Throwable t) {
-                Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(OTP_Verify.this, R.string.otp_verify, Toast.LENGTH_SHORT).show();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(OTP_layout ,  R.string.otp_verify, Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.example.licious.api.ApiService;
 import com.example.licious.authentication.DeviceUtils;
 import com.example.licious.response.SendOtp_Response;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,6 +57,7 @@ public class Account extends Fragment {
     String BlankId = "";
     LinearLayout ll_line;
     CardView cv_share_link;
+    RelativeLayout rl_view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class Account extends Fragment {
         tv_mail = account.findViewById(R.id.tv_mail);
         ll_line = account.findViewById(R.id.ll_line);
         cv_share_link = account.findViewById(R.id.cv_share_link);
+        rl_view = account.findViewById(R.id.rl_view);
 
         String phoneNum= loginPref.getString("phone","");
         String firstname = loginPref.getString("first_name", null);
@@ -274,7 +278,12 @@ public class Account extends Fragment {
 
             @Override
             public void onFailure(Call<SendOtp_Response> call, Throwable t) {
-
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_view, "Something went wrong", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }
