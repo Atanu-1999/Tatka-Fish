@@ -37,6 +37,7 @@ public class Apply_Coupon extends AppCompatActivity {
     List<CouponsResponse.Datum> couponsResponse;
     CouponAdapter couponAdapter;
     RecyclerView rv_coupons;
+    TextView count;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,6 +45,7 @@ public class Apply_Coupon extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_coupon);
         rv_coupons= findViewById(R.id.rv_coupons);
+        count = findViewById(R.id.count);
 
         //loading
         progressDialog = new ProgressDialog(Apply_Coupon.this);
@@ -91,12 +93,17 @@ public class Apply_Coupon extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     couponsResponse = response.body().getData();
+                    String countcoupn = String.valueOf(couponsResponse.size());
+
+                    count.setText(countcoupn);
                     couponAdapter = new CouponAdapter(getApplicationContext(), couponsResponse, new CouponListener() {
                         @Override
                         public void onItemClickedCoupon(CouponsResponse.Datum item, int position, int type) {
                             int id = item.getId();
+                            String coupon_amount = String.valueOf(item.getOffAmount());
                             Bundle bundle = new Bundle();
                             bundle.putInt("coupon_id",id);
+                            bundle.putString("coupon_amount",coupon_amount);
                             bundle.putInt("total_amount",totalAmount);
 //                            startActivity(new Intent(Apply_Coupon.this, CheckoutPage.class));
                             Intent i = new Intent(Apply_Coupon.this,CheckoutPage.class);

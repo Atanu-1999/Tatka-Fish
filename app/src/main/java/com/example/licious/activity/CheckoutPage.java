@@ -70,6 +70,7 @@ public class CheckoutPage extends AppCompatActivity {
     int add_Id;
     int Totals;
     Dialog dialog;
+    String coupon_amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,7 @@ public class CheckoutPage extends AppCompatActivity {
         if (bundle != null) {
             coupon_id = bundle.getInt("coupon_id", 0);
             totalAmount = bundle.getInt("total_amount", 0);
+            coupon_amount = bundle.getString("coupon_amount",null);
         }
 
         //get Data
@@ -159,7 +161,7 @@ public class CheckoutPage extends AppCompatActivity {
                                 @Override
                                 public void onItemClickedSlot(SlotResponse.Datum item, int position, Boolean flag) {
                                     flag = flag;
-                                    Toast.makeText(getApplicationContext(), item.getSlot_name(), Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(getApplicationContext(), item.getSlot_name(), Toast.LENGTH_SHORT).show();
                                     SlotTime = item.getSlot_name();
                                     SlotId = item.getId();
                                     delivery_charge = item.getDelivery_charge();
@@ -242,7 +244,9 @@ public class CheckoutPage extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent i = new Intent(CheckoutPage.this, MyCart.class);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
         btn_coupon.setOnClickListener(new View.OnClickListener() {

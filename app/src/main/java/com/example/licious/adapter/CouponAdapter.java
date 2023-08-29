@@ -37,7 +37,7 @@ public class CouponAdapter  extends RecyclerView.Adapter<CouponAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull CouponAdapter.ViewHolder holder, int position) {
-        holder.tv_coupon_code.setText(ItemList.get(position).getCoupon_code());
+        holder.tv_coupon_code.setText(ItemList.get(position).getCouponCode());
         holder.tv_descrp.setText(ItemList.get(position).getDescription());
         holder.tv_termCondition.setText(ItemList.get(position).getTc());
 

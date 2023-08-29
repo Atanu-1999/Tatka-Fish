@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.example.licious.listener.SearchItemClickListener;
 import com.example.licious.response.AddToCartResponse;
 import com.example.licious.response.AllCaterogyResponse;
 import com.example.licious.response.SearchResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class Search extends Fragment {
     List<SearchResponse.Datum> searchListresponse;
     int product_id;
     String deviceId,BlankId="";
+    RelativeLayout rl_view;
 
 
     @Override
@@ -67,6 +70,7 @@ public class Search extends Fragment {
         rv_all_category = v.findViewById(R.id.rv_all_category);
         sv_search = v.findViewById(R.id.sv_search);
         rv_Search_all_category = v.findViewById(R.id.rv_Search_all_category);
+        rl_view = v.findViewById(R.id.rl_view);
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -236,12 +240,19 @@ public class Search extends Fragment {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("product_id", product_id);
-                    Intent i = new Intent(getContext(), MyCart.class);
-                    i.putExtras(bundle);
-                    startActivity(i);
+//                    Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("product_id", product_id);
+//                    Intent i = new Intent(getContext(), MyCart.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_view, "Successfully Added", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                 }
 
             }

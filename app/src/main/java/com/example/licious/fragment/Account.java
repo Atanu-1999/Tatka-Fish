@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licious.BuildConfig;
 import com.example.licious.MainActivity;
 import com.example.licious.R;
 import com.example.licious.activity.Address;
@@ -52,6 +54,7 @@ public class Account extends Fragment {
     String deviceId, phone;
     String BlankId = "";
     LinearLayout ll_line;
+    CardView cv_share_link;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class Account extends Fragment {
         tv_full_name = account.findViewById(R.id.tv_full_name);
         tv_mail = account.findViewById(R.id.tv_mail);
         ll_line = account.findViewById(R.id.ll_line);
+        cv_share_link = account.findViewById(R.id.cv_share_link);
 
         String phoneNum= loginPref.getString("phone","");
         String firstname = loginPref.getString("first_name", null);
@@ -199,6 +203,23 @@ public class Account extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), Wishlist.class));
+            }
+        });
+
+        cv_share_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    String shareMessage= "\nLet me recommend you this application\n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
             }
         });
         txt_login.setOnClickListener(new View.OnClickListener() {

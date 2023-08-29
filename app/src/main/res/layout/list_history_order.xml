@@ -121,6 +121,25 @@
                 </RelativeLayout>
 
             </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardElevation="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIEW DETAILS"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/red"/>
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

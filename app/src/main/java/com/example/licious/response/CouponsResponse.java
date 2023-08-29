@@ -46,13 +46,22 @@ public class CouponsResponse {
         private Integer id;
         @SerializedName("coupon_name")
         @Expose
-        private String coupon_name;
+        private String couponName;
         @SerializedName("coupon_code")
         @Expose
-        private String coupon_code;
-        @SerializedName("percentage")
+        private String couponCode;
+        @SerializedName("applyig_amount")
         @Expose
-        private String percentage;
+        private Integer applyigAmount;
+        @SerializedName("off_amount")
+        @Expose
+        private Integer offAmount;
+        @SerializedName("coupon_type")
+        @Expose
+        private String couponType;
+        @SerializedName("coupon_for")
+        @Expose
+        private String couponFor;
         @SerializedName("description")
         @Expose
         private String description;
@@ -80,28 +89,52 @@ public class CouponsResponse {
             this.id = id;
         }
 
-        public String getCoupon_name() {
-            return coupon_name;
+        public String getCouponName() {
+            return couponName;
         }
 
-        public void setCoupon_name(String coupon_name) {
-            this.coupon_name = coupon_name;
+        public void setCouponName(String couponName) {
+            this.couponName = couponName;
         }
 
-        public String getCoupon_code() {
-            return coupon_code;
+        public String getCouponCode() {
+            return couponCode;
         }
 
-        public void setCoupon_code(String coupon_code) {
-            this.coupon_code = coupon_code;
+        public void setCouponCode(String couponCode) {
+            this.couponCode = couponCode;
         }
 
-        public String getPercentage() {
-            return percentage;
+        public Integer getApplyigAmount() {
+            return applyigAmount;
         }
 
-        public void setPercentage(String percentage) {
-            this.percentage = percentage;
+        public void setApplyigAmount(Integer applyigAmount) {
+            this.applyigAmount = applyigAmount;
+        }
+
+        public Integer getOffAmount() {
+            return offAmount;
+        }
+
+        public void setOffAmount(Integer offAmount) {
+            this.offAmount = offAmount;
+        }
+
+        public String getCouponType() {
+            return couponType;
+        }
+
+        public void setCouponType(String couponType) {
+            this.couponType = couponType;
+        }
+
+        public String getCouponFor() {
+            return couponFor;
+        }
+
+        public void setCouponFor(String couponFor) {
+            this.couponFor = couponFor;
         }
 
         public String getDescription() {

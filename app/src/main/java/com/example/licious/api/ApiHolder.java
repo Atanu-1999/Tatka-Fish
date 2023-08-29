@@ -232,10 +232,10 @@ public interface ApiHolder {
                                                    @Query("token") String token);
 
 
-    @POST("sendfeedback")
+    @POST("addfeedback")
     @FormUrlEncoded
     Call<RatingResponse> ratingfeedback(@Field("user_id") int user_id,
-                                        @Field("order_no") String order_no,
+                                        @Field("order_no") int order_no,
                                         @Field("star") String star,
                                         @Field("description") String description,
                                         @Field("token") String token);

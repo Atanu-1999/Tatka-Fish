@@ -250,11 +250,11 @@ public class ProductDetailsFragment extends Fragment {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+                                addToCartRecommended(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price, token);//add to cart API
+                                addToCartRecommended(product_id, price, token);//add to cart API
                             }
 
                             //}
@@ -429,6 +429,41 @@ public class ProductDetailsFragment extends Fragment {
                 errorBar.show();
 
                 //Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addToCartRecommended(int product_id, String price,String token) {
+        progressDialog.show();
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
+        addAddress.enqueue(new Callback<AddToCartResponse>() {
+            @Override
+            public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    // Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_product, "Successfully Added", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("product_id", product_id);
+//                    Intent i = new Intent(getContext(), MyCart.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddToCartResponse> call, Throwable t) {
+                //  Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //  Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
     }

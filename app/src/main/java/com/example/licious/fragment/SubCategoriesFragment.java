@@ -337,11 +337,11 @@ public class SubCategoriesFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("product_id", product_id);
-                    Intent i = new Intent(getContext(), MyCart.class);
-                    i.putExtras(bundle);
-                    startActivity(i);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("product_id", product_id);
+//                    Intent i = new Intent(getContext(), MyCart.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
                 }
 
             }

@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.example.licious.response.NotificationListResponse;
 import com.example.licious.response.OrderHistoryDataResponse;
 import com.example.licious.response.RatingResponse;
 import com.example.licious.response.RepeatOrderResponse;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -48,6 +51,9 @@ public class OrderHistoryTracking extends AppCompatActivity {
     RecyclerView rv_orderHistorydata;
     ImageView back;
     Dialog dialog;
+    LinearLayout ll_order,btn_cart;
+    int order_ids;
+    RelativeLayout rl_item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,9 @@ public class OrderHistoryTracking extends AppCompatActivity {
         rv_orderHistorydata = findViewById(R.id.rv_orderHistorydata);
         back = findViewById(R.id.back);
         dialog = new Dialog(OrderHistoryTracking.this);
+        ll_order = findViewById(R.id.ll_order);
+        btn_cart = findViewById(R.id.btn_cart);
+        rl_item = findViewById(R.id.rl_item);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -81,6 +90,26 @@ public class OrderHistoryTracking extends AppCompatActivity {
             }
         });
 
+        ll_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reOrder(order_ids);
+            }
+        });
+
+        btn_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // rating();
+                Bundle bundle = new Bundle();
+                bundle.putInt("order_id",order_ids);
+                bundle.putInt("id",order_id);
+                Intent i = new Intent(OrderHistoryTracking.this,SendFeedbackActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
+
         getOrderHistory();
     }
 
@@ -94,6 +123,8 @@ public class OrderHistoryTracking extends AppCompatActivity {
                     assert response.body() != null;
                     orderList = response.body().getData();
                     progressDialog.dismiss();
+                    order_ids = response.body().getData().get(0).getOrderId();
+
                     orderHistoryAdapter = new OrderHistoryAdapter(getApplicationContext(), orderList, new RepeatOrderListener() {
                         @Override
                         public void onItemClickedRepeatOrder(OrderHistoryDataResponse.Datum item, int position, int type) {
@@ -130,7 +161,15 @@ public class OrderHistoryTracking extends AppCompatActivity {
                     assert response.body() != null;
                     progressDialog.dismiss();
                     int product_id = response.body().getData().get(0).getProductId();
-                    Toast.makeText(OrderHistoryTracking.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_item, "Successfully Added", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
+
+                   // Toast.makeText(OrderHistoryTracking.this, "" + "Successfully Added", Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putInt("product_id", product_id);
                     Intent i = new Intent(OrderHistoryTracking.this, MyCart.class);
@@ -173,7 +212,7 @@ public class OrderHistoryTracking extends AppCompatActivity {
                 //Toast.makeText(OrderHistoryTracking.this,count,Toast.LENGTH_SHORT).show();
                 String desc = et_message.getText().toString();
                 String orderId = String.valueOf(item.getOrderId());
-                ratingAPi(orderId,count,desc);
+              //  ratingAPi(orderId,count,desc);
 
                 dialog.dismiss();
             }
@@ -190,7 +229,7 @@ public class OrderHistoryTracking extends AppCompatActivity {
         dialog.show();
     }
 
-    private void ratingAPi(String orderId, String count, String desc) {
+    private void ratingAPi(int orderId, String count, String desc) {
         progressDialog.show();
         Call<RatingResponse> category_apiCall = ApiService.apiHolders().ratingfeedback(id,orderId,count,desc,token);
         category_apiCall.enqueue(new Callback<RatingResponse>() {
