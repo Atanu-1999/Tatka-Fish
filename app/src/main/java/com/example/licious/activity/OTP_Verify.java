@@ -6,11 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,6 +47,7 @@ public class OTP_Verify extends AppCompatActivity {
     SharedPreferences loginPref;
     String fb_token;
     TextView forgot_pass;
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 123;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -67,6 +70,12 @@ public class OTP_Verify extends AppCompatActivity {
         forgot_pass =findViewById(R.id.forgot_pass);
         //sharedPref
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+
+        // Check if notification permission is granted
+        if (!isNotificationPermissionGranted()) {
+            // Request notification permission
+            requestNotificationPermission();
+        }
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -124,6 +133,33 @@ public class OTP_Verify extends AppCompatActivity {
             }
         });
     }
+
+    private boolean isNotificationPermissionGranted() {
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        return notificationManager.areNotificationsEnabled();
+    }
+
+    private void requestNotificationPermission() {
+        Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName())
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivityForResult(intent, NOTIFICATION_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            // Check if the user granted notification permission
+            if (isNotificationPermissionGranted()) {
+                // Permission granted, proceed with your app logic
+            } else {
+                // Permission not granted, handle accordingly
+            }
+        }
+    }
+
     private void otp_move() {
         otp1.addTextChangedListener(new TextWatcher() {
             @Override

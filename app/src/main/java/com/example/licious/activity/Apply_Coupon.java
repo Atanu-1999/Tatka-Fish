@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class Apply_Coupon extends AppCompatActivity {
     CouponAdapter couponAdapter;
     RecyclerView rv_coupons;
     TextView count;
+    ImageView back;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,6 +49,7 @@ public class Apply_Coupon extends AppCompatActivity {
         setContentView(R.layout.activity_apply_coupon);
         rv_coupons= findViewById(R.id.rv_coupons);
         count = findViewById(R.id.count);
+        back = findViewById(R.id.back);
 
         //loading
         progressDialog = new ProgressDialog(Apply_Coupon.this);
@@ -61,6 +65,16 @@ public class Apply_Coupon extends AppCompatActivity {
         if (bundle != null) {
             totalAmount = bundle.getInt("total_amount",0);
         }
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("pageType","coupon");
+                Intent i = new Intent(Apply_Coupon.this,CheckoutPage.class);
+               // i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
 
 //        hide_layout = findViewById(R.id.hide_layout);
 //        txt_view = findViewById(R.id.txt_view);

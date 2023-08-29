@@ -122,6 +122,7 @@
 
             </LinearLayout>
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 app:cardCornerRadius="@dimen/_5sdp"

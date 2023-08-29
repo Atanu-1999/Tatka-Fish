@@ -361,7 +361,14 @@ public class Update_Profile extends AppCompatActivity {
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 progressDialog.dismiss();
                 String response1 = response.body().toString();
-                Toast.makeText(Update_Profile.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Update_Profile.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
+
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_update, "Profile Update Successfully", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
 
                 //set data in userField
                 edite_Fname.setText(response.body().getData().get(0).getFirst_name());
@@ -403,8 +410,14 @@ public class Update_Profile extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_update, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
             }
         });
     }
@@ -518,7 +531,13 @@ public class Update_Profile extends AppCompatActivity {
                     mediaFile = new File(mediaPath);
                     uploadImg();
                 } else {
-                    Toast.makeText(this, "No image Capture to upload", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(this, "No image Capture to upload", Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_update, "No image Capture to upload", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                 }
             case 2:
                 if (resultCode == RESULT_OK) {
@@ -535,7 +554,13 @@ public class Update_Profile extends AppCompatActivity {
                     mediaFile = new File(mediaPath);
                     uploadImg();
                 } else {
-                    Toast.makeText(this, "No image select to upload", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(this, "No image select to upload", Toast.LENGTH_SHORT).show();
+                    Snackbar errorBar;
+                    errorBar = Snackbar.make(rl_update, "No image select to upload", Snackbar.LENGTH_LONG);
+                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                    errorBar.show();
                 }
         }
     }
@@ -558,7 +583,16 @@ public class Update_Profile extends AppCompatActivity {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
                 progressDialog.dismiss();
-                Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(Update_Profile.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
+
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_update, "Image upload successfully", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+
+
                 assert response.body() != null;
                 Picasso.with(getApplicationContext())
                         .load(image_url + response.body().getData().get(0).getImage())
@@ -569,8 +603,15 @@ public class Update_Profile extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
-                Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Update_Profile.this, "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Snackbar errorBar;
+                errorBar = Snackbar.make(rl_update, "failed", Snackbar.LENGTH_LONG);
+                errorBar.setTextColor(getResources().getColor(R.color.white));
+                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                errorBar.show();
+
             }
         });
     }

@@ -75,6 +75,7 @@ public class CheckoutPage extends AppCompatActivity {
     int coupon_amount,coupon_off_amount;
     TextView tv_coupoun_charge;
     RelativeLayout rl_view;
+    String pageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,7 @@ public class CheckoutPage extends AppCompatActivity {
             totalAmount = bundle.getInt("total_amount", 0);
             coupon_off_amount = bundle.getInt("coupon_off_amount",0);
             coupon_amount = bundle.getInt("coupon_amount",0);
+            pageType = bundle.getString("pageType",null);
         }
 
 
@@ -171,6 +173,13 @@ public class CheckoutPage extends AppCompatActivity {
                                 public void onItemClickedSlot(SlotResponse.Datum item, int position, Boolean flag) {
                                     flag = flag;
                                    // Toast.makeText(getApplicationContext(), item.getSlot_name(), Toast.LENGTH_SHORT).show();
+                                    Snackbar errorBar;
+                                    errorBar = Snackbar.make(rl_view, "Your select slot is "+item.getSlot_name(), Snackbar.LENGTH_LONG);
+                                    errorBar.setTextColor(getResources().getColor(R.color.white));
+                                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+                                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+                                    errorBar.show();
+
                                     SlotTime = item.getSlot_name();
                                     SlotId = item.getId();
                                     delivery_charge = item.getDelivery_charge();
@@ -253,9 +262,12 @@ public class CheckoutPage extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(CheckoutPage.this, MyCart.class);
-                i.putExtras(bundle);
-                startActivity(i);
+//                if (pageType.equals("coupon")){
+//
+//                }else {
+                    Intent i = new Intent(CheckoutPage.this, MyCart.class);
+                    startActivity(i);
+              //  }
             }
         });
         btn_coupon.setOnClickListener(new View.OnClickListener() {
@@ -480,5 +492,16 @@ public class CheckoutPage extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        if (pageType.equals("coupon")){
+//
+//        }else {
+            Intent i = new Intent(CheckoutPage.this, MyCart.class);
+            startActivity(i);
+       // }
     }
 }
