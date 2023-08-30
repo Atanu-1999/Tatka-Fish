@@ -156,14 +156,12 @@ public interface ApiHolder {
 
     @POST("addtocart")
     @FormUrlEncoded
-    Call<AddToCartResponse> add_to_cart(@Field("user_id") int user_id,
-                                        @Field("product_id") int product_id,
+    Call<AddToCartResponse> add_to_cart(@Field("product_id") int product_id,
                                         @Field("price") String price,
                                         @Field("token") String token);
 
     @GET("getcartdata")
-    Call<CartDetailsResponse> getCartDetails(@Query("user_id") int user_id,
-                                             @Query("token") String token);
+    Call<CartDetailsResponse> getCartDetails(@Query("token") String token);
 
     @DELETE("deletecartdata")
     Call<CartItemDeleteResponse> deleteCartItem(@Query("cart_id") int user_id,
