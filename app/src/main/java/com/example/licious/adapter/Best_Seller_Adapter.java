@@ -32,7 +32,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
 //        void onItemClick(Best_Seller_Response.Datum item, int position);
 //    }
 
-    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList,Boolean status, BestSellerListener listener) {
+    public Best_Seller_Adapter(Context context, List<Best_Seller_Response.Datum> ItemList, Boolean status, BestSellerListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;
@@ -56,15 +56,20 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
         holder.tv_mrp.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_basePrice.setText("₹" + ItemList.get(position).getMrp());
         holder.tv_discount.setText(ItemList.get(position).getOffer() + "% off");
-        Picasso.with(context)
-                .load(image_url+ItemList.get(position).getProduct_image())
-                .into(holder.iv_bestSeller);
 
-        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
-        {
-            holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
+        if (ItemList.get(position).getProduct_image() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagesqur)
+                    .into(holder.iv_bestSeller);
+        } else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getProduct_image())
+                    .into(holder.iv_bestSeller);
         }
-        else {
+
+        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False")) {
+            holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
+        } else {
             holder.fav_image.setImageResource(R.drawable.baseline_favorite_24);
         }
 
@@ -85,15 +90,16 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_bestSeller,btn_add,fav_image;
-        TextView tv_title,tv_weight,tv_mrp,tv_discount,tv_basePrice;
+        ImageView iv_bestSeller, btn_add, fav_image;
+        TextView tv_title, tv_weight, tv_mrp, tv_discount, tv_basePrice;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            iv_bestSeller =  (ImageView) itemView.findViewById(R.id.iv_bestSeller);
+            iv_bestSeller = (ImageView) itemView.findViewById(R.id.iv_bestSeller);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_weight = (TextView) itemView.findViewById(R.id.tv_weight);
             tv_mrp = (TextView) itemView.findViewById(R.id.tv_mrp);
-            tv_discount =  (TextView) itemView.findViewById(R.id.tv_discount);
+            tv_discount = (TextView) itemView.findViewById(R.id.tv_discount);
             btn_add = (ImageView) itemView.findViewById(R.id.btn_add);
             fav_image = (ImageView) itemView.findViewById(R.id.fav_image);
             tv_basePrice = (TextView) itemView.findViewById(R.id.tv_base_Price);
@@ -101,7 +107,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
             btn_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                  //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
+                    //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
                     listener.onItemClickedmy(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1);
                 }
             });
@@ -109,7 +115,7 @@ public class Best_Seller_Adapter extends RecyclerView.Adapter<Best_Seller_Adapte
                 @Override
                 public void onClick(View view) {
                     //  listener.onItemClick(ItemList.get(getAdapterPosition()), getAdapterPosition());
-                    listener.onItemClickedWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1,status);
+                    listener.onItemClickedWishList(ItemList.get(getAdapterPosition()), getAdapterPosition(), 1, status);
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {

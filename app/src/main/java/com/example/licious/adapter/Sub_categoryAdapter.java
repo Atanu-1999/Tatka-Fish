@@ -19,13 +19,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapter.ViewHolder>{
+public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapter.ViewHolder> {
     public static List<GetSubCategoryResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     SubCategoriesItemListener listener;
 
-    public Sub_categoryAdapter(Context context, List<GetSubCategoryResponse.Datum> ItemList,SubCategoriesItemListener listener) {
+    public Sub_categoryAdapter(Context context, List<GetSubCategoryResponse.Datum> ItemList, SubCategoriesItemListener listener) {
         this.ItemList = ItemList;
         this.context = context;
         this.listener = listener;
@@ -42,9 +42,15 @@ public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapte
     @Override
     public void onBindViewHolder(@NonNull Sub_categoryAdapter.ViewHolder holder, int position) {
         holder.tv_title_product.setText(ItemList.get(position).getName());
-        Picasso.with(context)
-                .load(image_url+ItemList.get(position).getImage())
-                .into(holder.cv_image);
+        if (ItemList.get(position).getImage() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagecircle)
+                    .into(holder.cv_image);
+        } else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getImage())
+                    .into(holder.cv_image);
+        }
 
     }
 
@@ -58,6 +64,7 @@ public class Sub_categoryAdapter extends RecyclerView.Adapter<Sub_categoryAdapte
         CircleImageView cv_image;
         TextView tv_title_product;
         LinearLayout ll_item;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cv_image = (CircleImageView) itemView.findViewById(R.id.cv_image);

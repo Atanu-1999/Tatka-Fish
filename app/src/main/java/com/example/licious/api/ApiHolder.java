@@ -13,6 +13,7 @@ import com.example.licious.response.CartDetailsResponse;
 import com.example.licious.response.CartItemDeleteResponse;
 import com.example.licious.response.Category_Response;
 import com.example.licious.response.CheckOutProccedResponse;
+import com.example.licious.response.CountResponse;
 import com.example.licious.response.CouponsResponse;
 import com.example.licious.response.DeleteResponse;
 import com.example.licious.response.EditAddressResponse;
@@ -80,6 +81,9 @@ public interface ApiHolder {
 
     @GET("banners")
     Call<BannerResponse> banner(@Query("token") String token);
+
+    @GET("getcartcount")
+    Call<CountResponse> getCartCount(@Query("token") String token);
 
     @PATCH("updateProfile")
     @FormUrlEncoded

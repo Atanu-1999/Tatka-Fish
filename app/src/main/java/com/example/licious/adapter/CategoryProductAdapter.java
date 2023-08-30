@@ -50,9 +50,15 @@ public class CategoryProductAdapter extends RecyclerView.Adapter<CategoryProduct
         holder.tv_basePrices.setText(ItemList.get(position).getMrp());
         holder.tv_offer.setText(ItemList.get(position).getOffer() + "% off");
 
-        Picasso.with(context)
-                .load(image_url+ItemList.get(position).getProduct_image())
-                .into(holder.iv_bg);
+        if (ItemList.get(position).getProduct_image() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagesqur)
+                    .into(holder.iv_bg);
+        }else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getProduct_image())
+                    .into(holder.iv_bg);
+        }
 
         if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
         {

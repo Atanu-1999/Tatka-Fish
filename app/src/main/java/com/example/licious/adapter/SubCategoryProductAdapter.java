@@ -19,16 +19,16 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Objects;
 
-public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryProductAdapter.ViewHolder>{
+public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryProductAdapter.ViewHolder> {
     public static List<SubCategoryItemResponse.Datum> ItemList;
     private Context context;
     String image_url = "https://tatkafish.in/superuser/public/uploads/";
     SubCategoriesProductListener listener;
 
-    public SubCategoryProductAdapter(Context context, List<SubCategoryItemResponse.Datum> ItemList,SubCategoriesProductListener listener) {
+    public SubCategoryProductAdapter(Context context, List<SubCategoryItemResponse.Datum> ItemList, SubCategoriesProductListener listener) {
         this.ItemList = ItemList;
         this.context = context;
-        this.listener= listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -48,17 +48,21 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
         holder.tv_serves.setText(ItemList.get(position).getServes() + " " + "Serves");
         holder.prices.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_basePrices.setText(ItemList.get(position).getMrp());
-        holder.tv_offer.setText(ItemList.get(position).getOffer()+ "5% off");
+        holder.tv_offer.setText(ItemList.get(position).getOffer() + "5% off");
 
-        Picasso.with(context)
-                .load(image_url+ItemList.get(position).getProduct_image())
-                .into(holder.iv_bg);
-
-        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
-        {
-            holder.IV_wishList.setImageResource(R.drawable.baseline_favorite_border_24);
+        if (ItemList.get(position).getProduct_image() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagesqur)
+                    .into(holder.iv_bg);
+        } else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getProduct_image())
+                    .into(holder.iv_bg);
         }
-        else {
+
+        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False")) {
+            holder.IV_wishList.setImageResource(R.drawable.baseline_favorite_border_24);
+        } else {
             holder.IV_wishList.setImageResource(R.drawable.baseline_favorite_24);
         }
 
@@ -71,9 +75,10 @@ public class SubCategoryProductAdapter extends RecyclerView.Adapter<SubCategoryP
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_bg,IV_wishList;
-        TextView pd_title,tv_pd_des,tv_weight,tv_pieces,tv_serves,prices,tv_basePrices,tv_offer;
-        LinearLayout ll_add,all_btn;
+        ImageView iv_bg, IV_wishList;
+        TextView pd_title, tv_pd_des, tv_weight, tv_pieces, tv_serves, prices, tv_basePrices, tv_offer;
+        LinearLayout ll_add, all_btn;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_bg = (ImageView) itemView.findViewById(R.id.iv_bg);

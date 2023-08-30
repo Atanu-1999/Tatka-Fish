@@ -45,15 +45,20 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.tv_mrp.setText("₹" + ItemList.get(position).getPrice());
         holder.tv_basePrice.setText("₹" + ItemList.get(position).getMrp());
         holder.tv_discount.setText(ItemList.get(position).getOffer() + "% off");
-        Picasso.with(context)
-                .load(image_url + ItemList.get(position).getProduct_image())
-                .into(holder.iv_bestSeller);
 
-        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False"))
-        {
-            holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
+        if (ItemList.get(position).getProduct_image() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagesqur)
+                    .into(holder.iv_bestSeller);
+        } else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getProduct_image())
+                    .into(holder.iv_bestSeller);
         }
-        else {
+
+        if (Objects.equals(ItemList.get(position).getWishlist_status(), "False")) {
+            holder.fav_image.setImageResource(R.drawable.baseline_favorite_border_24);
+        } else {
             holder.fav_image.setImageResource(R.drawable.baseline_favorite_24);
         }
     }

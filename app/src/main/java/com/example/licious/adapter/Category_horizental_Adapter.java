@@ -42,9 +42,15 @@ public class Category_horizental_Adapter extends RecyclerView.Adapter<Category_h
     @Override
     public void onBindViewHolder(@NonNull Category_horizental_Adapter.ViewHolder holder, int position) {
         holder.title.setText(ItemList.get(position).getName());
-        Picasso.with(context)
-                .load(image_url+ItemList.get(position).getImage())
-                .into(holder.iv_circle_image);
+        if (ItemList.get(position).getImage() == null) {
+            Picasso.with(context)
+                    .load(R.drawable.noimagecircle)
+                    .into(holder.iv_circle_image);
+        }else {
+            Picasso.with(context)
+                    .load(image_url + ItemList.get(position).getImage())
+                    .into(holder.iv_circle_image);
+        }
 
     }
 

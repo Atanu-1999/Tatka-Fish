@@ -53,6 +53,7 @@ import com.example.licious.response.AddWishListResponse;
 import com.example.licious.model.Slider_Model;
 import com.example.licious.response.BannerResponse;
 import com.example.licious.response.Best_Seller_Response;
+import com.example.licious.response.CountResponse;
 import com.example.licious.response.GetMasterCategoryResponse;
 import com.example.licious.response.RemoveWishListResponse;
 import com.google.android.material.snackbar.Snackbar;
@@ -116,6 +117,7 @@ public class Home extends Fragment {
     int product_id;
     ProgressDialog progressDialog;
     String deviceId;
+    TextView tv_count;
 
     public Home() {
     }
@@ -146,6 +148,7 @@ public class Home extends Fragment {
         rv_category = home.findViewById(R.id.rv_category_s);
         viewPager = home.findViewById(R.id.view_pager);
         rl_home = home.findViewById(R.id.rl_home);
+        tv_count = home.findViewById(R.id.tv_count);
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -249,6 +252,8 @@ public class Home extends Fragment {
             BestSeller(deviceId);
             //Top Rated
             TopRated(deviceId);
+            //show count on cart
+            ShowCount(deviceId);
         } else {
             //Banner
             Banner(token);
@@ -258,6 +263,8 @@ public class Home extends Fragment {
             BestSeller(token);
             //Top Rated
             TopRated(token);
+            //show count on cart
+            ShowCount(token);
         }
 
 
@@ -283,10 +290,34 @@ public class Home extends Fragment {
         return home;
     }
 
+    private void ShowCount(String token) {
+        progressDialog.show();
+        Call<CountResponse> showCount_apiCall = ApiService.apiHolders().getCartCount(token);
+        showCount_apiCall.enqueue(new Callback<CountResponse>() {
+            @Override
+            public void onResponse(Call<CountResponse> call, Response<CountResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    String response1 = response.body().toString();
+                    String count = String.valueOf(response.body().getData());
+                    tv_count.setText(count);
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CountResponse> call, Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
     private void Banner(String token) {
         progressDialog.show();
-        Call<BannerResponse> login_apiCall = ApiService.apiHolders().banner(token);
-        login_apiCall.enqueue(new Callback<BannerResponse>() {
+        Call<BannerResponse> banner_apiCall = ApiService.apiHolders().banner(token);
+        banner_apiCall.enqueue(new Callback<BannerResponse>() {
             @Override
             public void onResponse(Call<BannerResponse> call, Response<BannerResponse> response) {
                 if (response.isSuccessful()) {
@@ -329,8 +360,8 @@ public class Home extends Fragment {
 
     private void Category(String token) {
         progressDialog.show();
-        Call<GetMasterCategoryResponse> login_apiCall = ApiService.apiHolders().category(token);
-        login_apiCall.enqueue(new Callback<GetMasterCategoryResponse>() {
+        Call<GetMasterCategoryResponse> category_apiCall = ApiService.apiHolders().category(token);
+        category_apiCall.enqueue(new Callback<GetMasterCategoryResponse>() {
             @Override
             public void onResponse(Call<GetMasterCategoryResponse> call, Response<GetMasterCategoryResponse> response) {
                 if (response.isSuccessful()) {
@@ -374,8 +405,8 @@ public class Home extends Fragment {
 
     private void TopRated(String token) {
         progressDialog.show();
-        Call<Best_Seller_Response> login_apiCall = ApiService.apiHolders().topRated(token);
-        login_apiCall.enqueue(new Callback<Best_Seller_Response>() {
+        Call<Best_Seller_Response> topRated_apiCall = ApiService.apiHolders().topRated(token);
+        topRated_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
                 if (response.isSuccessful()) {
@@ -414,11 +445,11 @@ public class Home extends Fragment {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price,deviceId);//add to cart API
+                                addToCart(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price,token);//add to cart API
+                                addToCart(product_id, price, token);//add to cart API
                             }
                             //   }
                         }
@@ -458,8 +489,8 @@ public class Home extends Fragment {
 
     private void BestSeller(String token) {
         progressDialog.show();
-        Call<Best_Seller_Response> login_apiCall = ApiService.apiHolders().bestSeller(token);
-        login_apiCall.enqueue(new Callback<Best_Seller_Response>() {
+        Call<Best_Seller_Response> bestSeller_apiCall = ApiService.apiHolders().bestSeller(token);
+        bestSeller_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
                 if (response.isSuccessful()) {
@@ -482,11 +513,11 @@ public class Home extends Fragment {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price,deviceId);//add to cart API
+                                addToCart(product_id, price, deviceId);//add to cart API
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price,token);//add to cart API
+                                addToCart(product_id, price, token);//add to cart API
                             }
                             //  }
                         }
@@ -544,10 +575,10 @@ public class Home extends Fragment {
         });
     }
 
-    private void addToCart(int product_id, String price,String token) {
+    private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
-        addAddress.enqueue(new Callback<AddToCartResponse>() {
+        Call<AddToCartResponse> addCart = ApiService.apiHolders().add_to_cart(id, product_id, price, token);
+        addCart.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
@@ -560,6 +591,13 @@ public class Home extends Fragment {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
+
+                    if (BlankId.equals(loginPref.getString("device_id", ""))) {
+                        ShowCount(deviceId);
+                    } else {
+                        ShowCount(token);
+                    }
+
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putInt("product_id", product_id);
@@ -581,8 +619,8 @@ public class Home extends Fragment {
 
     private void addWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<AddWishListResponse> addAddress = ApiService.apiHolders().add_wishList(id, prod_id, status, token);
-        addAddress.enqueue(new Callback<AddWishListResponse>() {
+        Call<AddWishListResponse> addWishList = ApiService.apiHolders().add_wishList(id, prod_id, status, token);
+        addWishList.enqueue(new Callback<AddWishListResponse>() {
             @Override
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
@@ -604,7 +642,7 @@ public class Home extends Fragment {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-               // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 Snackbar errorBar;
                 errorBar = Snackbar.make(rl_home, "failed", Snackbar.LENGTH_LONG);
@@ -619,14 +657,14 @@ public class Home extends Fragment {
 
     private void removeWishList(Integer prod_id, String status) {
         progressDialog.show();
-        Call<RemoveWishListResponse> addAddress = ApiService.apiHolders().remove_wishList(id, prod_id, status, token);
-        addAddress.enqueue(new Callback<RemoveWishListResponse>() {
+        Call<RemoveWishListResponse> removeWishlist = ApiService.apiHolders().remove_wishList(id, prod_id, status, token);
+        removeWishlist.enqueue(new Callback<RemoveWishListResponse>() {
             @Override
             public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
                     String status = response.body().getStatus();
-                   //Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
 
                     Snackbar errorBar;
                     errorBar = Snackbar.make(rl_home, "WishList Remove Successfully", Snackbar.LENGTH_LONG);
