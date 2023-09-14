@@ -372,9 +372,12 @@ public class Home extends Fragment {
                         @Override
                         public void onItemClickedCategories(GetMasterCategoryResponse.Datum item, int position, int type) {
                             int cId = item.getId();
+                            String title_name = item.getName();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", cId);
                             bundle.putString("page_type", "home");
+                            bundle.putString("page_type", "home");
+                            bundle.putString("master_title", title_name);
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();

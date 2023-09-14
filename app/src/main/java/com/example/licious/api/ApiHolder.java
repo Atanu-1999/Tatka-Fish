@@ -251,5 +251,9 @@ public interface ApiHolder {
     @GET("faqs")
     Call<FaqResponse> getFaq(@Query("token") String token);
 
+    @GET("scproduct")
+    Call<SubCategoryItemResponse> getSubCategoryProductList(@Query("scId") int cId,
+                                                        @Query("token") String token);
+
 
 }

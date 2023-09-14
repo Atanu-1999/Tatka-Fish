@@ -65,7 +65,8 @@ public class FreshWaterFragment extends Fragment {
     int page;
     String page_type;
     ImageView back;
-    String deviceId;
+    String deviceId,cat_title,master_title;
+    TextView title;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,7 @@ public class FreshWaterFragment extends Fragment {
         back  = freshWater.findViewById(R.id.back);
         txt_noData = freshWater.findViewById(R.id.txt_noData);
         rl_freshwater = freshWater.findViewById(R.id.rl_freshwater);
+        title = freshWater.findViewById(R.id.title);
 
         Bundle bundle =getArguments();
         //Extract the data…
@@ -90,7 +92,11 @@ public class FreshWaterFragment extends Fragment {
             cId = bundle.getInt("cId", 0);
             page_type = bundle.getString("page_type", null);
             mcId = bundle.getInt("mcId", 0);
+            cat_title =bundle.getString("cat_title");
+            master_title = bundle.getString("master_title");
         }
+
+        title.setText(cat_title);
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
@@ -120,6 +126,7 @@ public class FreshWaterFragment extends Fragment {
                 else if (Objects.equals(page_type, "subCat")){
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
+                    bundle.putString("master_title",master_title);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
@@ -131,6 +138,7 @@ public class FreshWaterFragment extends Fragment {
                 else {
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
+                    bundle.putString("master_title",master_title);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
@@ -179,12 +187,29 @@ public class FreshWaterFragment extends Fragment {
                     sub_categoryAdapter = new Sub_categoryAdapter(getContext(), subCategories, new SubCategoriesItemListener() {
                         @Override
                         public void onItemClickedCategoriesItem(GetSubCategoryResponse.Datum item, int position, int type) {
-                            int cId = item.getC_id();
-                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                getSubCategortItem(cId, deviceId);
-                            }else {
-                                getSubCategortItem(cId, token);
-                            }
+                            int scId = item.getId();
+                            String sub_sub_cat = item.getName();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("scId", scId);
+                            bundle.putInt("cId", cId);
+                            bundle.putString("page_type", "subCatProd");
+                            bundle.putInt("mcId", mcId);
+                            bundle.putString("cat_title",cat_title);
+                            bundle.putString("sub_sub_cat",sub_sub_cat);
+                            bundle.putString("master_title",master_title);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            SubCategoryTypeProductFragment freshwater = new SubCategoryTypeProductFragment();
+                            freshwater.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, freshwater);
+                            fragmentTransaction.addToBackStack(null).commit();
+
+//                            if (BlankId.equals(loginPref.getString("device_id", ""))) {
+//                                getSubCategortItem(cId, deviceId);
+//                            }else {
+//                                getSubCategortItem(cId, token);
+//                            }
                         }
                     });
                     rv_sub_cat.setAdapter(sub_categoryAdapter);
@@ -214,6 +239,8 @@ public class FreshWaterFragment extends Fragment {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     subProductItem = response.body().getData();
+                    String count = String.valueOf(subProductItem.size());
+                    tv_totalItem.setText(count + " " + "Items");
                     subCategoryProductAdapter = new SubCategoryProductAdapter(getContext(), subProductItem, new SubCategoriesProductListener() {
                         @Override
                         public void onItemClickedCategoriesProduct(SubCategoryItemResponse.Datum item, int position, int type) {

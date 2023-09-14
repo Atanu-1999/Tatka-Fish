@@ -41,8 +41,8 @@ public class MyCart extends AppCompatActivity {
     TextView txt_change, btn_continue, tv_add_type, tv_address;
     CardView btn_proceed;
     RecyclerView rv_cart;
-    SharedPreferences loginPref;
-    SharedPreferences.Editor editor;
+    SharedPreferences loginPref,address_pref;
+    SharedPreferences.Editor editor,editor1;
     String token;
     int id;
     List<CartDetailsResponse.Datum> cardDetailsResponse;
@@ -82,15 +82,17 @@ public class MyCart extends AppCompatActivity {
         deviceId = DeviceUtils.getDeviceId(MyCart.this);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        address_pref = getSharedPreferences("address_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
+        editor1 = address_pref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
-        int add_Id = loginPref.getInt("add_id", 0);
-        String adds_one = loginPref.getString("adds_one", null);
-        String adds_two = loginPref.getString("adds_two", null);
-        String add_type = loginPref.getString("add_type", null);
-        String city = loginPref.getString("city", null);
+        int add_Id = address_pref.getInt("add_id", 0);
+        String adds_one = address_pref.getString("adds_one", null);
+        String adds_two = address_pref.getString("adds_two", null);
+        String add_type = address_pref.getString("add_type", null);
+        String city = address_pref.getString("city", null);
 
         //for address
         if (add_Id == 0) {

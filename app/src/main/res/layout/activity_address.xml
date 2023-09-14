@@ -62,7 +62,7 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:foregroundGravity="center"
-        android:text="No Item Found"
+        android:text="No Address Found"
         android:textColor="@color/black"
         android:textSize="16dp"
         android:textStyle="bold"

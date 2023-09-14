@@ -51,7 +51,7 @@ public class SubCategoriesFragment extends Fragment {
     Crab crab = new Crab();
 
     ImageView product_search;
-    TextView txt_noData;
+    TextView txt_noData,tv_totalItem;
     RecyclerView rv_category_sub_s, rv_sub_cat_product;
     List<GetCategoryResponse.Datum> category_response;
     List<Category_Response.Datum> category_response_product;
@@ -68,7 +68,8 @@ public class SubCategoriesFragment extends Fragment {
     ImageView back;
     String deviceId;
     RelativeLayout rl_subCat;
-    String pageType;
+    String pageType,master_title;
+    TextView title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class SubCategoriesFragment extends Fragment {
         back = subCat.findViewById(R.id.back);
         txt_noData = subCat.findViewById(R.id.txt_noData);
         rl_subCat = subCat.findViewById(R.id.rl_subCat);
+        tv_totalItem = subCat.findViewById(R.id.tv_totalItem);
         deviceId = DeviceUtils.getDeviceId(getContext());
 
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -103,7 +105,11 @@ public class SubCategoriesFragment extends Fragment {
         if (bundle != null) {
             mcId = bundle.getInt("mcId");
             pageType = bundle.getString("page_type");
+            master_title = bundle.getString("master_title");
         }
+
+        title = subCat.findViewById(R.id.title);
+        title.setText(master_title);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,39 +128,6 @@ public class SubCategoriesFragment extends Fragment {
                 }
             }
         });
-
-//        getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
-//        btn_all.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,all).commit();
-//            }
-//        });
-//        btn_fresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(SubCatergoriesActivity.this,Freshwater.class));
-//            }
-//        });
-//        btn_sea.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//              //  startActivity(new Intent(Subcategories.this,Seawater.class));
-//            }
-//        });
-//        btn_crab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getSupportFragmentManager().beginTransaction().replace(R.id.contenair,crab).commit();
-//            }
-//        });
-//        product_search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//              //  startActivity(new Intent(Subcategories.this,SearchActivity.class));
-//            }
-//        });
-        // getCategory(cId);
         Log.d("device_id", loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             getCategory(mcId, deviceId);//Category
@@ -193,10 +166,13 @@ public class SubCategoriesFragment extends Fragment {
                     @Override
                     public void onItemClickedCategories(GetCategoryResponse.Datum item, int position, int type) {
                         int id = item.getId();
+                        String cat_title = item.getName();
                         Bundle bundle = new Bundle();
                         bundle.putInt("cId", id);
                         bundle.putString("page_type", "subCat");
                         bundle.putInt("mcId", mcId);
+                        bundle.putString("master_title",master_title);
+                        bundle.putString("cat_title",cat_title);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         FreshWaterFragment freshwater = new FreshWaterFragment();
@@ -238,6 +214,8 @@ public class SubCategoriesFragment extends Fragment {
                     progressDialog.dismiss();
                     assert response.body() != null;
                     category_response_product = response.body().getData();
+                    String count = String.valueOf(category_response_product.size());
+                    tv_totalItem.setText(count + " " + "Items");
                     txt_noData.setVisibility(View.GONE);
                     categoryProductAdapter = new CategoryProductAdapter(getContext(), category_response_product, new MasterCategoryprouduct() {
                         @Override

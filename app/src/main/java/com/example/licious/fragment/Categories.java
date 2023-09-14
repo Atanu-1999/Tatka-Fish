@@ -135,8 +135,10 @@ public class Categories extends Fragment implements BackPressedListener {
                         public void onItemClickCategory(GetMasterCategoryResponse.Datum item, int position, int type) {
                          //   Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
                             int Id = item.getId();
+                            String title_name = item.getName();
                             Bundle bundle = new Bundle();
                             bundle.putInt("mcId", Id);
+                            bundle.putString("master_title", title_name);
 //                            Intent intent = new Intent(getContext(), SubCatergoriesActivity.class);
 //                            intent.putExtras(bundle);
 //                            startActivity(intent);

@@ -44,8 +44,8 @@ public class Address extends AppCompatActivity {
     TextView txt_add, tv_home, tv_work, tv_other;
     private BottomSheetDialog bottomSheetDialog;
     TextInputEditText tv_area, tv_building, tv_landmark, tv_city, tv_mobile;
-    SharedPreferences loginPref;
-    SharedPreferences.Editor editor;
+    SharedPreferences loginPref, address_pref;
+    SharedPreferences.Editor editor, editor1;
     String token, phoneNum;
     int id;
     RecyclerView rv_all_address;
@@ -59,6 +59,11 @@ public class Address extends AppCompatActivity {
     String BlankId = "";
     RelativeLayout Rl_layout;
     int addr_type;
+    int add_Id;
+    String adds_one;
+    String adds_two;
+    String add_type;
+    String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,9 @@ public class Address extends AppCompatActivity {
         Rl_layout = findViewById(R.id.Rl_layout);
 
         loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        address_pref = getSharedPreferences("address_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
+        editor1 = address_pref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
         phoneNum = loginPref.getString("phone", "");
@@ -90,6 +97,12 @@ public class Address extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editor1.putInt("add_id", add_Id);
+                editor1.putString("adds_one", adds_one);
+                editor1.putString("adds_two", adds_two);
+                editor1.putString("add_type", add_type);
+                editor1.putString("city", city);
+                editor1.commit();
                 finish();
             }
         });
@@ -200,23 +213,22 @@ public class Address extends AppCompatActivity {
 
                     @Override
                     public void onItemClickCheck(AllAddressListResponse.Datum item, int position, int type, boolean isChecked) {
-                        if (addr_type==1) {
-                            int add_Id = item.getAddress_id();
-                            String adds_one = item.getAddress_line_one();
-                            String adds_two = item.getAddress_line_two();
-                            String add_type = item.getAddress_type();
-                            String city = item.getCity();
+                        if (addr_type == 1) {
+                            add_Id = item.getAddress_id();
+                            adds_one = item.getAddress_line_one();
+                            adds_two = item.getAddress_line_two();
+                            add_type = item.getAddress_type();
+                            city = item.getCity();
 
-                            editor.putInt("add_id", add_Id);
-                            editor.putString("adds_one", adds_one);
-                            editor.putString("adds_two", adds_two);
-                            editor.putString("add_type", add_type);
-                            editor.putString("city", city);
-                            editor.commit();
+                            editor1.putInt("add_id", add_Id);
+                            editor1.putString("adds_one", adds_one);
+                            editor1.putString("adds_two", adds_two);
+                            editor1.putString("add_type", add_type);
+                            editor1.putString("city", city);
+                            editor1.commit();
 
                             startActivity(new Intent(Address.this, MyCart.class));
-                        }
-                        else {
+                        } else {
                             finish();
                         }
                     }
@@ -371,11 +383,17 @@ public class Address extends AppCompatActivity {
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 progressDialog.dismiss();
                 Snackbar errorBar;
-                errorBar = Snackbar.make(Rl_layout, "Address Added Successfully", Snackbar.LENGTH_LONG);
+                errorBar = Snackbar.make(Rl_layout, "Address Deleted Successfully", Snackbar.LENGTH_LONG);
                 errorBar.setTextColor(getResources().getColor(R.color.white));
                 errorBar.setActionTextColor(getResources().getColor(R.color.white));
                 errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                 errorBar.show();
+
+                SharedPreferences preferences = getSharedPreferences("address_pref", Context.MODE_PRIVATE);
+                editor1 = preferences.edit();
+                editor1.clear();
+                editor1.apply();
+
                 // Toast.makeText(Address.this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
 
 
