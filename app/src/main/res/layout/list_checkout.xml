@@ -118,6 +118,7 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="@dimen/_5sdp">
 
+
                             <TextView
                                 android:id="@+id/basePrice"
                                 android:layout_width="match_parent"

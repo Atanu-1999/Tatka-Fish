@@ -40,7 +40,12 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         holder.tv_produc_tTitle.setText(ItemList.get(position).getProduct_title());
         holder.tv_weight.setText(ItemList.get(position).getWeight() + " " + ItemList.get(position).getWeight_type());
         holder.tv_price.setText("₹" + ItemList.get(position).getPrice());
-        holder.tv_base_Price.setText(ItemList.get(position).getMrp());
+        int a,b,c;
+        a= Integer.parseInt(ItemList.get(position).getMrp());
+        b = Integer.parseInt(ItemList.get(position).getQty());
+        c = a * b;
+        String d = String.valueOf(c);
+        holder.tv_base_Price.setText(d);
         holder.tv_qty.setText(ItemList.get(position).getQty());
     }
 
