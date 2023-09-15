@@ -446,9 +446,15 @@ public class Home extends Fragment {
 //                                fragmentTransaction.addToBackStack(null).commit();
 //                            } else {
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCart(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                //edit_sku_no.getText().clear();
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
@@ -514,9 +520,15 @@ public class Home extends Fragment {
 //                            } else {
 
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCart(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                //edit_sku_no.getText().clear();
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();

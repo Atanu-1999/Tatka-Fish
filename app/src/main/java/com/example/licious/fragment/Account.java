@@ -58,6 +58,7 @@ public class Account extends Fragment {
     LinearLayout ll_line;
     CardView cv_share_link;
     RelativeLayout rl_view;
+    EditText txt_phone;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -234,20 +235,35 @@ public class Account extends Fragment {
                         (LinearLayout) getActivity().findViewById(R.id.container));
                 TextView btn_submit = (TextView) view1.findViewById(R.id.btn_submit);
                 TextView myTextView = (TextView) view1.findViewById(R.id.myTextView);
-                EditText txt_phone = (EditText) view1.findViewById(R.id.txt_phone);
+                txt_phone = (EditText) view1.findViewById(R.id.txt_phone);
                 btn_submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         phone = txt_phone.getText().toString();
-                        if (txt_phone.getText().toString().trim().isEmpty()) {
-                            Toast.makeText(getContext(), "Field Can't Empty", Toast.LENGTH_SHORT).show();
-                            txt_phone.requestFocus();
-                        } else if (txt_phone.length() > 10 || txt_phone.length() < 10) {
-                            Toast.makeText(getContext(), "Please Enter Valid Phone Number", Toast.LENGTH_SHORT).show();
-                            txt_phone.requestFocus();
-                        } else {
+                        if (validation()) {
                             user_login(phone);
                         }
+ //                       if (txt_phone.getText().toString().trim().isEmpty()) {
+                            //Toast.makeText(getContext(), "Field Can't Empty", Toast.LENGTH_SHORT).show();
+//                            Snackbar errorBar;
+//                            errorBar = Snackbar.make(rl_view, "Field Can't Empty", Snackbar.LENGTH_LONG);
+//                            errorBar.setTextColor(getResources().getColor(R.color.white));
+//                            errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                            errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                            errorBar.show();
+                           // txt_phone.requestFocus();
+ //                       } else if (txt_phone.length() > 10 || txt_phone.length() < 10) {
+                           //Toast.makeText(getContext(), "Please Enter Valid Phone Number", Toast.LENGTH_SHORT).show();
+//                            Snackbar errorBar;
+//                            errorBar = Snackbar.make(rl_view, "Please Enter Valid Phone Number", Snackbar.LENGTH_LONG);
+//                            errorBar.setTextColor(getResources().getColor(R.color.white));
+//                            errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                            errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                            errorBar.show();
+                            //txt_phone.requestFocus();
+//                        } else {
+//                            user_login(phone);
+//                        }
                     }
                 });
                 bottomSheetDialog.setContentView(view1);
@@ -257,6 +273,19 @@ public class Account extends Fragment {
         });
 
         return account;
+    }
+
+    private boolean validation() {
+        if (txt_phone.getText().toString().trim().length() == 0) {
+            txt_phone.setError("Please enter phone number");
+            txt_phone.requestFocus();
+            return false;
+        } else if (txt_phone.length() > 10 || txt_phone.length() < 10) {
+            txt_phone.setError("Please Enter Valid Phone Number");
+            txt_phone.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     private void user_login(String phone) {

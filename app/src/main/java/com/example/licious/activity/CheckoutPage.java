@@ -140,7 +140,7 @@ public class CheckoutPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validation()) {
-                    placedOrder(id, delivery_date, delivery_charge, totalAmount, Totals, SlotId, add_Id, token);
+                    placedOrder(id, delivery_date, delivery_charge, totalAmount, Totals, SlotId, add_Id,coupon_id, token);
                 }
             }
         });
@@ -295,9 +295,9 @@ public class CheckoutPage extends AppCompatActivity {
         return true;
     }
 
-    private void placedOrder(int id, String delivery_date, int delivery_charge, int totalAmount, int Totals, int slotTime, int add_id, String token) {
+    private void placedOrder(int id, String delivery_date, int delivery_charge, int totalAmount, int Totals, int slotTime, int add_id,int coupon_id, String token) {
         progressDialog.show();
-        Call<CheckOutProccedResponse> slot = ApiService.apiHolders().procedToCheckOut(id, totalAmount, delivery_charge, Totals, delivery_date, slotTime, add_id, token);
+        Call<CheckOutProccedResponse> slot = ApiService.apiHolders().procedToCheckOut(id, totalAmount, delivery_charge, Totals, delivery_date, slotTime, add_id,coupon_id, token);
         slot.enqueue(new Callback<CheckOutProccedResponse>() {
             @Override
             public void onResponse(Call<CheckOutProccedResponse> call, Response<CheckOutProccedResponse> response) {

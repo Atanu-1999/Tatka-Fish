@@ -65,7 +65,7 @@ public class ProductDetailsFragment extends Fragment {
     String BlankId = "";
     String deviceId;
     RelativeLayout rl_product;
-    int cId,mcId;
+    int cId, mcId, scId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class ProductDetailsFragment extends Fragment {
 
             cId = bundle.getInt("cId", 0);
             mcId = bundle.getInt("mcId", 0);
+            scId = bundle.getInt("scId", 0);
         }
         initi();
         loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
@@ -126,8 +127,14 @@ public class ProductDetailsFragment extends Fragment {
 //                    fragmentTransaction.addToBackStack(null).commit();
 //                } else {
                 if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                    addToCart(product_id, tv_product_price.getText().toString(), deviceId);
-                }else {
+                    //  addToCart(product_id, tv_product_price.getText().toString(), deviceId);
+
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Account account = new Account();
+                    fragmentTransaction.replace(R.id.main_container, account);
+                    fragmentTransaction.addToBackStack(null).commit();
+                } else {
                     addToCart(product_id, tv_product_price.getText().toString(), token);
                 }
                 //  }
@@ -139,9 +146,8 @@ public class ProductDetailsFragment extends Fragment {
                 if (Objects.equals(page_type, "home")) {
                     Intent i = new Intent(getContext(), MainActivity.class);
                     startActivity(i);
-                }
-                else if (Objects.equals(page_type, "subCat")) {
-                   // getActivity().finish();
+                } else if (Objects.equals(page_type, "subCat")) {
+                    // getActivity().finish();
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -150,17 +156,28 @@ public class ProductDetailsFragment extends Fragment {
                     subCategoriesFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
                     fragmentTransaction.addToBackStack(null).commit();
-                }
-                else if (Objects.equals(page_type, "frehwater")){
-                   // getActivity().finish();
+                } else if (Objects.equals(page_type, "frehwater")) {
+                    // getActivity().finish();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("cId",cId);
-                    bundle.putInt("mcId",mcId);
+                    bundle.putInt("cId", cId);
+                    bundle.putInt("mcId", mcId);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     FreshWaterFragment freshWaterFragment = new FreshWaterFragment();
                     freshWaterFragment.setArguments(bundle);
                     fragmentTransaction.replace(R.id.main_container, freshWaterFragment);
+                    fragmentTransaction.addToBackStack(null).commit();
+                } else if (Objects.equals(page_type, "subCatProduct")) {
+                    // getActivity().finish();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("cId", cId);
+                    bundle.putInt("mcId", mcId);
+                    bundle.putInt("scId", scId);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SubCategoryTypeProductFragment subCategoryTypeProductFragment = new SubCategoryTypeProductFragment();
+                    subCategoryTypeProductFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, subCategoryTypeProductFragment);
                     fragmentTransaction.addToBackStack(null).commit();
                 }
 
@@ -248,9 +265,14 @@ public class ProductDetailsFragment extends Fragment {
 //                            addToCart(product_id, prices);//add to cart API
 
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCartRecommended(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCartRecommended(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
@@ -314,7 +336,7 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     // add to cart
-    private void addToCart(int product_id, String price,String token) {
+    private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
@@ -322,7 +344,7 @@ public class ProductDetailsFragment extends Fragment {
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                   // Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "" + "Successfully Added", Toast.LENGTH_SHORT).show();
 
                     Snackbar errorBar;
                     errorBar = Snackbar.make(rl_product, "Successfully Added", Snackbar.LENGTH_LONG);
@@ -358,7 +380,7 @@ public class ProductDetailsFragment extends Fragment {
             public void onResponse(Call<AddWishListResponse> call, Response<AddWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                   // Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "WishList Added Successfully", Toast.LENGTH_SHORT).show();
 
                     Snackbar errorBar;
                     errorBar = Snackbar.make(rl_product, "WishList Added Successfully", Snackbar.LENGTH_LONG);
@@ -378,7 +400,7 @@ public class ProductDetailsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<AddWishListResponse> call, Throwable t) {
-               // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
                 Snackbar errorBar;
                 errorBar = Snackbar.make(rl_product, "failed", Snackbar.LENGTH_LONG);
@@ -399,7 +421,7 @@ public class ProductDetailsFragment extends Fragment {
             public void onResponse(Call<RemoveWishListResponse> call, Response<RemoveWishListResponse> response) {
                 if (response.isSuccessful()) {
                     progressDialog.dismiss();
-                   // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
 
                     Snackbar errorBar;
                     errorBar = Snackbar.make(rl_product, "WishList Remove Successfully", Snackbar.LENGTH_LONG);
@@ -433,7 +455,7 @@ public class ProductDetailsFragment extends Fragment {
         });
     }
 
-    private void addToCartRecommended(int product_id, String price,String token) {
+    private void addToCartRecommended(int product_id, String price, String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

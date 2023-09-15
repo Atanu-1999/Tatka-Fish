@@ -46,7 +46,7 @@ import retrofit2.Response;
 
 
 public class FreshWaterFragment extends Fragment {
-    int cId,mcId;
+    int cId, mcId;
     RecyclerView rv_sub_cat, rv_sub_cat_product;
     ProgressDialog progressDialog;
     SharedPreferences loginPref;
@@ -59,14 +59,15 @@ public class FreshWaterFragment extends Fragment {
     Sub_categoryAdapter sub_categoryAdapter;
     LinearLayout ll_items;
     SubCategoryProductAdapter subCategoryProductAdapter;
-    TextView tv_totalItem,txt_noData;
+    TextView tv_totalItem, txt_noData;
     int product_id;
     String BlankId = "";
     int page;
     String page_type;
     ImageView back;
-    String deviceId,cat_title,master_title;
+    String deviceId, cat_title, master_title;
     TextView title;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,18 +82,18 @@ public class FreshWaterFragment extends Fragment {
         ll_items = freshWater.findViewById(R.id.ll_items);
         rv_sub_cat_product = freshWater.findViewById(R.id.rv_sub_cat_product);
         tv_totalItem = freshWater.findViewById(R.id.tv_totalItem);
-        back  = freshWater.findViewById(R.id.back);
+        back = freshWater.findViewById(R.id.back);
         txt_noData = freshWater.findViewById(R.id.txt_noData);
         rl_freshwater = freshWater.findViewById(R.id.rl_freshwater);
         title = freshWater.findViewById(R.id.title);
 
-        Bundle bundle =getArguments();
+        Bundle bundle = getArguments();
         //Extract the data…
         if (bundle != null) {
             cId = bundle.getInt("cId", 0);
             page_type = bundle.getString("page_type", null);
             mcId = bundle.getInt("mcId", 0);
-            cat_title =bundle.getString("cat_title");
+            cat_title = bundle.getString("cat_title");
             master_title = bundle.getString("master_title");
         }
 
@@ -115,18 +116,17 @@ public class FreshWaterFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Objects.equals(page_type, "search")){
+                if (Objects.equals(page_type, "search")) {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Search search = new Search();
                     fragmentTransaction.replace(R.id.main_container, search);
                     //edit_sku_no.getText().clear();
                     fragmentTransaction.addToBackStack(null).commit();
-                }
-                else if (Objects.equals(page_type, "subCat")){
+                } else if (Objects.equals(page_type, "subCat")) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
-                    bundle.putString("master_title",master_title);
+                    bundle.putString("master_title", master_title);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
@@ -134,11 +134,10 @@ public class FreshWaterFragment extends Fragment {
                     fragmentTransaction.replace(R.id.main_container, subCategoriesFragment);
                     //edit_sku_no.getText().clear();
                     fragmentTransaction.addToBackStack(null).commit();
-                }
-                else {
+                } else {
                     Bundle bundle = new Bundle();
                     bundle.putInt("mcId", mcId);
-                    bundle.putString("master_title",master_title);
+                    bundle.putString("master_title", master_title);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     SubCategoriesFragment subCategoriesFragment = new SubCategoriesFragment();
@@ -195,9 +194,9 @@ public class FreshWaterFragment extends Fragment {
                             bundle.putInt("cId", cId);
                             bundle.putString("page_type", "subCatProd");
                             bundle.putInt("mcId", mcId);
-                            bundle.putString("cat_title",cat_title);
-                            bundle.putString("sub_sub_cat",sub_sub_cat);
-                            bundle.putString("master_title",master_title);
+                            bundle.putString("cat_title", cat_title);
+                            bundle.putString("sub_sub_cat", sub_sub_cat);
+                            bundle.putString("master_title", master_title);
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             SubCategoryTypeProductFragment freshwater = new SubCategoryTypeProductFragment();
@@ -255,15 +254,20 @@ public class FreshWaterFragment extends Fragment {
 //                                String prices = item.getPrice();
 //                                addToCart(product_id, prices);//add to cart API
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCart(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
                                 addToCart(product_id, price, token);//add to cart API
                             }
-                          //  }
+                            //  }
                         }
 
                         @Override
@@ -289,8 +293,8 @@ public class FreshWaterFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             bundle.putInt("products_id", id);
                             bundle.putString("page_type", "frehwater");
-                            bundle.putInt("cId",cId);
-                            bundle.putInt("mcId",mcId);
+                            bundle.putInt("cId", cId);
+                            bundle.putInt("mcId", mcId);
 //                            Intent i = new Intent(getContext(), ProductDetails.class);
 //                            i.putExtras(bundle);
 //                            startActivity(i);
@@ -336,7 +340,7 @@ public class FreshWaterFragment extends Fragment {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
-                    getSubCategortItem(cId,token);
+                    getSubCategortItem(cId, token);
                 }
             }
 
@@ -369,7 +373,7 @@ public class FreshWaterFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    getSubCategortItem(cId,token);
+                    getSubCategortItem(cId, token);
                 }
             }
 
@@ -387,7 +391,7 @@ public class FreshWaterFragment extends Fragment {
     }
 
     // add to cart
-    private void addToCart(int product_id, String price,String token) {
+    private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
         Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {

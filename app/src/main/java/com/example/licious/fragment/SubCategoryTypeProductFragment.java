@@ -53,7 +53,7 @@ public class SubCategoryTypeProductFragment extends Fragment {
     SubCategoryProductAdapter subCategoryProductAdapter;
     RelativeLayout rl_freshwater;
     ImageView back;
-    TextView title;
+    TextView title,txt_noData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,7 @@ public class SubCategoryTypeProductFragment extends Fragment {
         rl_freshwater = subCatProd.findViewById(R.id.rl_freshwater);
         back = subCatProd.findViewById(R.id.back);
         title = subCatProd.findViewById(R.id.title);
+        txt_noData  = subCatProd.findViewById(R.id.txt_noData);
 
         tv_totalItem = subCatProd.findViewById(R.id.tv_totalItem);
         // /*Device Id Get*
@@ -130,9 +131,9 @@ public class SubCategoryTypeProductFragment extends Fragment {
         return subCatProd;
     }
 
-    private void callSubCatProd(int scId, String token) {
+    private void callSubCatProd(int sc_Id, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProductList(scId, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProductList(sc_Id, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -176,7 +177,24 @@ public class SubCategoryTypeProductFragment extends Fragment {
 
                         @Override
                         public void onItemClickedItem(SubCategoryItemResponse.Datum item, int position, int type) {
-
+                            int id = item.getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("products_id", id);
+                            bundle.putString("page_type", "subCatProduct");
+                            bundle.putInt("mcId", mcId);
+                            bundle.putInt("cId", cId);
+                            bundle.putInt("scId", scId);
+//                            scId = bundle.getInt("scId", 0);
+//                            Intent i = new Intent(getContext(), ProductDetails.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+                            productDetailsFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.main_container, productDetailsFragment);
+                            //edit_sku_no.getText().clear();
+                            fragmentTransaction.addToBackStack(null).commit();
                         }
                     });
                     rv_sub_cat_product_list.setAdapter(subCategoryProductAdapter);
@@ -190,8 +208,8 @@ public class SubCategoryTypeProductFragment extends Fragment {
             @Override
             public void onFailure(Call<SubCategoryItemResponse> call, Throwable t) {
                 progressDialog.dismiss();
-//                rv_sub_cat_product.setVisibility(View.GONE);
-//                txt_noData.setVisibility(View.VISIBLE);
+                rv_sub_cat_product_list.setVisibility(View.GONE);
+                txt_noData.setVisibility(View.VISIBLE);
             }
         });
     }

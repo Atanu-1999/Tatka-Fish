@@ -251,9 +251,14 @@ public class SubCategoriesFragment extends Fragment {
 //                                addToCart(product_id, prices);//add to cart API
 
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCart(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
@@ -411,6 +416,13 @@ public class SubCategoriesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getCategorieesPoduct(mcId, token);//CategoryProduct
+//        getCategorieesPoduct(mcId, token);//CategoryProduct
+        if (BlankId.equals(loginPref.getString("device_id", ""))) {
+            getCategory(mcId, deviceId);//Category
+            getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+        } else {
+            getCategory(mcId, token);//Category
+            getCategorieesPoduct(mcId, token);//CategoryProduct
+        }
     }
 }
