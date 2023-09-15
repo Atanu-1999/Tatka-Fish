@@ -275,6 +275,7 @@ public class CheckoutPage extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("total_amount", totalAmount);
+                bundle.putInt("delivery_charge",delivery_charge);
                 Intent i = new Intent(CheckoutPage.this, Apply_Coupon.class);
                 i.putExtras(bundle);
                 startActivity(i);

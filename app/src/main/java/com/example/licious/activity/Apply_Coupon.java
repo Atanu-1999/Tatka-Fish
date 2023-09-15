@@ -35,7 +35,7 @@ public class Apply_Coupon extends AppCompatActivity {
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
     String token;
-    int id,totalAmount;
+    int id,totalAmount,delivery_charge;
     List<CouponsResponse.Datum> couponsResponse;
     CouponAdapter couponAdapter;
     RecyclerView rv_coupons;
@@ -64,14 +64,16 @@ public class Apply_Coupon extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             totalAmount = bundle.getInt("total_amount",0);
+            delivery_charge = bundle.getInt("delivery_charge",0);
         }
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("pageType","coupon");
+                Bundle bundle = new Bundle();
+                bundle.putInt("total_amount",totalAmount);
+                bundle.putInt("delivery_charge",delivery_charge);
                 Intent i = new Intent(Apply_Coupon.this,CheckoutPage.class);
-               // i.putExtras(bundle);
+                i.putExtras(bundle);
                 startActivity(i);
             }
         });
