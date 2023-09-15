@@ -128,13 +128,13 @@ public class Search extends Fragment {
     }
 
     private void search_api(String token) {
-        progressDialog.show();
+       // progressDialog.show();
         Call<SearchResponse> category_apiCall = ApiService.apiHolders().getSearch(cName, token);
         category_apiCall.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 if (response.isSuccessful()) {
-                    progressDialog.dismiss();
+                   // progressDialog.dismiss();
                     searchListresponse = response.body().getData();
                     rv_Search_all_category.setVisibility(View.VISIBLE);
                     rv_all_category.setVisibility(View.GONE);
@@ -156,9 +156,14 @@ public class Search extends Fragment {
 //                                String prices = item.getPrice();
 //                                addToCart(product_id, prices);//add to cart API
                             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                                product_id = item.getId();
-                                String price = item.getPrice();
-                                addToCart(product_id, price, deviceId);//add to cart API
+//                                product_id = item.getId();
+//                                String price = item.getPrice();
+//                                addToCart(product_id, price, deviceId);//add to cart API
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Account account = new Account();
+                                fragmentTransaction.replace(R.id.main_container, account);
+                                fragmentTransaction.addToBackStack(null).commit();
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
@@ -171,14 +176,26 @@ public class Search extends Fragment {
                     rv_Search_all_category.setLayoutManager(new LinearLayoutManager(getContext()));
 
                 } else {
-                    Toast.makeText(getContext(),"Somethings went wrong",Toast.LENGTH_SHORT).show();
+//                    Snackbar errorBar;
+//                    errorBar = Snackbar.make(rl_view, "No item Found", Snackbar.LENGTH_LONG);
+//                    errorBar.setTextColor(getResources().getColor(R.color.white));
+//                    errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                    errorBar.show();
+                   // Toast.makeText(getContext(),"Somethings went wrong",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
-                progressDialog.dismiss();
+               // progressDialog.dismiss();
                // Toast.makeText(getContext(),"failed",Toast.LENGTH_SHORT).show();
+//                Snackbar errorBar;
+//                errorBar = Snackbar.make(rl_view, "No item Found", Snackbar.LENGTH_LONG);
+//                errorBar.setTextColor(getResources().getColor(R.color.white));
+//                errorBar.setActionTextColor(getResources().getColor(R.color.white));
+//                errorBar.setBackgroundTint(getResources().getColor(R.color.error));
+//                errorBar.show();
             }
         });
 
