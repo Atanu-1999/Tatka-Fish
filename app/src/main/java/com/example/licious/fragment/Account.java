@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.util.Log;
@@ -201,7 +203,16 @@ public class Account extends Fragment {
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), OrdersPage.class));
+                //startActivity(new Intent(getContext(), OrdersPage.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("account", "account");
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
+                orderHistoryFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.main_container, orderHistoryFragment);
+                //edit_sku_no.getText().clear();
+                fragmentTransaction.addToBackStack(null).commit();
             }
         });
         wishList.setOnClickListener(new View.OnClickListener() {
