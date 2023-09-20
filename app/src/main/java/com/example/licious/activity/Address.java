@@ -463,6 +463,16 @@ public class Address extends AppCompatActivity {
             tv_building.setError("please enter building");
             tv_building.requestFocus();
             return false;
+        } else if (tv_landmark.equals("")) {
+            //Toast.makeText(Address.this, "Please enter PinCode", Toast.LENGTH_SHORT).show();
+            tv_landmark.setError("Please enter PinCode");
+            tv_landmark.requestFocus();
+            return false;
+        } else if (tv_landmark.length() < 6 || tv_landmark.length() > 6) {
+           // Toast.makeText(getApplicationContext(), "Please enter valid pin code", Toast.LENGTH_SHORT).show();
+            tv_landmark.setError("Please enter valid pin code");
+            tv_landmark.requestFocus();
+            return false;
         } else if (tv_city.getText().toString().trim().length() == 0) {
             tv_city.setError("please enter city");
             tv_city.requestFocus();

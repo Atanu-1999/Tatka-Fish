@@ -79,7 +79,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Landmark(Optional)"
+            android:hint="Pin Code"
             app:hintEnabled="true"
             app:hintAnimationEnabled="true"
             android:layout_margin="@dimen/_5sdp">
@@ -89,6 +89,8 @@
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="6"
                 android:background="@drawable/bottom_bg"/>
 
         </com.google.android.material.textfield.TextInputLayout>
