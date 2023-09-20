@@ -142,6 +142,20 @@ public class FeedbackFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                    // finish();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", id_his);
+                    bundle.putString("orderHistoryDetails", orderHistoryDetails);
+                    bundle.putString("orderhistory",orderhistory);
+//                    Intent i = new Intent(getContext(), OrderHistoryDetailsFragment.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    OrderHistoryDetailsFragment orderHistoryDetailsFragment = new OrderHistoryDetailsFragment();
+                    orderHistoryDetailsFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, orderHistoryDetailsFragment);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
 
                 } else {
                     progressDialog.dismiss();
