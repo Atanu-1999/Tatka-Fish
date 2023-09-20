@@ -153,9 +153,9 @@ public class FreshWaterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                    getSubCategortItem(cId, deviceId);
+                    getSubCategortItem(0,cId, deviceId);
                 } else {
-                    getSubCategortItem(cId, token);
+                    getSubCategortItem(id,cId, token);
                 }
             }
         });
@@ -163,10 +163,10 @@ public class FreshWaterFragment extends Fragment {
         Log.d("device_id", loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             getSubCategory(cId, deviceId);
-            getSubCategortItem(cId, deviceId);
+            getSubCategortItem(0,cId, deviceId);
         } else {
             getSubCategory(cId, token);
-            getSubCategortItem(cId, token);
+            getSubCategortItem(id,cId, token);
         }
 
 
@@ -228,9 +228,9 @@ public class FreshWaterFragment extends Fragment {
         });
     }
 
-    private void getSubCategortItem(int cId, String token) {
+    private void getSubCategortItem(int id,int cId, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(cId, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(id,cId, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -340,7 +340,7 @@ public class FreshWaterFragment extends Fragment {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
-                    getSubCategortItem(cId, token);
+                    getSubCategortItem(id,cId, token);
                 }
             }
 
@@ -373,7 +373,7 @@ public class FreshWaterFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    getSubCategortItem(cId, token);
+                    getSubCategortItem(id,cId, token);
                 }
             }
 
@@ -393,7 +393,7 @@ public class FreshWaterFragment extends Fragment {
     // add to cart
     private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {

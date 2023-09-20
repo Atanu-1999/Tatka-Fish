@@ -249,22 +249,22 @@ public class Home extends Fragment {
             //category
             Category(deviceId);
             //Best Seller
-            BestSeller(deviceId);
+            BestSeller(0,deviceId);
             //Top Rated
-            TopRated(deviceId);
+            TopRated(0,deviceId);
             //show count on cart
-            ShowCount(deviceId);
+            ShowCount(0,deviceId);
         } else {
             //Banner
             Banner(token);
             //category
             Category(token);
             //Best Seller
-            BestSeller(token);
+            BestSeller(id,token);
             //Top Rated
-            TopRated(token);
+            TopRated(id,token);
             //show count on cart
-            ShowCount(token);
+            ShowCount(id,token);
         }
 
 
@@ -290,9 +290,9 @@ public class Home extends Fragment {
         return home;
     }
 
-    private void ShowCount(String token) {
+    private void ShowCount(int id,String token) {
         progressDialog.show();
-        Call<CountResponse> showCount_apiCall = ApiService.apiHolders().getCartCount(token);
+        Call<CountResponse> showCount_apiCall = ApiService.apiHolders().getCartCount(id,token);
         showCount_apiCall.enqueue(new Callback<CountResponse>() {
             @Override
             public void onResponse(Call<CountResponse> call, Response<CountResponse> response) {
@@ -406,9 +406,9 @@ public class Home extends Fragment {
         });
     }
 
-    private void TopRated(String token) {
+    private void TopRated(int id,String token) {
         progressDialog.show();
-        Call<Best_Seller_Response> topRated_apiCall = ApiService.apiHolders().topRated(token);
+        Call<Best_Seller_Response> topRated_apiCall = ApiService.apiHolders().topRated(id,token);
         topRated_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
@@ -458,7 +458,7 @@ public class Home extends Fragment {
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price, token);//add to cart API
+                                addToCart(id,product_id, price, token);//add to cart API
                             }
                             //   }
                         }
@@ -496,9 +496,9 @@ public class Home extends Fragment {
         });
     }
 
-    private void BestSeller(String token) {
+    private void BestSeller(int id,String token) {
         progressDialog.show();
-        Call<Best_Seller_Response> bestSeller_apiCall = ApiService.apiHolders().bestSeller(token);
+        Call<Best_Seller_Response> bestSeller_apiCall = ApiService.apiHolders().bestSeller(id,token);
         bestSeller_apiCall.enqueue(new Callback<Best_Seller_Response>() {
             @Override
             public void onResponse(Call<Best_Seller_Response> call, Response<Best_Seller_Response> response) {
@@ -532,7 +532,7 @@ public class Home extends Fragment {
                             } else {
                                 product_id = item.getId();
                                 String price = item.getPrice();
-                                addToCart(product_id, price, token);//add to cart API
+                                addToCart(id,product_id, price, token);//add to cart API
                             }
                             //  }
                         }
@@ -590,9 +590,9 @@ public class Home extends Fragment {
         });
     }
 
-    private void addToCart(int product_id, String price, String token) {
+    private void addToCart(int id,int product_id, String price, String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addCart = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addCart = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addCart.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -608,9 +608,9 @@ public class Home extends Fragment {
                     errorBar.show();
 
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        ShowCount(deviceId);
+                        ShowCount(0,deviceId);
                     } else {
-                        ShowCount(token);
+                        ShowCount(id,token);
                     }
 
 
@@ -650,8 +650,8 @@ public class Home extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
 
-                    TopRated(token);
-                    BestSeller(token);
+                    TopRated(id,token);
+                    BestSeller(id,token);
                 }
             }
 
@@ -688,8 +688,8 @@ public class Home extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
 
-                    TopRated(token);
-                    BestSeller(token);
+                    TopRated(id,token);
+                    BestSeller(id,token);
                 }
             }
 

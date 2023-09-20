@@ -138,7 +138,7 @@ public class Freshwater extends AppCompatActivity {
 
     private void getSubCategortItem(int cId, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(2, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProduct(id,2, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -254,7 +254,7 @@ public class Freshwater extends AppCompatActivity {
     // add to cart
     private void addToCart(int product_id, String price) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {

@@ -159,9 +159,9 @@ public class MyCart extends AppCompatActivity {
 //            }
 //        });
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
-            getCartDetails(deviceId);
+            getCartDetails(deviceId,0);
         }else {
-            getCartDetails(token);
+            getCartDetails(token,id);
         }
     }
 
@@ -173,10 +173,10 @@ public class MyCart extends AppCompatActivity {
         return true;
     }
 
-    private void getCartDetails(String token) {
+    private void getCartDetails(String token,int id) {
         progressDialog.show();
 
-        Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(token);
+        Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(token,id);
         addAddress.enqueue(new Callback<CartDetailsResponse>() {
             @Override
             public void onResponse(Call<CartDetailsResponse> call, Response<CartDetailsResponse> response) {
@@ -260,9 +260,9 @@ public class MyCart extends AppCompatActivity {
         tv_subtotal.setText(tpp);
     }
 
-    private void addOrRemoveItem(String token,int id, String price, int qty) {
+    private void addOrRemoveItem(String token,int ids, String price, int qty) {
         progressDialog.show();
-        Call<AddRemoveResponse> addAddress = ApiService.apiHolders().updatedCart(token, id, price, qty);
+        Call<AddRemoveResponse> addAddress = ApiService.apiHolders().updatedCart(token, ids, price, qty);
         addAddress.enqueue(new Callback<AddRemoveResponse>() {
             @Override
             public void onResponse(Call<AddRemoveResponse> call, Response<AddRemoveResponse> response) {
@@ -276,9 +276,9 @@ public class MyCart extends AppCompatActivity {
 //                    errorBar.setBackgroundTint(getResources().getColor(R.color.error));
 //                    errorBar.show();
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        getCartDetails(deviceId);
+                        getCartDetails(deviceId,0);
                     }else {
-                        getCartDetails(token);
+                        getCartDetails(token,id);
                     }
 
                 }
@@ -314,9 +314,9 @@ public class MyCart extends AppCompatActivity {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                     if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                        getCartDetails(deviceId);
+                        getCartDetails(deviceId,0);
                     }else {
-                        getCartDetails(token);
+                        getCartDetails(token,id);
                     }
                 }
             }
@@ -339,9 +339,9 @@ public class MyCart extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
-            getCartDetails(deviceId);
+            getCartDetails(deviceId,0);
         }else {
-            getCartDetails(token);
+            getCartDetails(token,id);
         }
     }
 

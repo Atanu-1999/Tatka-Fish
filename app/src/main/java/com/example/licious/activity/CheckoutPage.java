@@ -385,7 +385,7 @@ public class CheckoutPage extends AppCompatActivity {
 
     private void getCartDetails() {
         progressDialog.show();
-        Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(token);
+        Call<CartDetailsResponse> addAddress = ApiService.apiHolders().getCartDetails(token,id);
         addAddress.enqueue(new Callback<CartDetailsResponse>() {
             @Override
             public void onResponse(Call<CartDetailsResponse> call, Response<CartDetailsResponse> response) {

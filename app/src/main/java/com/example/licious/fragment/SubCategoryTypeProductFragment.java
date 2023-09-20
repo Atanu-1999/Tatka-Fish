@@ -102,9 +102,9 @@ public class SubCategoryTypeProductFragment extends Fragment {
         //call API
         Log.d("device_id", loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
-            callSubCatProd(scId, deviceId);
+            callSubCatProd(0,scId, deviceId);
         } else {
-            callSubCatProd(scId, token);
+            callSubCatProd(id,scId, token);
         }
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -131,9 +131,9 @@ public class SubCategoryTypeProductFragment extends Fragment {
         return subCatProd;
     }
 
-    private void callSubCatProd(int sc_Id, String token) {
+    private void callSubCatProd(int id,int sc_Id, String token) {
         progressDialog.show();
-        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProductList(sc_Id, token);
+        Call<SubCategoryItemResponse> subCategoryDataProduct = ApiService.apiHolders().getSubCategoryProductList(id,sc_Id, token);
         subCategoryDataProduct.enqueue(new Callback<SubCategoryItemResponse>() {
             @Override
             public void onResponse(Call<SubCategoryItemResponse> call, Response<SubCategoryItemResponse> response) {
@@ -217,7 +217,7 @@ public class SubCategoryTypeProductFragment extends Fragment {
     // add to cart
     private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -268,7 +268,7 @@ public class SubCategoryTypeProductFragment extends Fragment {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
-                    callSubCatProd(scId, token);
+                    callSubCatProd(id,scId, token);
                 }
             }
 
@@ -301,7 +301,7 @@ public class SubCategoryTypeProductFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    callSubCatProd(scId, token);
+                    callSubCatProd(id,scId, token);
                 }
             }
 

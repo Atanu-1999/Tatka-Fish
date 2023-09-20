@@ -110,9 +110,9 @@ public class OrderHistoryDetailsFragment extends Fragment {
                     bundle.putString("account", "account");
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    OrderHistoryFragment orderHistoryDetailsFragment = new OrderHistoryFragment();
-                    orderHistoryDetailsFragment.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.main_container, orderHistoryDetailsFragment);
+                    OrderHistoryFragment orderHistoryFragment = new OrderHistoryFragment();
+                    orderHistoryFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, orderHistoryFragment);
                     //edit_sku_no.getText().clear();
                     fragmentTransaction.addToBackStack(null).commit();
                 }
@@ -133,9 +133,18 @@ public class OrderHistoryDetailsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("order_id", order_ids);
                 bundle.putInt("id", order_id);
-                Intent i = new Intent(getContext(), SendFeedbackActivity.class);
-                i.putExtras(bundle);
-                startActivity(i);
+                bundle.putString("orderHistoryDetails", "orderHistoryDetails");
+                bundle.putString("orderhistory",orderhistory);
+//                Intent i = new Intent(getContext(), SendFeedbackActivity.class);
+//                i.putExtras(bundle);
+ //               startActivity(i);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FeedbackFragment feedbackFragment = new FeedbackFragment();
+                feedbackFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.main_container, feedbackFragment);
+                //edit_sku_no.getText().clear();
+                fragmentTransaction.addToBackStack(null).commit();
             }
         });
         getOrderHistory();
@@ -164,7 +173,7 @@ public class OrderHistoryDetailsFragment extends Fragment {
 
                         @Override
                         public void onItemClickedFeedback(OrderHistoryDataResponse.Datum item, int position, int type) {
-                            rating(item);
+                            //rating(item);
                         }
                     });
                     rv_orderHistorydata.setAdapter(orderHistoryAdapter);

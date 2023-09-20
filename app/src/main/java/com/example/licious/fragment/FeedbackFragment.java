@@ -1,6 +1,4 @@
-package com.example.licious.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.licious.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,7 +8,14 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,8 +23,8 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 
 import com.example.licious.R;
+import com.example.licious.activity.SendFeedbackActivity;
 import com.example.licious.api.ApiService;
-import com.example.licious.fragment.OrderHistoryDetailsFragment;
 import com.example.licious.response.RatingResponse;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -27,7 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SendFeedbackActivity extends AppCompatActivity {
+
+public class FeedbackFragment extends Fragment {
     int orderId;
     SharedPreferences loginPref;
     SharedPreferences.Editor editor;
@@ -43,29 +49,37 @@ public class SendFeedbackActivity extends AppCompatActivity {
     String orderHistoryDetails,orderhistory;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_feedback);
-        ratingBar = findViewById(R.id.ratingBar);
-        et_message = findViewById(R.id.et_message);
-        btn_submit = findViewById(R.id.btn_submit);
-        rl_view =findViewById(R.id.rl_view);
-        back = findViewById(R.id.back);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View feedback = inflater.inflate(R.layout.fragment_feedback, container, false);
+        ratingBar = feedback.findViewById(R.id.ratingBar);
+        et_message = feedback.findViewById(R.id.et_message);
+        btn_submit = feedback.findViewById(R.id.btn_submit);
+        rl_view =feedback.findViewById(R.id.rl_view);
+        back = feedback.findViewById(R.id.back);
+
         LayerDrawable stars=(LayerDrawable)ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
 
-        loginPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        loginPref = getContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         editor = loginPref.edit();
         token = loginPref.getString("device_id", null);
         id = loginPref.getInt("userId", 0);
 
         //loading
-        progressDialog = new ProgressDialog(SendFeedbackActivity.this);
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
 
 
-        Bundle bundle =getIntent().getExtras();
+        Bundle bundle =getArguments();
         //Extract the data…
         if (bundle != null) {
             orderId = bundle.getInt("order_id", 0);
@@ -82,9 +96,16 @@ public class SendFeedbackActivity extends AppCompatActivity {
                     bundle.putInt("id", id_his);
                     bundle.putString("orderHistoryDetails", orderHistoryDetails);
                     bundle.putString("orderhistory",orderhistory);
-                    Intent i = new Intent(SendFeedbackActivity.this, OrderHistoryDetailsFragment.class);
-                    i.putExtras(bundle);
-                    startActivity(i);
+//                    Intent i = new Intent(getContext(), OrderHistoryDetailsFragment.class);
+//                    i.putExtras(bundle);
+//                    startActivity(i);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    OrderHistoryDetailsFragment orderHistoryDetailsFragment = new OrderHistoryDetailsFragment();
+                    orderHistoryDetailsFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.main_container, orderHistoryDetailsFragment);
+                    //edit_sku_no.getText().clear();
+                    fragmentTransaction.addToBackStack(null).commit();
                 }
             }
         });
@@ -101,7 +122,10 @@ public class SendFeedbackActivity extends AppCompatActivity {
         });
 
 
+
+        return feedback;
     }
+
     private void ratingAPi(int orderId, String count, String desc) {
         progressDialog.show();
         Call<RatingResponse> category_apiCall = ApiService.apiHolders().ratingfeedback(id,orderId,count,desc,token);
@@ -117,7 +141,7 @@ public class SendFeedbackActivity extends AppCompatActivity {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
-                    finish();
+                   // finish();
 
                 } else {
                     progressDialog.dismiss();
@@ -141,15 +165,5 @@ public class SendFeedbackActivity extends AppCompatActivity {
                 errorBar.show();
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", order_id);
-        Intent i = new Intent(SendFeedbackActivity.this,OrderHistoryTracking.class);
-        i.putExtras(bundle);
-        startActivity(i);
     }
 }

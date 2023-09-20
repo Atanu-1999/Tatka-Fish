@@ -120,16 +120,16 @@ public class Search extends Fragment {
             }
         } else {
             if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                search_api(deviceId);
+                search_api(0,deviceId);
             }else {
-                search_api(token);
+                search_api(id,token);
             }
         }
     }
 
-    private void search_api(String token) {
+    private void search_api(int id,String token) {
        // progressDialog.show();
-        Call<SearchResponse> category_apiCall = ApiService.apiHolders().getSearch(cName, token);
+        Call<SearchResponse> category_apiCall = ApiService.apiHolders().getSearch(id,cName, token);
         category_apiCall.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
@@ -251,7 +251,7 @@ public class Search extends Fragment {
 
     private void addToCart(int product_id, String price,String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {

@@ -61,7 +61,7 @@ public interface ApiHolder {
     @POST("resendotp")
     @FormUrlEncoded
     Call<RepeatResponse> re_sent_otp(@Field("phone") String phone,
-                                  @Field("device_id") String device_id);
+                                     @Field("device_id") String device_id);
 
     @POST("verifyotp")
     @FormUrlEncoded
@@ -74,16 +74,19 @@ public interface ApiHolder {
     Call<GetMasterCategoryResponse> category(@Query("token") String token);
 
     @GET("bsproduct")
-    Call<Best_Seller_Response> bestSeller(@Query("token") String token);
+    Call<Best_Seller_Response> bestSeller(@Query("user_id") int user_id,
+                                          @Query("token") String token);
 
     @GET("trproduct")
-    Call<Best_Seller_Response> topRated(@Query("token") String token);
+    Call<Best_Seller_Response> topRated(@Query("user_id") int user_id,
+                                        @Query("token") String token);
 
     @GET("banners")
     Call<BannerResponse> banner(@Query("token") String token);
 
     @GET("getcartcount")
-    Call<CountResponse> getCartCount(@Query("token") String token);
+    Call<CountResponse> getCartCount(@Query("user_id") int user_id,
+                                     @Query("token") String token);
 
     @PATCH("updateProfile")
     @FormUrlEncoded
@@ -156,12 +159,14 @@ public interface ApiHolder {
 
     @POST("addtocart")
     @FormUrlEncoded
-    Call<AddToCartResponse> add_to_cart(@Field("product_id") int product_id,
+    Call<AddToCartResponse> add_to_cart(@Field("user_id") int user_id,
+                                        @Field("product_id") int product_id,
                                         @Field("price") String price,
                                         @Field("token") String token);
 
     @GET("getcartdata")
-    Call<CartDetailsResponse> getCartDetails(@Query("token") String token);
+    Call<CartDetailsResponse> getCartDetails(@Query("token") String token,
+                                             @Query("user_id") int user_id);
 
     @DELETE("deletecartdata")
     Call<CartItemDeleteResponse> deleteCartItem(@Query("cart_id") int user_id,
@@ -185,14 +190,16 @@ public interface ApiHolder {
     Call<SlotResponse> getTimeSlot(@Query("token") String token);
 
     @GET("cproduct")
-    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("cId") int cId,
+    Call<SubCategoryItemResponse> getSubCategoryProduct(@Query("user_id") int user_id,
+                                                        @Query("cId") int cId,
                                                         @Query("token") String token);
 
     @GET("rproduct")
     Call<SubCategoryItemResponse> getRecommendedProduct(@Query("token") String token);
 
     @GET("mcproduct")
-    Call<Category_Response> getCategoryProduct(@Query("mcId") int mcId,
+    Call<Category_Response> getCategoryProduct(@Query("user_id") int user_id,
+                                               @Query("mcId") int mcId,
                                                @Query("token") String token);
 
     @GET("productdtls")
@@ -223,7 +230,8 @@ public interface ApiHolder {
                                                    @Field("token") String token);
 
     @GET("productsearch")
-    Call<SearchResponse> getSearch(@Query("search") String search,
+    Call<SearchResponse> getSearch(@Query("user_id") int user_id,
+                                   @Query("search") String search,
                                    @Query("token") String token);
 
     @GET("pages")
@@ -253,8 +261,9 @@ public interface ApiHolder {
     Call<FaqResponse> getFaq(@Query("token") String token);
 
     @GET("scproduct")
-    Call<SubCategoryItemResponse> getSubCategoryProductList(@Query("scId") int cId,
-                                                        @Query("token") String token);
+    Call<SubCategoryItemResponse> getSubCategoryProductList(@Query("user_id") int user_id,
+                                                            @Query("scId") int cId,
+                                                            @Query("token") String token);
 
 
 }

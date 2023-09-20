@@ -131,18 +131,18 @@ public class SubCategoriesFragment extends Fragment {
         Log.d("device_id", loginPref.getString("device_id", ""));
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             getCategory(mcId, deviceId);//Category
-            getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+            getCategorieesPoduct(0,mcId, deviceId);//CategoryProduct
         } else {
             getCategory(mcId, token);//Category
-            getCategorieesPoduct(mcId, token);//CategoryProduct
+            getCategorieesPoduct(id,mcId, token);//CategoryProduct
         }
         ll_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (BlankId.equals(loginPref.getString("device_id", ""))) {
-                    getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+                    getCategorieesPoduct(0,mcId, deviceId);//CategoryProduct
                 } else {
-                    getCategorieesPoduct(mcId, token);
+                    getCategorieesPoduct(id,mcId, token);
                 }
             }
         });
@@ -204,9 +204,9 @@ public class SubCategoriesFragment extends Fragment {
 
     }
 
-    private void getCategorieesPoduct(int mcId, String token) {
+    private void getCategorieesPoduct(int id,int mcId, String token) {
         progressDialog.show();
-        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(mcId, token);
+        Call<Category_Response> subCategoryDataProduct = ApiService.apiHolders().getCategoryProduct(id,mcId, token);
         subCategoryDataProduct.enqueue(new Callback<Category_Response>() {
             @Override
             public void onResponse(Call<Category_Response> call, Response<Category_Response> response) {
@@ -306,7 +306,7 @@ public class SubCategoriesFragment extends Fragment {
     //Add to cart
     private void addToCart(int product_id, String price, String token) {
         progressDialog.show();
-        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(product_id, price, token);
+        Call<AddToCartResponse> addAddress = ApiService.apiHolders().add_to_cart(id,product_id, price, token);
         addAddress.enqueue(new Callback<AddToCartResponse>() {
             @Override
             public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
@@ -359,7 +359,7 @@ public class SubCategoriesFragment extends Fragment {
                     errorBar.setActionTextColor(getResources().getColor(R.color.white));
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
-                    getCategorieesPoduct(mcId, token);
+                    getCategorieesPoduct(id,mcId, token);
                 }
             }
 
@@ -395,7 +395,7 @@ public class SubCategoriesFragment extends Fragment {
                     errorBar.setBackgroundTint(getResources().getColor(R.color.error));
                     errorBar.show();
                     // Toast.makeText(getContext(), "WishList Remove Successfully", Toast.LENGTH_SHORT).show();
-                    getCategorieesPoduct(mcId, token);
+                    getCategorieesPoduct(id,mcId, token);
                 }
             }
 
@@ -419,10 +419,10 @@ public class SubCategoriesFragment extends Fragment {
 //        getCategorieesPoduct(mcId, token);//CategoryProduct
         if (BlankId.equals(loginPref.getString("device_id", ""))) {
             getCategory(mcId, deviceId);//Category
-            getCategorieesPoduct(mcId, deviceId);//CategoryProduct
+            getCategorieesPoduct(0,mcId, deviceId);//CategoryProduct
         } else {
             getCategory(mcId, token);//Category
-            getCategorieesPoduct(mcId, token);//CategoryProduct
+            getCategorieesPoduct(id,mcId, token);//CategoryProduct
         }
     }
 }
